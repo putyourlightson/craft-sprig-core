@@ -105,9 +105,7 @@ class ComponentsService extends BaseComponent
             $type = 'template';
 
             if (!Craft::$app->getView()->doesTemplateExist($value)) {
-                throw new BadRequestHttpException(Craft::t('sprig', 'Unable to find the component or template “{value}”.', [
-                    'value' => $value,
-                ]));
+                throw new BadRequestHttpException('Unable to find the component or template “'.$value.'”.');
             }
 
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
@@ -169,10 +167,7 @@ class ComponentsService extends BaseComponent
         }
 
         if (!is_subclass_of($componentClass, Component::class)) {
-            throw new BadRequestHttpException(Craft::t('sprig', 'Component class “{class}” must extend “{extendsClass}”.', [
-                'class' => $componentClass,
-                'extendsClass' => Component::class,
-            ]));
+            throw new BadRequestHttpException('Component class “'.$componentClass.'” must extend “'.Component::class.'”.');
         }
 
         /** @var Component $component */
@@ -438,7 +433,7 @@ class ComponentsService extends BaseComponent
      */
     private function _getError(string $templateName, array $variables = []): string
     {
-        $template = 'sprig/_errors/'.$templateName;
+        $template = 'sprig-core/_errors/'.$templateName;
 
         return Craft::$app->getView()->renderTemplate($template, $variables, View::TEMPLATE_MODE_CP);
     }

@@ -15,6 +15,6 @@ class InvalidVariableException extends Exception
      */
     public function getName(): string
     {
-        return Craft::t('sprig', 'Invalid variable');
+        return 'Invalid variable';
     }
 }

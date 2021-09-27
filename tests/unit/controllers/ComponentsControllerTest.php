@@ -8,8 +8,8 @@ namespace putyourlightson\sprigplugintests\unit\controllers;
 use Codeception\Test\Unit;
 use Craft;
 use craft\web\View;
-use putyourlightson\sprigplugin\Sprig;
-use putyourlightson\sprigplugin\test\mockclasses\controllers\TestController;
+use putyourlightson\sprig\Sprig;
+use putyourlightson\sprig\test\mockclasses\controllers\TestController;
 use UnitTester;
 use yii\web\Response;
 
@@ -30,11 +30,15 @@ class ComponentsControllerTest extends Unit
     {
         parent::_before();
 
-        // Set controller namespace to web
-        Sprig::$plugin->controllerNamespace = str_replace('\\console', '', Sprig::$plugin->controllerNamespace);
+        // Load and bootstrap the module
+        Craft::$app->setModule('sprig', ['class' => Sprig::class]);
+
+        /** @var Sprig $module */
+        $module = Craft::$app->getModule('sprig');
+        $module->bootstrap(Craft::$app);
 
         // Add test controller
-        Sprig::$plugin->controllerMap = ['test' => TestController::class];
+        Sprig::getInstance()->controllerMap = ['test' => TestController::class];
 
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
@@ -47,7 +51,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::$plugin->runAction('components/render');
+        $response = Sprig::getInstance()->runAction('components/render');
 
         $this->assertEquals('', trim($response->data));
     }
@@ -60,7 +64,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::$plugin->runAction('components/render');
+        $response = Sprig::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
     }
@@ -73,7 +77,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::$plugin->runAction('components/render');
+        $response = Sprig::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
     }
@@ -86,7 +90,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::$plugin->runAction('components/render');
+        $response = Sprig::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
     }
@@ -99,7 +103,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::$plugin->runAction('components/render');
+        $response = Sprig::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
         $this->assertStringContainsString('id:1', trim($response->data));
@@ -114,7 +118,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::$plugin->runAction('components/render');
+        $response = Sprig::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
         $this->assertStringContainsString('flashes[error]:Error', trim($response->data));

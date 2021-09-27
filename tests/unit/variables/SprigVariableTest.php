@@ -7,7 +7,7 @@ namespace putyourlightson\sprigplugintests\unit\variables;
 
 use Codeception\Test\Unit;
 use Craft;
-use putyourlightson\sprigplugin\variables\SprigVariable;
+use putyourlightson\sprig\variables\SprigVariable;
 use UnitTester;
 
 /**
@@ -35,16 +35,14 @@ class SprigVariableTest extends Unit
         $this->variable = new SprigVariable();
     }
 
-    public function testHtmxScriptExistsLocally()
+    public function testHtmxScriptExistsForDev()
     {
-        // Simplified check that file version exists locally
-        $version = $this->variable->htmxVersion;
-        $filepath = '@putyourlightson/sprig/resources/js/htmx-'.$version.'.js';
+        Craft::$app->getConfig()->env = 'dev';
 
-        $this->assertFileExists(Craft::getAlias($filepath));
+        $this->_testScriptExistsRemotely($this->variable->getScript());
     }
 
-    public function testHtmxScriptExistsRemotely()
+    public function testHtmxScriptExistsForProduction()
     {
         Craft::$app->getConfig()->env = 'production';
 

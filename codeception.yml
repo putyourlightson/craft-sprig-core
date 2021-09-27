@@ -16,10 +16,6 @@ modules:
             entryScript: 'index.php'
             projectConfig: {}
             migrations: []
-            plugins:
-                sprig:
-                    class: '\putyourlightson\sprigplugin\Sprig'
-                    handle: sprig
             cleanup: true
             transaction: false
             dbSetup: {clean: true, setupCraft: true}

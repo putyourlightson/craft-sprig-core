@@ -254,8 +254,7 @@ class SprigVariable
         $url = 'https://unpkg.com/htmx.org@'.$this->htmxVersion;
 
         if (Craft::$app->getConfig()->env == 'dev') {
-            $path = '@putyourlightson/sprig/resources/js/htmx-'.$this->htmxVersion.'.js';
-            $url = Craft::$app->getAssetManager()->getPublishedUrl($path, true);
+            $url .= '/dist/htmx.js';
         }
         else {
             // Add subresource integrity

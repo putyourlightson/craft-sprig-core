@@ -7,7 +7,7 @@ namespace putyourlightson\sprigplugintests\unit\services;
 
 use Craft;
 use craft\test\TestCase;
-use putyourlightson\sprigplugin\Sprig;
+use putyourlightson\sprig\Sprig;
 use UnitTester;
 use yii\web\BadRequestHttpException;
 
@@ -24,6 +24,18 @@ class RequestTest extends TestCase
      */
     protected $tester;
 
+    protected function _before()
+    {
+        parent::_before();
+
+        // Load and bootstrap the module
+        Craft::$app->setModule('sprig', ['class' => Sprig::class]);
+
+        /** @var Sprig $module */
+        $module = Craft::$app->getModule('sprig');
+        $module->bootstrap(Craft::$app);
+    }
+
     public function testGetVariables()
     {
         $this->_mockRequestMethods(['getQueryParams' => [
@@ -32,7 +44,7 @@ class RequestTest extends TestCase
             'sprig:template' => 't',
         ]]);
 
-        $variables = Sprig::$plugin->request->getVariables();
+        $variables = Sprig::getInstance()->request->getVariables();
 
         $this->assertEquals(['page' => 1], $variables);
     }
@@ -48,7 +60,7 @@ class RequestTest extends TestCase
             'getParam' => Craft::$app->getSecurity()->hashData('xyz'),
         ]);
 
-        $param = Sprig::$plugin->request->getValidatedParam('page');
+        $param = Sprig::getInstance()->request->getValidatedParam('page');
 
         $this->assertEquals('xyz', $param);
     }
@@ -60,7 +72,7 @@ class RequestTest extends TestCase
             Craft::$app->getSecurity()->hashData('xyz'),
         ]]);
 
-        $values = Sprig::$plugin->request->getValidatedParamValues('page');
+        $values = Sprig::getInstance()->request->getValidatedParamValues('page');
 
         $this->assertEquals(['abc', 'xyz'], $values);
     }
@@ -71,7 +83,7 @@ class RequestTest extends TestCase
 
         $data = Craft::$app->getSecurity()->hashData('xyz').'abc';
 
-        Sprig::$plugin->request->validateData($data);
+        Sprig::getInstance()->request->validateData($data);
     }
 
     private function _mockRequestMethods(array $methods)
