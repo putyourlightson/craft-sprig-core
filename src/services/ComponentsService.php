@@ -119,6 +119,13 @@ class ComponentsService extends BaseComponent
             $values['sprig:variables['.$name.']'] = $this->_hashVariable($name, $val);
         }
 
+        // Add token to values if this is a preview request.
+        // https://github.com/putyourlightson/craft-sprig/issues/162
+        if (Craft::$app->request->getIsPreview()) {
+            $tokenParam = Craft::$app->config->general->tokenParam;
+            $values[$tokenParam] = Craft::$app->request->getToken();
+        }
+
         // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
         $id = $attributes['id'] ?? ('component-'.StringHelper::randomString(6));
 

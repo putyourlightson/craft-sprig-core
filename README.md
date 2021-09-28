@@ -4,6 +4,10 @@
 
 This is the core package for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for Craft CMS. If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed. 
 
+Issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
+
+Changes are documented in https://github.com/putyourlightson/craft-sprig/blob/develop/CHANGELOG.md
+
 ## Documentation
 
 Learn more and read the documentation at [putyourlightson.com/plugins/sprig »](https://putyourlightson.com/plugins/sprig)
