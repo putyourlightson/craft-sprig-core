@@ -3,11 +3,11 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigplugintests\unit\variables;
+namespace putyourlightson\sprigcoretests\unit\variables;
 
 use Codeception\Test\Unit;
 use Craft;
-use putyourlightson\sprig\variables\SprigVariable;
+use putyourlightson\sprigcore\variables\SprigVariable;
 use UnitTester;
 
 /**

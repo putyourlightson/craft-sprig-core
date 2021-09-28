@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\controllers;
+namespace putyourlightson\sprigcore\controllers;
 
 use Craft;
 use craft\elements\User;
@@ -11,7 +11,7 @@ use craft\events\ModelEvent;
 use craft\helpers\ArrayHelper;
 use craft\web\Controller;
 use craft\web\UrlRule;
-use putyourlightson\sprig\Sprig;
+use putyourlightson\sprigcore\SprigCore;
 use yii\base\Event;
 use yii\base\Model;
 use yii\web\Response;
@@ -30,21 +30,21 @@ class ComponentsController extends Controller
      */
     public function actionRender(): Response
     {
-        $siteId = Sprig::getInstance()->request->getValidatedParam('sprig:siteId');
+        $siteId = SprigCore::getInstance()->request->getValidatedParam('sprig:siteId');
         Craft::$app->getSites()->setCurrentSite($siteId);
 
-        $component = Sprig::getInstance()->request->getValidatedParam('sprig:component');
-        $action = Sprig::getInstance()->request->getValidatedParam('sprig:action');
+        $component = SprigCore::getInstance()->request->getValidatedParam('sprig:component');
+        $action = SprigCore::getInstance()->request->getValidatedParam('sprig:action');
 
         $variables = ArrayHelper::merge(
-            Sprig::getInstance()->request->getValidatedParamValues('sprig:variables'),
-            Sprig::getInstance()->request->getVariables()
+            SprigCore::getInstance()->request->getValidatedParamValues('sprig:variables'),
+            SprigCore::getInstance()->request->getVariables()
         );
 
         $content = '';
 
         if ($component) {
-            $componentObject = Sprig::getInstance()->components->createObject($component, $variables);
+            $componentObject = SprigCore::getInstance()->components->createObject($component, $variables);
 
             if ($componentObject) {
                 if ($action && method_exists($componentObject, $action)) {
@@ -60,13 +60,13 @@ class ComponentsController extends Controller
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
-            $template = Sprig::getInstance()->request->getValidatedParam('sprig:template');
+            $template = SprigCore::getInstance()->request->getValidatedParam('sprig:template');
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
         }
 
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
-        $response->data = Sprig::getInstance()->components->parseHtml($content);
+        $response->data = SprigCore::getInstance()->components->parseHtml($content);
 
         return $response;
     }

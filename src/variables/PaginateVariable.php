@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\variables;
+namespace putyourlightson\sprigcore\variables;
 
 use craft\db\Paginator;
 use craft\web\twig\variables\Paginate;

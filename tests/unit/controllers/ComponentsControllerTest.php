@@ -3,13 +3,13 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigplugintests\unit\controllers;
+namespace putyourlightson\sprigcoretests\unit\controllers;
 
 use Codeception\Test\Unit;
 use Craft;
 use craft\web\View;
-use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\test\mockclasses\controllers\TestController;
+use putyourlightson\sprigcore\SprigCore;
+use putyourlightson\sprigcore\test\mockclasses\controllers\TestController;
 use UnitTester;
 use yii\web\Response;
 
@@ -30,28 +30,24 @@ class ComponentsControllerTest extends Unit
     {
         parent::_before();
 
-        // Load and bootstrap the module
-        Craft::$app->setModule('sprig', ['class' => Sprig::class]);
-
-        /** @var Sprig $module */
-        $module = Craft::$app->getModule('sprig');
-        $module->bootstrap(Craft::$app);
+        // Bootstrap the module
+        SprigCore::bootstrap();
 
         // Add test controller
-        Sprig::getInstance()->controllerMap = ['test' => TestController::class];
+        SprigCore::getInstance()->controllerMap['test'] = TestController::class;
 
-        Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
-        Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
+        Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
+        Craft::$app->view->setTemplatesPath(Craft::getAlias('@templates'));
     }
 
     public function testRender()
     {
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->getSecurity()->hashData('_empty'),
+            'sprig:template' => Craft::$app->security->hashData('_empty'),
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = SprigCore::getInstance()->runAction('components/render');
 
         $this->assertEquals('', trim($response->data));
     }
@@ -59,12 +55,12 @@ class ComponentsControllerTest extends Unit
     public function testRenderNull()
     {
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->getSecurity()->hashData('_action'),
-            'sprig:action' => Craft::$app->getSecurity()->hashData('sprig/test/get-null'),
+            'sprig:template' => Craft::$app->security->hashData('_action'),
+            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-null'),
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = SprigCore::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
     }
@@ -72,12 +68,12 @@ class ComponentsControllerTest extends Unit
     public function testRenderArray()
     {
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->getSecurity()->hashData('_action'),
-            'sprig:action' => Craft::$app->getSecurity()->hashData('sprig/test/get-array'),
+            'sprig:template' => Craft::$app->security->hashData('_action'),
+            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-array'),
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = SprigCore::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
     }
@@ -85,12 +81,12 @@ class ComponentsControllerTest extends Unit
     public function testRenderModel()
     {
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->getSecurity()->hashData('_action'),
-            'sprig:action' => Craft::$app->getSecurity()->hashData('sprig/test/get-model'),
+            'sprig:template' => Craft::$app->security->hashData('_action'),
+            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-model'),
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = SprigCore::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
     }
@@ -98,12 +94,12 @@ class ComponentsControllerTest extends Unit
     public function testControllerActionSuccess()
     {
         Craft::$app->getRequest()->setBodyParams([
-            'sprig:template' => Craft::$app->getSecurity()->hashData('_action'),
-            'sprig:action' => Craft::$app->getSecurity()->hashData('sprig/test/save-success'),
+            'sprig:template' => Craft::$app->security->hashData('_action'),
+            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-success'),
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = SprigCore::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
         $this->assertStringContainsString('id:1', trim($response->data));
@@ -113,12 +109,12 @@ class ComponentsControllerTest extends Unit
     public function testControllerActionError()
     {
         Craft::$app->getRequest()->setBodyParams([
-            'sprig:template' => Craft::$app->getSecurity()->hashData('_action'),
-            'sprig:action' => Craft::$app->getSecurity()->hashData('sprig/test/save-error'),
+            'sprig:template' => Craft::$app->security->hashData('_action'),
+            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-error'),
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = SprigCore::getInstance()->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
         $this->assertStringContainsString('flashes[error]:Error', trim($response->data));

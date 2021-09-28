@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\events;
+namespace putyourlightson\sprigcore\events;
 
 use yii\base\Event;
 

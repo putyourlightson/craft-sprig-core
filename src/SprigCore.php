@@ -3,17 +3,16 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig;
+namespace putyourlightson\sprigcore;
 
 use Craft;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
-use putyourlightson\sprig\services\ComponentsService;
-use putyourlightson\sprig\services\RequestService;
-use putyourlightson\sprig\twigextensions\SprigTwigExtension;
-use putyourlightson\sprig\variables\SprigVariable;
-use yii\base\BootstrapInterface;
+use putyourlightson\sprigcore\services\ComponentsService;
+use putyourlightson\sprigcore\services\RequestService;
+use putyourlightson\sprigcore\twigextensions\SprigTwigExtension;
+use putyourlightson\sprigcore\variables\SprigVariable;
 use yii\base\Event;
 use yii\base\Module;
 
@@ -21,19 +20,39 @@ use yii\base\Module;
  * @property ComponentsService $components
  * @property RequestService $request
  */
-class Sprig extends Module implements BootstrapInterface
+class SprigCore extends Module
 {
     /**
      * @var SprigVariable
      */
     public static $sprigVariable;
 
-    /**
-     * @inheritdoc
-     */
-    public function bootstrap($app)
+    public static function bootstrap()
     {
-        self::setInstance($this);
+        static::getInstance();
+    }
+
+    /**
+     * @return SprigCore
+     */
+    public static function getInstance(): Module
+    {
+        $id = 'sprig-core';
+
+        if ($module = Craft::$app->getModule($id)) {
+            return $module;
+        }
+
+        $module = new SprigCore($id);
+        static::setInstance($module);
+        Craft::$app->setModule($id, $module);
+
+        return $module::getInstance();
+    }
+
+    public function init()
+    {
+        parent::init();
 
         self::$sprigVariable = new SprigVariable();
 
@@ -41,11 +60,6 @@ class Sprig extends Module implements BootstrapInterface
             'components' => ComponentsService::class,
             'request' => RequestService::class,
         ]);
-
-        // Register the controller map manually since the module is bootstrapped.
-        if (!Craft::$app->request->isConsoleRequest) {
-            Craft::$app->controllerMap['sprig'] = self::class;
-        }
 
         $this->_registerTemplateRoots();
         $this->_registerTwigExtensions();
@@ -60,7 +74,6 @@ class Sprig extends Module implements BootstrapInterface
         Event::on(
             View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
             function(RegisterTemplateRootsEvent $event) {
-                // Register as `sprig-core` because `sprig` will be overwritten by the plugin.
                 $event->roots['sprig-core'] = $this->getBasePath().'/templates';
             }
         );

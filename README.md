@@ -2,7 +2,32 @@
 
 # Sprig Core for Craft CMS
 
-This is the core package for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for Craft CMS. If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed. 
+This is the core module for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for Craft CMS. If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed. 
+
+Require the package in your plugin/module's `composer.json` file:
+```json
+{
+    "require": {
+        "putyourlightson/craft-sprig-core": "^1.9.0"
+    }
+}
+```
+
+Bootstrap the module from within your plugin/module's `init` method.
+```php
+use craft\base\Plugin;
+use putyourlightson\sprigcore\SprigCore;
+
+class MyPlugin extends Plugin
+{
+    public function init()
+    {
+        parent::init();
+
+        SprigCore::bootstrap();
+    }
+}
+```
 
 Issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
 

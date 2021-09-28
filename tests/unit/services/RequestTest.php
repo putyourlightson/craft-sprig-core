@@ -3,11 +3,11 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigplugintests\unit\services;
+namespace putyourlightson\sprigcoretests\unit\services;
 
 use Craft;
 use craft\test\TestCase;
-use putyourlightson\sprig\Sprig;
+use putyourlightson\sprigcore\SprigCore;
 use UnitTester;
 use yii\web\BadRequestHttpException;
 
@@ -28,12 +28,8 @@ class RequestTest extends TestCase
     {
         parent::_before();
 
-        // Load and bootstrap the module
-        Craft::$app->setModule('sprig', ['class' => Sprig::class]);
-
-        /** @var Sprig $module */
-        $module = Craft::$app->getModule('sprig');
-        $module->bootstrap(Craft::$app);
+        // Bootstrap the module
+        SprigCore::bootstrap();
     }
 
     public function testGetVariables()
@@ -44,7 +40,7 @@ class RequestTest extends TestCase
             'sprig:template' => 't',
         ]]);
 
-        $variables = Sprig::getInstance()->request->getVariables();
+        $variables = SprigCore::getInstance()->request->getVariables();
 
         $this->assertEquals(['page' => 1], $variables);
     }
@@ -60,7 +56,7 @@ class RequestTest extends TestCase
             'getParam' => Craft::$app->getSecurity()->hashData('xyz'),
         ]);
 
-        $param = Sprig::getInstance()->request->getValidatedParam('page');
+        $param = SprigCore::getInstance()->request->getValidatedParam('page');
 
         $this->assertEquals('xyz', $param);
     }
@@ -72,7 +68,7 @@ class RequestTest extends TestCase
             Craft::$app->getSecurity()->hashData('xyz'),
         ]]);
 
-        $values = Sprig::getInstance()->request->getValidatedParamValues('page');
+        $values = SprigCore::getInstance()->request->getValidatedParamValues('page');
 
         $this->assertEquals(['abc', 'xyz'], $values);
     }
@@ -83,7 +79,7 @@ class RequestTest extends TestCase
 
         $data = Craft::$app->getSecurity()->hashData('xyz').'abc';
 
-        Sprig::getInstance()->request->validateData($data);
+        SprigCore::getInstance()->request->validateData($data);
     }
 
     private function _mockRequestMethods(array $methods)

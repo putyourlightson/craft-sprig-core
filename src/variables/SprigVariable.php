@@ -3,15 +3,15 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\variables;
+namespace putyourlightson\sprigcore\variables;
 
 use Craft;
 use craft\db\Paginator;
 use craft\db\Query;
 use craft\helpers\Html;
 use craft\helpers\Template;
-use putyourlightson\sprig\base\Component;
-use putyourlightson\sprig\Sprig;
+use putyourlightson\sprigcore\base\Component;
+use putyourlightson\sprigcore\SprigCore;
 use Twig\Markup;
 use yii\web\BadRequestHttpException;
 
@@ -240,7 +240,7 @@ class SprigVariable
      */
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
-        return Sprig::$plugin->components->create($value, $variables, $attributes);
+        return SprigCore::$plugin->components->create($value, $variables, $attributes);
     }
 
     /**
