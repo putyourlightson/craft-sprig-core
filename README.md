@@ -4,7 +4,8 @@
 
 This is the core module for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for Craft CMS. If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed. 
 
-Require the package in your plugin/module's `composer.json` file:
+First require the package in your plugin/module's `composer.json` file.
+
 ```json
 {
     "require": {
@@ -13,7 +14,8 @@ Require the package in your plugin/module's `composer.json` file:
 }
 ```
 
-Bootstrap the module from within your plugin/module's `init` method.
+Then bootstrap the module from within your plugin/module's `init` method.
+
 ```php
 use craft\base\Plugin;
 use putyourlightson\sprigcore\SprigCore;

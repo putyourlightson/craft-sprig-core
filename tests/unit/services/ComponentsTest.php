@@ -73,9 +73,17 @@ class ComponentsTest extends Unit
 
     public function testCreateObjectFromComponent()
     {
-        $object = SprigCore::getInstance()->components->createObject('TestComponent');
+        // Require the class since it is not autoloaded.
+        require CRAFT_TESTS_PATH.'/_craft/sprig/components/TestComponent.php';
 
-        $this->assertNotNull($object);
+        $object = SprigCore::getInstance()->components->createObject(
+            'TestComponent',
+            ['number' => 15]
+        );
+
+        $html = $object->render();
+
+        $this->assertStringContainsString('xyz 15', $html);
     }
 
     public function testCreateObjectFromNoComponent()
