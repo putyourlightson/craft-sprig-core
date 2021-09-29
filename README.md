@@ -43,7 +43,7 @@ To see working examples and video tutorials, visit the [learning resources](http
 
 ## License
 
-This plugin is licensed for free under the MIT License.
+This package is licensed for free under the MIT License.
 
 ## Requirements
 
