@@ -251,10 +251,10 @@ class SprigVariable
      */
     private function _getScript(array $attributes = []): Markup
     {
-        $url = 'https://unpkg.com/htmx.org@'.$this->htmxVersion;
+        $url = 'https://unpkg.com/htmx.org@'.$this->htmxVersion.'/dist/htmx.min.js';
 
         if (Craft::$app->getConfig()->env == 'dev') {
-            $url .= '/dist/htmx.js';
+            $url = str_replace('htmx.min.js', 'htmx.js', $url);
         }
         else {
             // Add subresource integrity
