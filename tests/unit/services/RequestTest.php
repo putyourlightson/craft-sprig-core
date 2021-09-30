@@ -7,7 +7,7 @@ namespace putyourlightson\sprigcoretests\unit\services;
 
 use Craft;
 use craft\test\TestCase;
-use putyourlightson\sprigcore\SprigCore;
+use putyourlightson\sprig\Sprig;
 use UnitTester;
 use yii\web\BadRequestHttpException;
 
@@ -29,7 +29,7 @@ class RequestTest extends TestCase
         parent::_before();
 
         // Bootstrap the module
-        SprigCore::bootstrap();
+        Sprig::bootstrap();
     }
 
     public function testGetVariables()
@@ -40,7 +40,7 @@ class RequestTest extends TestCase
             'sprig:template' => 't',
         ]]);
 
-        $variables = SprigCore::getInstance()->request->getVariables();
+        $variables = Sprig::getInstance()->request->getVariables();
 
         $this->assertEquals(['page' => 1], $variables);
     }
@@ -56,7 +56,7 @@ class RequestTest extends TestCase
             'getParam' => Craft::$app->getSecurity()->hashData('xyz'),
         ]);
 
-        $param = SprigCore::getInstance()->request->getValidatedParam('page');
+        $param = Sprig::getInstance()->request->getValidatedParam('page');
 
         $this->assertEquals('xyz', $param);
     }
@@ -68,7 +68,7 @@ class RequestTest extends TestCase
             Craft::$app->getSecurity()->hashData('xyz'),
         ]]);
 
-        $values = SprigCore::getInstance()->request->getValidatedParamValues('page');
+        $values = Sprig::getInstance()->request->getValidatedParamValues('page');
 
         $this->assertEquals(['abc', 'xyz'], $values);
     }
@@ -79,7 +79,7 @@ class RequestTest extends TestCase
 
         $data = Craft::$app->getSecurity()->hashData('xyz').'abc';
 
-        SprigCore::getInstance()->request->validateData($data);
+        Sprig::getInstance()->request->validateData($data);
     }
 
     private function _mockRequestMethods(array $methods)

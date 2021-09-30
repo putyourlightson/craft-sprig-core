@@ -9,8 +9,8 @@ use Codeception\Test\Unit;
 use Craft;
 use craft\elements\Entry;
 use craft\web\Request;
-use putyourlightson\sprigcore\errors\InvalidVariableException;
-use putyourlightson\sprigcore\SprigCore;
+use putyourlightson\sprig\errors\InvalidVariableException;
+use putyourlightson\sprig\Sprig;
 use UnitTester;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -33,14 +33,14 @@ class ComponentsTest extends Unit
         parent::_before();
 
         // Bootstrap the module
-        SprigCore::bootstrap();
+        Sprig::bootstrap();
 
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
     }
 
     public function testCreate()
     {
-        $markup = SprigCore::getInstance()->components->create(
+        $markup = Sprig::getInstance()->components->create(
             '_component',
             ['number' => 15],
             ['id' => 'abc', 's-trigger' => 'load', 's-vars' => 'limit:1', 's-push-url' => 'new-url']
@@ -58,7 +58,7 @@ class ComponentsTest extends Unit
 
     public function testCreateEmptyComponent()
     {
-        $markup = SprigCore::getInstance()->components->create('_empty');
+        $markup = Sprig::getInstance()->components->create('_empty');
         $html = (string)$markup;
 
         $this->assertStringContainsString('hx-get', $html);
@@ -68,7 +68,7 @@ class ComponentsTest extends Unit
     {
         $this->expectException(BadRequestHttpException::class);
 
-        SprigCore::getInstance()->components->create('_no-component');
+        Sprig::getInstance()->components->create('_no-component');
     }
 
     public function testCreateObjectFromComponent()
@@ -76,7 +76,7 @@ class ComponentsTest extends Unit
         // Require the class since it is not autoloaded.
         require CRAFT_TESTS_PATH.'/_craft/sprig/components/TestComponent.php';
 
-        $object = SprigCore::getInstance()->components->createObject(
+        $object = Sprig::getInstance()->components->createObject(
             'TestComponent',
             ['number' => 15]
         );
@@ -88,7 +88,7 @@ class ComponentsTest extends Unit
 
     public function testCreateObjectFromNoComponent()
     {
-        $object = SprigCore::getInstance()->components->createObject('NoComponent');
+        $object = Sprig::getInstance()->components->createObject('NoComponent');
 
         $this->assertNull($object);
     }
@@ -116,7 +116,7 @@ class ComponentsTest extends Unit
     public function testGetParsedTagAttributes()
     {
         $html = '<div sprig s-method="post" s-action="a/b/c" s-vals=\'{"limit":1}\'></div>';
-        $html = SprigCore::getInstance()->components->parseHtml($html);
+        $html = Sprig::getInstance()->components->parseHtml($html);
 
         $this->assertStringContainsString('hx-vals=\'{"limit":1}', $html);
         $this->assertStringContainsString('hx-post=', $html);
@@ -128,7 +128,7 @@ class ComponentsTest extends Unit
     public function testGetParsedTagAttributesWithHxData()
     {
         $html = '<div data-sprig data-s-method="post"></div>';
-        $html = SprigCore::getInstance()->components->parseHtml($html);
+        $html = Sprig::getInstance()->components->parseHtml($html);
 
         $this->assertStringContainsString('data-hx-headers=\'{"'.Request::CSRF_HEADER.'"', $html);
         $this->assertStringContainsString('data-hx-post=', $html);
@@ -137,49 +137,49 @@ class ComponentsTest extends Unit
     public function testGetParsedTagAttributesVals()
     {
         $html = '<div sprig s-val:x-y-z="a" s-vals=\'{"limit":1}\'></div>';
-        $html = SprigCore::getInstance()->components->parseHtml($html);
+        $html = Sprig::getInstance()->components->parseHtml($html);
         $this->assertStringContainsString('hx-vals=\'{"xYZ":"a","limit":1}\'', $html);
     }
 
     public function testGetParsedTagAttributesValsEncodedAndSanitized()
     {
         $html = '<div sprig s-val:x="alert(\'xss\')" s-val:z=\'alert("xss")\' s-vals=\'{"limit":1}\'></div>';
-        $html = SprigCore::getInstance()->components->parseHtml($html);
+        $html = Sprig::getInstance()->components->parseHtml($html);
         $this->assertStringContainsString('hx-vals=\'{"x":"alert(\u0027xss\u0027)","z":"alert(\u0022xss\u0022)","limit":1}\'', $html);
     }
 
     public function testGetParsedTagAttributesEmpty()
     {
         $html = '';
-        $result = SprigCore::getInstance()->components->parseHtml($html);
+        $result = Sprig::getInstance()->components->parseHtml($html);
         $this->assertEquals($html, $result);
     }
 
     public function testGetParsedTagAttributesHtml()
     {
         $html = '<div><p><span><template><h1>Hello</h1></template></span></p></div>';
-        $result = SprigCore::getInstance()->components->parseHtml($html);
+        $result = Sprig::getInstance()->components->parseHtml($html);
         $this->assertEquals($html, $result);
     }
 
     public function testGetParsedTagAttributesDuplicateIds()
     {
         $html = '<div id="my-id"><p id="my-id"><span id="my-id"></span></p></div>';
-        $result = SprigCore::getInstance()->components->parseHtml($html);
+        $result = Sprig::getInstance()->components->parseHtml($html);
         $this->assertEquals($html, $result);
     }
 
     public function testGetParsedTagAttributesScript()
     {
         $html = '<script><h1>Hello</h1></script>';
-        $result = SprigCore::getInstance()->components->parseHtml($html);
+        $result = Sprig::getInstance()->components->parseHtml($html);
         $this->assertEquals($html, $result);
     }
 
     public function testGetParsedTagAttributesUtfEncoding()
     {
         $html = 'ÆØÅäöü';
-        $result = SprigCore::getInstance()->components->parseHtml($html);
+        $result = Sprig::getInstance()->components->parseHtml($html);
         $this->assertEquals($html, $result);
     }
 
@@ -190,6 +190,6 @@ class ComponentsTest extends Unit
 
         $this->expectException(InvalidVariableException::class);
 
-        SprigCore::getInstance()->components->create('_component', $variables);
+        Sprig::getInstance()->components->create('_component', $variables);
     }
 }

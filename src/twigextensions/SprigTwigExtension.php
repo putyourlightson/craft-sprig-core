@@ -3,9 +3,9 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigcore\twigextensions;
+namespace putyourlightson\sprig\twigextensions;
 
-use putyourlightson\sprigcore\SprigCore;
+use putyourlightson\sprig\Sprig;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
@@ -18,7 +18,7 @@ class SprigTwigExtension extends AbstractExtension implements GlobalsInterface
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sprig', [SprigCore::getInstance()->components, 'create']),
+            new TwigFunction('sprig', [Sprig::getInstance()->components, 'create']),
         ];
     }
 
@@ -28,7 +28,7 @@ class SprigTwigExtension extends AbstractExtension implements GlobalsInterface
     public function getGlobals(): array
     {
         return [
-            'sprig' => SprigCore::$sprigVariable,
+            'sprig' => Sprig::$sprigVariable,
         ];
     }
 }

@@ -7,7 +7,7 @@ namespace putyourlightson\sprigcoretests\unit\variables;
 
 use Codeception\Test\Unit;
 use Craft;
-use putyourlightson\sprigcore\variables\SprigVariable;
+use putyourlightson\sprig\variables\SprigVariable;
 use UnitTester;
 
 /**

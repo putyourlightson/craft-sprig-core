@@ -9,7 +9,7 @@ First require the package in your plugin/module's `composer.json` file.
 ```json
 {
     "require": {
-        "putyourlightson/craft-sprig-core": "^1.9.0"
+        "putyourlightson/craft-sprig-core": "^1.0.0"
     }
 }
 ```
@@ -18,7 +18,7 @@ Then bootstrap the module from within your plugin/module's `init` method.
 
 ```php
 use craft\base\Plugin;
-use putyourlightson\sprigcore\SprigCore;
+use putyourlightson\sprig\Sprig;
 
 class MyPlugin extends Plugin
 {
@@ -26,7 +26,7 @@ class MyPlugin extends Plugin
     {
         parent::init();
 
-        SprigCore::bootstrap();
+        Sprig::bootstrap();
     }
 }
 ```

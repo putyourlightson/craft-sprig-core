@@ -3,16 +3,16 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigcore;
+namespace putyourlightson\sprig;
 
 use Craft;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
-use putyourlightson\sprigcore\services\ComponentsService;
-use putyourlightson\sprigcore\services\RequestService;
-use putyourlightson\sprigcore\twigextensions\SprigTwigExtension;
-use putyourlightson\sprigcore\variables\SprigVariable;
+use putyourlightson\sprig\services\ComponentsService;
+use putyourlightson\sprig\services\RequestService;
+use putyourlightson\sprig\twigextensions\SprigTwigExtension;
+use putyourlightson\sprig\variables\SprigVariable;
 use yii\base\Event;
 use yii\base\Module;
 
@@ -20,7 +20,7 @@ use yii\base\Module;
  * @property ComponentsService $components
  * @property RequestService $request
  */
-class SprigCore extends Module
+class Sprig extends Module
 {
     /**
      * @var SprigVariable
@@ -33,7 +33,7 @@ class SprigCore extends Module
     }
 
     /**
-     * @return SprigCore
+     * @return Sprig
      */
     public static function getInstance(): Module
     {
@@ -43,7 +43,7 @@ class SprigCore extends Module
             return $module;
         }
 
-        $module = new SprigCore($id);
+        $module = new Sprig($id);
         static::setInstance($module);
         Craft::$app->setModule($id, $module);
 

@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigcore\services;
+namespace putyourlightson\sprig\services;
 
 use Craft;
 use craft\base\Component;

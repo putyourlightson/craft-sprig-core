@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigcore\services;
+namespace putyourlightson\sprig\services;
 
 use Craft;
 use craft\base\Component as BaseComponent;
@@ -17,10 +17,10 @@ use craft\web\Request;
 use craft\web\View;
 use IvoPetkov\HTML5DOMDocument;
 use IvoPetkov\HTML5DOMElement;
-use putyourlightson\sprigcore\base\Component;
-use putyourlightson\sprigcore\errors\InvalidVariableException;
-use putyourlightson\sprigcore\events\ComponentEvent;
-use putyourlightson\sprigcore\SprigCore;
+use putyourlightson\sprig\base\Component;
+use putyourlightson\sprig\errors\InvalidVariableException;
+use putyourlightson\sprig\events\ComponentEvent;
+use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\components\SprigPlayground;
 use Twig\Markup;
 use yii\base\Model;
@@ -80,7 +80,7 @@ class ComponentsService extends BaseComponent
 
         $mergedVariables = array_merge(
             $variables,
-            SprigCore::getInstance()->request->getVariables()
+            Sprig::getInstance()->request->getVariables()
         );
 
         $event = new ComponentEvent([

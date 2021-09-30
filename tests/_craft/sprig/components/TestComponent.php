@@ -5,7 +5,7 @@
 
 namespace sprig\components;
 
-use putyourlightson\sprigcore\base\Component;
+use putyourlightson\sprig\base\Component;
 
 class TestComponent extends Component
 {

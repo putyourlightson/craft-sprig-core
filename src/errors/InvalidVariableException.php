@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprigcore\errors;
+namespace putyourlightson\sprig\errors;
 
 use Craft;
 use yii\base\Exception;
