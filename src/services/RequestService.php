@@ -69,7 +69,7 @@ class RequestService extends Component
      * @param string $name
      * @return string[]
      */
-    public function getValidatedParamValues(string $name)
+    public function getValidatedParamValues(string $name): array
     {
         $values = [];
 
@@ -91,7 +91,7 @@ class RequestService extends Component
      * @return string
      * @throws Exception
      */
-    public function validateData($value)
+    public function validateData($value): string
     {
         $value = Craft::$app->getSecurity()->validateData($value);
 
