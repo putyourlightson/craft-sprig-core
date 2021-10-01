@@ -21,7 +21,7 @@ use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\components\SprigPlayground;
+use putyourlightson\sprig\plugin\components\SprigPlayground;
 use Twig\Markup;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -159,7 +159,7 @@ class ComponentsService extends BaseComponent
      *
      * @param string $component
      * @param array $variables
-     * @return Component|null
+     * @return Component|object|null
      */
     public function createObject(string $component, array $variables = [])
     {
@@ -177,13 +177,10 @@ class ComponentsService extends BaseComponent
             throw new BadRequestHttpException('Component class “'.$componentClass.'” must extend “'.Component::class.'”.');
         }
 
-        /** @var Component $component */
-        $component = Craft::createObject([
+        return Craft::createObject([
             'class' => $componentClass,
             'attributes' => $variables,
         ]);
-
-        return $component;
     }
 
     /**
@@ -224,9 +221,7 @@ class ComponentsService extends BaseComponent
 
         // Solves HTML entities being double encoded.
         // https://github.com/putyourlightson/craft-sprig/issues/133#issuecomment-840662721
-        $output = str_replace('&amp;#', '&#', $output);
-
-        return $output;
+        return str_replace('&amp;#', '&#', $output);
     }
 
     /**
