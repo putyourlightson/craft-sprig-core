@@ -21,7 +21,7 @@ use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\components\SprigPlayground;
+use putyourlightson\sprig\plugin\components\SprigPlayground;
 use Twig\Markup;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
