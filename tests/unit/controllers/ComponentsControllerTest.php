@@ -34,7 +34,7 @@ class ComponentsControllerTest extends Unit
         Sprig::bootstrap();
 
         // Add test controller
-        Sprig::getInstance()->controllerMap['test'] = TestController::class;
+        Sprig::$core->controllerMap['test'] = TestController::class;
 
         Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
         Craft::$app->view->setTemplatesPath(Craft::getAlias('@templates'));
@@ -47,7 +47,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = Sprig::$core->runAction('components/render');
 
         $this->assertEquals('', trim($response->data));
     }
@@ -60,7 +60,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = Sprig::$core->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
     }
@@ -73,7 +73,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = Sprig::$core->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
     }
@@ -86,7 +86,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = Sprig::$core->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
     }
@@ -99,7 +99,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = Sprig::$core->runAction('components/render');
 
         $this->assertStringContainsString('success:true', trim($response->data));
         $this->assertStringContainsString('id:1', trim($response->data));
@@ -114,7 +114,7 @@ class ComponentsControllerTest extends Unit
         ]);
 
         /** @var Response $response */
-        $response = Sprig::getInstance()->runAction('components/render');
+        $response = Sprig::$core->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
         $this->assertStringContainsString('flashes[error]:Error', trim($response->data));

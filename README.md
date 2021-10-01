@@ -31,9 +31,9 @@ class MyPlugin extends Plugin
 }
 ```
 
-Issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
+Sprig plugin issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
 
-All changes are documented in https://github.com/putyourlightson/craft-sprig/blob/develop/CHANGELOG.md
+Sprig plugin changes are documented in https://github.com/putyourlightson/craft-sprig/blob/develop/CHANGELOG.md
 
 ## Documentation
 

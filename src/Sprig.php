@@ -22,6 +22,13 @@ use yii\base\Module;
  */
 class Sprig extends Module
 {
+    const ID = 'sprig-core';
+
+    /**
+     * @var Sprig
+     */
+    public static $core;
+
     /**
      * @var SprigVariable
      */
@@ -37,17 +44,17 @@ class Sprig extends Module
      */
     public static function getInstance(): Module
     {
-        $id = 'sprig-core';
-
-        if ($module = Craft::$app->getModule($id)) {
+        if ($module = Craft::$app->getModule(self::ID)) {
             return $module;
         }
 
-        $module = new Sprig($id);
+        $module = new Sprig(self::ID);
         static::setInstance($module);
-        Craft::$app->setModule($id, $module);
+        Craft::$app->setModule(self::ID, $module);
 
-        return $module::getInstance();
+        self::$core = $module;
+
+        return $module;
     }
 
     public function init()

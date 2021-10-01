@@ -80,7 +80,7 @@ class ComponentsService extends BaseComponent
 
         $mergedVariables = array_merge(
             $variables,
-            Sprig::getInstance()->request->getVariables()
+            Sprig::$core->request->getVariables()
         );
 
         $event = new ComponentEvent([

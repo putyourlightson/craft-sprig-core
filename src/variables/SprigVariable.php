@@ -236,11 +236,10 @@ class SprigVariable
      * @param array $variables
      * @param array $attributes
      * @return Markup
-     * @throws BadRequestHttpException
      */
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
-        return Sprig::$plugin->components->create($value, $variables, $attributes);
+        return Sprig::$core->components->create($value, $variables, $attributes);
     }
 
     /**

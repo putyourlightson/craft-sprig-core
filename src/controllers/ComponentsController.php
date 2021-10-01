@@ -30,21 +30,21 @@ class ComponentsController extends Controller
      */
     public function actionRender(): Response
     {
-        $siteId = Sprig::getInstance()->request->getValidatedParam('sprig:siteId');
+        $siteId = Sprig::$core->request->getValidatedParam('sprig:siteId');
         Craft::$app->getSites()->setCurrentSite($siteId);
 
-        $component = Sprig::getInstance()->request->getValidatedParam('sprig:component');
-        $action = Sprig::getInstance()->request->getValidatedParam('sprig:action');
+        $component = Sprig::$core->request->getValidatedParam('sprig:component');
+        $action = Sprig::$core->request->getValidatedParam('sprig:action');
 
         $variables = ArrayHelper::merge(
-            Sprig::getInstance()->request->getValidatedParamValues('sprig:variables'),
-            Sprig::getInstance()->request->getVariables()
+            Sprig::$core->request->getValidatedParamValues('sprig:variables'),
+            Sprig::$core->request->getVariables()
         );
 
         $content = '';
 
         if ($component) {
-            $componentObject = Sprig::getInstance()->components->createObject($component, $variables);
+            $componentObject = Sprig::$core->components->createObject($component, $variables);
 
             if ($componentObject) {
                 if ($action && method_exists($componentObject, $action)) {
@@ -60,13 +60,13 @@ class ComponentsController extends Controller
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
-            $template = Sprig::getInstance()->request->getValidatedParam('sprig:template');
+            $template = Sprig::$core->request->getValidatedParam('sprig:template');
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
         }
 
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
-        $response->data = Sprig::getInstance()->components->parseHtml($content);
+        $response->data = Sprig::$core->components->parseHtml($content);
 
         return $response;
     }
