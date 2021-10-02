@@ -13,21 +13,20 @@ use craft\helpers\Template;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
-use yii\web\BadRequestHttpException;
 
 class SprigVariable
 {
     /**
      * @var string
      */
-    public $htmxVersion = '1.5.0';
+    public $htmxVersion = '1.6.0';
 
     /**
      * Generate the SRI hash at https://www.srihash.org/
      *
      * @var string
      */
-    public $htmxSRIHash = 'sha384-oGA+prIp5Vchu6we2YkI51UtVzN9Jpx2Z7PnR1I78PnZlN8LkrCT4lqqqmDkyrvI';
+    public $htmxSRIHash = 'sha384-G4dtlRlMBrk5fEiRXDsLjriPo8Qk5ZeHVVxS8KhX6D7I9XXJlNqbdvRlp9/glk5D';
 
     /**
      * Returns the script tag with the given attributes.
