@@ -20,8 +20,8 @@
         }
     },
     "support": {
-        "docs": "https://putyourlightson.com/plugins/sprig",
+        "docs": "https://github.com/putyourlightson/craft-sprig-core",
         "source": "https://github.com/putyourlightson/craft-sprig-core",
-        "issues": "https://github.com/putyourlightson/craft-sprig/issues"
+        "issues": "https://github.com/putyourlightson/craft-sprig-core/issues"
     }
 }
