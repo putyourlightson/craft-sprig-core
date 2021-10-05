@@ -51,6 +51,7 @@ class Sprig extends Module
         $module = new Sprig(self::ID);
         static::setInstance($module);
         Craft::$app->setModule(self::ID, $module);
+        Craft::setAlias('@putyourlightson/sprig', __DIR__);
 
         return $module;
     }
@@ -66,9 +67,6 @@ class Sprig extends Module
             'components' => ComponentsService::class,
             'request' => RequestService::class,
         ]);
-
-        // Sets an alias (solves https://github.com/putyourlightson/craft-sprig/issues/170).
-        Craft::setAlias('@putyourlightson/sprig', __DIR__);
 
         $this->_registerTemplateRoots();
         $this->_registerTwigExtensions();
