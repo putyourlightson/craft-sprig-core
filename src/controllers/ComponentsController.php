@@ -66,7 +66,7 @@ class ComponentsController extends Controller
 
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
-        $response->data = Sprig::$core->components->parseHtml($content);
+        $response->data = Sprig::$core->components->parse($content);
 
         return $response;
     }

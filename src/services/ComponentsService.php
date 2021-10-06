@@ -54,6 +54,11 @@ class ComponentsService extends BaseComponent
     const SPRIG_PREFIXES = ['s', 'sprig', 'data-s', 'data-sprig'];
 
     /**
+     * @const string
+     */
+    const SPRIG_IGNORE_TAG = 's-ignore';
+
+    /**
      * @const string[]
      */
     const HTMX_ATTRIBUTES = ['boost', 'confirm', 'delete', 'disable', 'encoding', 'ext', 'get', 'headers', 'history-elt', 'include', 'indicator', 'params', 'patch', 'post', 'preserve', 'prompt', 'push-url', 'put', 'request', 'select', 'sse', 'swap', 'swap-oob', 'target', 'trigger', 'vals', 'vars', 'ws'];
@@ -111,7 +116,7 @@ class ComponentsService extends BaseComponent
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
         }
 
-        $content = $this->parseHtml($renderedContent);
+        $content = $this->parse($renderedContent);
 
         $values['sprig:'.$type] = Craft::$app->getSecurity()->hashData($value);
 
@@ -184,12 +189,40 @@ class ComponentsService extends BaseComponent
     }
 
     /**
+     * Parses and returns content.
+     *
+     * @param string $content
+     * @return string
+     */
+    public function parse(string $content): string
+    {
+        $tag = self::SPRIG_IGNORE_TAG;
+        $pattern = '/<'.$tag.'>([\s\S]*?)<\/'.$tag.'>/im';
+
+        // Exclude any HTML wrapped in ignore tags.
+        preg_match_all($pattern, $content, $matches);
+        $ignoreBlocks = $matches[1] ?? [];
+
+        foreach ($ignoreBlocks as $key => $value) {
+            $content = preg_replace($pattern, '<'.$tag.'-'.$key.'>', $content);
+        }
+
+        $content = $this->_parseHtml($content);
+
+        foreach ($ignoreBlocks as $key => $value) {
+            $content = str_replace('<'.$tag.'-'.$key.'>', $value, $content);
+        }
+
+        return $content;
+    }
+
+    /**
      * Parses and returns HTML.
      *
      * @param string $html
      * @return string
      */
-    public function parseHtml(string $html): string
+    private function _parseHtml(string $html): string
     {
         if (empty(trim($html))) {
             return $html;
@@ -221,7 +254,9 @@ class ComponentsService extends BaseComponent
 
         // Solves HTML entities being double encoded.
         // https://github.com/putyourlightson/craft-sprig/issues/133#issuecomment-840662721
-        return str_replace('&amp;#', '&#', $output);
+        $output = str_replace('&amp;#', '&#', $output);
+
+        return $output;
     }
 
     /**
@@ -229,7 +264,7 @@ class ComponentsService extends BaseComponent
      *
      * @param array $attributes
      */
-    public function _parseAttributes(array &$attributes)
+    private function _parseAttributes(array &$attributes)
     {
         $this->_parseSprigAttribute($attributes);
 
@@ -280,7 +315,7 @@ class ComponentsService extends BaseComponent
      * @param string $key
      * @param string $value
      */
-    public function _parseAttribute(array &$attributes, string $key, string $value)
+    private function _parseAttribute(array &$attributes, string $key, string $value)
     {
         $name = $this->_getSprigAttributeName($key);
 
