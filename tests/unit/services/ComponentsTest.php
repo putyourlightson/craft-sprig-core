@@ -135,10 +135,10 @@ class ComponentsTest extends Unit
 
     public function testGetParsedTagAttributesWithVerbatim()
     {
-        $html = '<s-verbatim><input sprig></s-verbatim><s-verbatim><input sprig></s-verbatim>';
+        $html = 'x<s-verbatim><input sprig id="1"></s-verbatim><s-verbatim><input sprig id="2"></s-verbatim>y';
         $html = Sprig::$core->components->parse($html);
 
-        $this->assertEquals('<input sprig><input sprig>', $html);
+        $this->assertEquals('x<input sprig id="1"><input sprig id="2">y', $html);
     }
 
     public function testGetParsedTagAttributesVals()
