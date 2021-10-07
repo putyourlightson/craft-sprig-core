@@ -200,20 +200,31 @@ class ComponentsService extends BaseComponent
      */
     public function parse(string $content): string
     {
-        $tag = self::SPRIG_VERBATIM_TAG;
-        $pattern = '/<'.$tag.'>([\s\S]*?)<\/'.$tag.'>/im';
+        $verbatimBlocks = [];
+        $key = 1;
+        $startPos = 0;
+        $startTag = '<'.self::SPRIG_VERBATIM_TAG.'>';
+        $endTag = '</'.self::SPRIG_VERBATIM_TAG.'>';
 
-        preg_match_all($pattern, $content, $matches);
+        while (($startPos = stripos($content, $startTag, $startPos)) !== false) {
+            $endPos = stripos($content, $endTag, $startPos);
 
-        // Replace verbatim blocks with placeholders.
-        foreach ($matches[0] as $key => $value) {
-            $content = str_replace($value, $this->_getVerbatimTagPlaceholder($key), $content);
+            if ($endPos !== false) {
+                $verbatimBlocks[$key] = substr(
+                    $content,
+                    $startPos + strlen($startTag),
+                    $endPos - $startPos - strlen($startTag)
+                );
+                $content = substr($content, 0, $startPos)
+                    .$this->_getVerbatimTagPlaceholder($key)
+                    .substr($content, $endPos + strlen($endTag));
+                $key++;
+            }
         }
 
         $content = $this->_parseHtml($content);
 
-        // Replace placeholders with inner content of verbatim blocks.
-        foreach ($matches[1] as $key => $value) {
+        foreach ($verbatimBlocks as $key => $value) {
             $content = str_replace($this->_getVerbatimTagPlaceholder($key), $value, $content);
         }
 
