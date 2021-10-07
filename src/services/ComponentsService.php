@@ -214,9 +214,7 @@ class ComponentsService extends BaseComponent
                 $endPos - $startPos - strlen($startTag)
             );
 
-            $content = substr($content, 0, $startPos)
-                .$this->_getVerbatimTagPlaceholder($key)
-                .substr($content, $endPos + strlen($endTag));
+            $content = substr_replace($content, $this->_getVerbatimTagPlaceholder($key), $startPos, $endPos - $startPos + strlen($endTag));
 
             $key++;
         }
