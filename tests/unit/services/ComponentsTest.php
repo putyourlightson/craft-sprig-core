@@ -138,7 +138,7 @@ class ComponentsTest extends Unit
         $html = '<s-verbatim><input sprig></s-verbatim><s-verbatim><input sprig></s-verbatim>';
         $html = Sprig::$core->components->parse($html);
 
-        $this->assertStringNotContainsString('data-hx-get=', $html);
+        $this->assertEquals('<input sprig><input sprig>', $html);
     }
 
     public function testGetParsedTagAttributesVals()
