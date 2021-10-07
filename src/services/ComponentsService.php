@@ -214,7 +214,7 @@ class ComponentsService extends BaseComponent
                 $endPos - $startPos - strlen($startTag)
             );
 
-            $content = substr_replace($content, $this->_getVerbatimTagPlaceholder($key), $startPos, $endPos - $startPos + strlen($endTag));
+            $content = substr_replace($content, $this->_getVerbatimPlaceholder($key), $startPos, $endPos - $startPos + strlen($endTag));
 
             $key++;
         }
@@ -222,16 +222,16 @@ class ComponentsService extends BaseComponent
         $content = $this->_parseHtml($content);
 
         foreach ($verbatimBlocks as $key => $value) {
-            $content = str_replace($this->_getVerbatimTagPlaceholder($key), $value, $content);
+            $content = str_replace($this->_getVerbatimPlaceholder($key), $value, $content);
         }
 
         return $content;
     }
 
     /**
-     * Returns the verbatim tag placeholder with the given key.
+     * Returns the verbatim placeholder with the given key.
      */
-    private function _getVerbatimTagPlaceholder(string $key): string
+    private function _getVerbatimPlaceholder(string $key): string
     {
         // Use an HTML comment so that the tag is not parsed as an element.
         return '<!--'.self::SPRIG_VERBATIM_TAG.'-'.$key.'-->';
