@@ -133,9 +133,9 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('data-hx-get=', $html);
     }
 
-    public function testGetParsedTagAttributesWithIgnore()
+    public function testGetParsedTagAttributesWithVerbatim()
     {
-        $html = '<s-ignore><div sprig></div></s-ignore>';
+        $html = '<s-verbatim><input sprig></s-verbatim><s-verbatim><input sprig></s-verbatim>';
         $html = Sprig::$core->components->parse($html);
 
         $this->assertStringNotContainsString('data-hx-get=', $html);
