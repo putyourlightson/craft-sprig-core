@@ -2,7 +2,7 @@
 
 ## 1.0.2 - Unreleased
 ### Added
-- Added the `<s-ignore></s-ignore>` element tags that tell Sprig to ignore what they wrap from being parsed for `sprig` and `s-` attributes, for edge-case optimisation.
+- Added the `<s-verbatim>` tag that tells Sprig to not parse `sprig` and `s-` attributes in the content it wraps, useful for optimising large amounts of content that does not need to be interactive.
 
 ## 1.0.1 - 2021-10-05
 ### Fixed
