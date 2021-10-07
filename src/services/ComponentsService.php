@@ -199,7 +199,7 @@ class ComponentsService extends BaseComponent
         $tag = self::SPRIG_IGNORE_TAG;
         $pattern = '/<'.$tag.'>([\s\S]*?)<\/'.$tag.'>/im';
 
-        // Exclude any HTML wrapped in ignore tags.
+        // Exclude content wrapped in ignore tags.
         preg_match_all($pattern, $content, $matches);
         $ignoreBlocks = $matches[1] ?? [];
 
