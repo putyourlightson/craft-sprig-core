@@ -191,6 +191,10 @@ class ComponentsService extends BaseComponent
     /**
      * Parses and returns content.
      *
+     * Content wrapped in ignore tags is not parsed. If the subject is very large
+     * then increasing the value of `pcre.backtrack_limit` may be necessary.
+     * https://www.php.net/manual/en/pcre.configuration.php#ini.pcre.backtrack-limit
+     *
      * @param string $content
      * @return string
      */
@@ -199,17 +203,17 @@ class ComponentsService extends BaseComponent
         $tag = self::SPRIG_IGNORE_TAG;
         $pattern = '/<'.$tag.'>([\s\S]*?)<\/'.$tag.'>/im';
 
-        // Exclude content wrapped in ignore tags.
         preg_match_all($pattern, $content, $matches);
-        $ignoreBlocks = $matches[1] ?? [];
 
-        foreach ($ignoreBlocks as $key => $value) {
-            $content = preg_replace($pattern, $this->_getIgnoreTagPlaceholder($key), $content);
+        // Replace ignore blocks with placeholders.
+        foreach ($matches[0] as $key => $value) {
+            $content = str_replace($value, $this->_getIgnoreTagPlaceholder($key), $content);
         }
 
         $content = $this->_parseHtml($content);
 
-        foreach ($ignoreBlocks as $key => $value) {
+        // Replace placeholders with inner content of ignore blocks.
+        foreach ($matches[1] as $key => $value) {
             $content = str_replace($this->_getIgnoreTagPlaceholder($key), $value, $content);
         }
 
