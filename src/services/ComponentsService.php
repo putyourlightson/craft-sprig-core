@@ -204,19 +204,21 @@ class ComponentsService extends BaseComponent
         $key = 1;
         $startTag = '<'.self::SPRIG_VERBATIM_TAG.'>';
         $endTag = '</'.self::SPRIG_VERBATIM_TAG.'>';
+        // Fold out calculations from the inner loop
+        $startTagLen = strlen($startTag);
+        $endTagLen = strlen($endTag);
 
         while (($startPos = stripos($content, $startTag)) !== false
             && ($endPos = stripos($content, $endTag, $startPos)) !== false)
         {
             $verbatimBlocks[$key] = substr(
                 $content,
-                $startPos + strlen($startTag),
-                $endPos - $startPos - strlen($startTag)
+                $startPos + $startTagLen,
+                $endPos - $startPos - $startTagLen
             );
-
             $content = substr($content, 0, $startPos)
                 .$this->_getVerbatimTagPlaceholder($key)
-                .substr($content, $endPos + strlen($endTag));
+                .substr($content, $endPos + $endTagLen);
 
             $key++;
         }
