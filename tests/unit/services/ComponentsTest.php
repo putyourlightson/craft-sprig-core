@@ -118,20 +118,27 @@ class ComponentsTest extends Unit
         $html = '<div sprig s-method="post" s-action="a/b/c" s-vals=\'{"limit":1}\'></div>';
         $html = Sprig::$core->components->parse($html);
 
-        $this->assertStringContainsString('hx-vals=\'{"limit":1}', $html);
-        $this->assertStringContainsString('hx-post=', $html);
-        $this->assertStringContainsString('hx-headers=\'{"'.Request::CSRF_HEADER.'"', $html);
+        $this->assertStringContainsString('data-hx-vals=\'{"limit":1}', $html);
+        $this->assertStringContainsString('data-hx-post=', $html);
+        $this->assertStringContainsString('data-hx-headers=\'{"'.Request::CSRF_HEADER.'"', $html);
         $this->assertStringContainsString('sprig:action', $html);
         $this->assertStringContainsString('"limit":1', $html);
     }
 
-    public function testGetParsedTagAttributesWithHxData()
+    public function testGetParsedTagAttributesWithData()
     {
-        $html = '<div data-sprig data-s-method="post"></div>';
+        $html = '<div data-sprig></div>';
         $html = Sprig::$core->components->parse($html);
 
-        $this->assertStringContainsString('data-hx-headers=\'{"'.Request::CSRF_HEADER.'"', $html);
-        $this->assertStringContainsString('data-hx-post=', $html);
+        $this->assertStringContainsString('data-hx-get=', $html);
+    }
+
+    public function testGetParsedTagAttributesWithIgnore()
+    {
+        $html = '<s-ignore><div sprig></div></s-ignore>';
+        $html = Sprig::$core->components->parse($html);
+
+        $this->assertStringNotContainsString('data-hx-get=', $html);
     }
 
     public function testGetParsedTagAttributesVals()

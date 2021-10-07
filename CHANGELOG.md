@@ -2,7 +2,7 @@
 
 ## 1.0.2 - Unreleased
 ### Added
-- Added the `s-ignore` tag that tells Sprig to ignore part of a component from being parsed for `sprig` and `s-` attributes.
+- Added the `<s-verbatim>` tag that tells Sprig to not parse `sprig` and `s-` attributes in the content it wraps, useful for optimising large amounts of content that does not need to be interactive.
 
 ## 1.0.1 - 2021-10-05
 ### Fixed

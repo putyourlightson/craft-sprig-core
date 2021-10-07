@@ -56,7 +56,7 @@ class ComponentsService extends BaseComponent
     /**
      * @const string
      */
-    const SPRIG_IGNORE_TAG = 's-ignore';
+    const SPRIG_VERBATIM_TAG = 's-verbatim';
 
     /**
      * @const string[]
@@ -191,29 +191,52 @@ class ComponentsService extends BaseComponent
     /**
      * Parses and returns content.
      *
+     * Content wrapped in verbatim tags is not parsed. If the subject is very large
+     * then increasing the value of `pcre.backtrack_limit` may be necessary.
+     * https://www.php.net/manual/en/pcre.configuration.php#ini.pcre.backtrack-limit
+     *
      * @param string $content
      * @return string
      */
     public function parse(string $content): string
     {
-        $tag = self::SPRIG_IGNORE_TAG;
-        $pattern = '/<'.$tag.'>([\s\S]*?)<\/'.$tag.'>/im';
+        $verbatimBlocks = [];
+        $key = 1;
+        $startTag = '<'.self::SPRIG_VERBATIM_TAG.'>';
+        $endTag = '</'.self::SPRIG_VERBATIM_TAG.'>';
 
-        // Exclude any HTML wrapped in ignore tags.
-        preg_match_all($pattern, $content, $matches);
-        $ignoreBlocks = $matches[1] ?? [];
+        while (($startPos = stripos($content, $startTag)) !== false
+            && ($endPos = stripos($content, $endTag, $startPos)) !== false)
+        {
+            $verbatimBlocks[$key] = substr(
+                $content,
+                $startPos + strlen($startTag),
+                $endPos - $startPos - strlen($startTag)
+            );
 
-        foreach ($ignoreBlocks as $key => $value) {
-            $content = preg_replace($pattern, '<'.$tag.'-'.$key.'>', $content);
+            $content = substr($content, 0, $startPos)
+                .$this->_getVerbatimTagPlaceholder($key)
+                .substr($content, $endPos + strlen($endTag));
+
+            $key++;
         }
 
         $content = $this->_parseHtml($content);
 
-        foreach ($ignoreBlocks as $key => $value) {
-            $content = str_replace('<'.$tag.'-'.$key.'>', $value, $content);
+        foreach ($verbatimBlocks as $key => $value) {
+            $content = str_replace($this->_getVerbatimTagPlaceholder($key), $value, $content);
         }
 
         return $content;
+    }
+
+    /**
+     * Returns the verbatim tag placeholder with the given key.
+     */
+    private function _getVerbatimTagPlaceholder(string $key): string
+    {
+        // Use an HTML comment so that the tag is not parsed as an element.
+        return '<!--'.self::SPRIG_VERBATIM_TAG.'-'.$key.'-->';
     }
 
     /**
