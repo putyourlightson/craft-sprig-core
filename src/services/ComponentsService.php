@@ -202,24 +202,23 @@ class ComponentsService extends BaseComponent
     {
         $verbatimBlocks = [];
         $key = 1;
-        $startPos = 0;
         $startTag = '<'.self::SPRIG_VERBATIM_TAG.'>';
         $endTag = '</'.self::SPRIG_VERBATIM_TAG.'>';
 
-        while (($startPos = stripos($content, $startTag, $startPos)) !== false) {
-            $endPos = stripos($content, $endTag, $startPos);
+        while (($startPos = stripos($content, $startTag)) !== false
+            && ($endPos = stripos($content, $endTag, $startPos)) !== false)
+        {
+            $verbatimBlocks[$key] = substr(
+                $content,
+                $startPos + strlen($startTag),
+                $endPos - $startPos - strlen($startTag)
+            );
 
-            if ($endPos !== false) {
-                $verbatimBlocks[$key] = substr(
-                    $content,
-                    $startPos + strlen($startTag),
-                    $endPos - $startPos - strlen($startTag)
-                );
-                $content = substr($content, 0, $startPos)
-                    .$this->_getVerbatimTagPlaceholder($key)
-                    .substr($content, $endPos + strlen($endTag));
-                $key++;
-            }
+            $content = substr($content, 0, $startPos)
+                .$this->_getVerbatimTagPlaceholder($key)
+                .substr($content, $endPos + strlen($endTag));
+
+            $key++;
         }
 
         $content = $this->_parseHtml($content);
