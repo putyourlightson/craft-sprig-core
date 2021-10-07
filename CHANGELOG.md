@@ -2,7 +2,7 @@
 
 ## 1.0.2 - Unreleased
 ### Added
-- Added the `s-ignore` tag that tells Sprig to ignore part of a component from being parsed for `sprig` and `s-` attributes.
+- Added the `<s-ignore></s-ignore>` element tags that tell Sprig to ignore what they wrap from being parsed for `sprig` and `s-` attributes, for edge-case optimisation.
 
 ## 1.0.1 - 2021-10-05
 ### Fixed

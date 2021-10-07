@@ -204,16 +204,25 @@ class ComponentsService extends BaseComponent
         $ignoreBlocks = $matches[1] ?? [];
 
         foreach ($ignoreBlocks as $key => $value) {
-            $content = preg_replace($pattern, '<'.$tag.'-'.$key.'>', $content);
+            $content = preg_replace($pattern, $this->_getIgnoreTagPlaceholder($key), $content);
         }
 
         $content = $this->_parseHtml($content);
 
         foreach ($ignoreBlocks as $key => $value) {
-            $content = str_replace('<'.$tag.'-'.$key.'>', $value, $content);
+            $content = str_replace($this->_getIgnoreTagPlaceholder($key), $value, $content);
         }
 
         return $content;
+    }
+
+    /**
+     * Returns the ignore tag placeholder with the given key.
+     */
+    private function _getIgnoreTagPlaceholder(string $key): string
+    {
+        // Use an HTML comment so that the tag is not parsed as an element.
+        return '<!--'.self::SPRIG_IGNORE_TAG.'-'.$key.'-->';
     }
 
     /**
