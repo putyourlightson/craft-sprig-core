@@ -218,10 +218,8 @@ class ComponentsService extends BaseComponent
             );
             // Remove function call from inner loop
             $verbatimTagPlaceholder = '<!--'.self::SPRIG_VERBATIM_TAG.'-'.$key.'-->';
-            $content = substr($content, 0, $startPos)
-                .$verbatimTagPlaceholder
-                .substr($content, $endPos + $endTagLen);
-
+            // Do one substr_replace rather than two substr calls
+            $content = substr_replace($content, $verbatimTagPlaceholder, $startPos, $endPos + $endTagLen);
             $key++;
         }
 
