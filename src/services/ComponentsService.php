@@ -189,10 +189,10 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Parses and returns content.
+     * Parses content that is not wrapped in verbatim tags.
      *
-     * Content wrapped in verbatim tags is not parsed. If the subject is very large
-     * then increasing the value of `pcre.backtrack_limit` may be necessary.
+     * This method avoids using `preg_match` and `preg_replace` which can fail
+     * if the subject is very large due to the `pcre.backtrack_limit` configuration setting.
      * https://www.php.net/manual/en/pcre.configuration.php#ini.pcre.backtrack-limit
      *
      * @param string $content
@@ -229,9 +229,9 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Returns the verbatim tag placeholder with the given key.
+     * Returns the verbatim placeholder with the given key.
      */
-    private function _getVerbatimTagPlaceholder(string $key): string
+    private function _getVerbatimPlaceholder(string $key): string
     {
         // Use an HTML comment so that the tag is not parsed as an element.
         return '<!--'.self::SPRIG_VERBATIM_TAG.'-'.$key.'-->';
