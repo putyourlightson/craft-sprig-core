@@ -264,11 +264,13 @@ class ComponentsService extends BaseComponent
         foreach ($dom->getElementsByTagName('*') as $element) {
             $attributes = $element->getAttributes();
 
-            $this->_parseAttributes($attributes);
-
-            foreach ($attributes as $attribute => $value) {
-                $element->setAttribute($attribute, $value);
+            // Only re-set the attributes if sprig attributes were found
+            if ($this->_parseAttributes($attributes)) {
+                foreach ($attributes as $attribute => $value) {
+                    $element->setAttribute($attribute, $value);
+                }
             }
+
         }
 
         $output = $dom->getElementsByTagName('body')[0]->innerHTML;
@@ -284,26 +286,33 @@ class ComponentsService extends BaseComponent
      * Parses an array of attributes.
      *
      * @param array $attributes
+     * @return bool whether sprig attributes are found
      */
-    private function _parseAttributes(array &$attributes)
+    private function _parseAttributes(array &$attributes): bool
     {
-        $this->_parseSprigAttribute($attributes);
+        // Only parse the attributes if sprig attributes were found
+        if ($this->_parseSprigAttribute($attributes)) {
+            foreach ($attributes as $key => $value) {
+                $this->_parseAttribute($attributes, $key, $value);
+            }
 
-        foreach ($attributes as $key => $value) {
-            $this->_parseAttribute($attributes, $key, $value);
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Parses the Sprig attribute on an array of attributes.
      *
      * @param array $attributes
+     * @return bool whether sprig attributes are found
      */
-    private function _parseSprigAttribute(array &$attributes)
+    private function _parseSprigAttribute(array &$attributes): bool
     {
         // Use `!isset` over `!empty` because the attributes value will be an empty string
         if (!isset($attributes['sprig']) && !isset($attributes['data-sprig'])) {
-            return;
+            return false;
         }
 
         $verb = 'get';
@@ -327,6 +336,8 @@ class ComponentsService extends BaseComponent
         }
 
         $attributes[self::HTMX_PREFIX.$verb] = UrlHelper::actionUrl(self::RENDER_CONTROLLER_ACTION, $params);
+
+        return true;
     }
 
     /**
