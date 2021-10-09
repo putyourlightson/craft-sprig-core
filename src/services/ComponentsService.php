@@ -244,18 +244,14 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Convert an HTML tag passed in as an array to a HTML tag string
+     * Convert an HTML tag passed in as an array to an HTML tag string
      *
      * @param array $htmlArray
      * @return string
      */
     private function htmlArrayToTag(array $htmlArray): string
     {
-        $html = '<'.$htmlArray['name'];
-        foreach ($htmlArray['attributes'] as $key => $value) {
-            $html .= " {$key}='{$value}'";
-        }
-        $html .= '>';
+        $html = '<' . $htmlArray['name'] . Html::renderTagAttributes($htmlArray['attributes']) . '>';
 
         return $html;
     }
