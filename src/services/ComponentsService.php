@@ -200,84 +200,64 @@ class ComponentsService extends BaseComponent
      */
     public function parse(string $content): string
     {
-        $verbatimBlocks = [];
-        $key = 1;
-        $startTag = '<'.self::SPRIG_VERBATIM_TAG.'>';
-        $endTag = '</'.self::SPRIG_VERBATIM_TAG.'>';
-
-        while (($startPos = stripos($content, $startTag)) !== false
-            && ($endPos = stripos($content, $endTag, $startPos)) !== false)
-        {
-            $verbatimBlocks[$key] = substr(
-                $content,
-                $startPos + strlen($startTag),
-                $endPos - $startPos - strlen($startTag)
-            );
-
-            $content = substr_replace($content, $this->_getVerbatimPlaceholder($key), $startPos, $endPos - $startPos + strlen($endTag));
-
-            $key++;
-        }
-
-        $content = $this->_parseHtml($content);
-
-        foreach ($verbatimBlocks as $key => $value) {
-            $content = str_replace($this->_getVerbatimPlaceholder($key), $value, $content);
+        // Do this once, and stash the object for re-used
+        $dom = new \DOMDocument();
+        $pattern = '<[a-z\s\'"\n]*[s-|sprig-|data-s|data-sprig][^>]*>';
+        // The test
+        if (preg_match_all('`'.$pattern.'`i', $content,$matches) !== false) {
+            foreach ($matches[0] as $match) {
+                $htmlArray = $this->htmlTagToArray($dom, $match);
+                if ($htmlArray) {
+                    $this->_parseAttributes($htmlArray['attributes']);
+                    $newTag = $this->htmlArrayToTag($htmlArray);
+                    $content = str_replace($match, $newTag, $content);
+                }
+            }
         }
 
         return $content;
     }
 
     /**
-     * Returns the verbatim tag placeholder with the given key.
+     * Convert an HTML tag passed in as a string to an array containing its name, and attributes
+     *
+     * @param \DOMDocument $dom The DOMDocument to use; allocate it once, and re-used it
+     * @param string $htmlTag   The HTML tag to be parsed
+     * @return array|null
      */
-    private function _getVerbatimTagPlaceholder(string $key): string
+    private function htmlTagToArray($dom, $htmlTag)
     {
-        // Use an HTML comment so that the tag is not parsed as an element.
-        return '<!--'.self::SPRIG_VERBATIM_TAG.'-'.$key.'-->';
+        $dom->loadHTML($htmlTag, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $domElement = $dom->firstChild;
+        if ($domElement === null) {
+            return null;
+        }
+        $attrs = [];
+        foreach($domElement->attributes as $attr) {
+            $attrs[$attr->name] = $attr->value;
+        }
+
+        return [
+            'name' => $domElement->nodeName,
+            'attributes' => $attrs,
+        ];
     }
 
     /**
-     * Parses and returns HTML.
+     * Convert an HTML tag passed in as an array to a HTML tag string
      *
-     * @param string $html
+     * @param array $htmlArray
      * @return string
      */
-    private function _parseHtml(string $html): string
+    private function htmlArrayToTag(array $htmlArray): string
     {
-        if (empty(trim($html))) {
-            return $html;
+        $html = '<'.$htmlArray['name'];
+        foreach ($htmlArray['attributes'] as $key => $value) {
+            $html .= " {$key}='{$value}'";
         }
+        $html .= '>';
 
-        // Use HTML5DOMDocument which supports HTML5 and takes care of UTF-8 encoding.
-        $dom = new HTML5DOMDocument();
-
-        // Surround html with body tag to ensure script tags are not tampered with.
-        // https://github.com/putyourlightson/craft-sprig/issues/34
-        $html = '<!doctype html><html lang=""><body>'.$html.'</body></html>';
-
-        // Allow duplicate IDs to avoid an error being thrown.
-        // https://github.com/ivopetkov/html5-dom-document-php/issues/21
-        $dom->loadHTML($html, HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
-
-        /** @var HTML5DOMElement $element */
-        foreach ($dom->getElementsByTagName('*') as $element) {
-            $attributes = $element->getAttributes();
-
-            $this->_parseAttributes($attributes);
-
-            foreach ($attributes as $attribute => $value) {
-                $element->setAttribute($attribute, $value);
-            }
-        }
-
-        $output = $dom->getElementsByTagName('body')[0]->innerHTML;
-
-        // Solves HTML entities being double encoded.
-        // https://github.com/putyourlightson/craft-sprig/issues/133#issuecomment-840662721
-        $output = str_replace('&amp;#', '&#', $output);
-
-        return $output;
+        return $html;
     }
 
     /**
