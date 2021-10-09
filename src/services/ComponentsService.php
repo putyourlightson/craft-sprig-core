@@ -255,7 +255,10 @@ class ComponentsService extends BaseComponent
     {
         $html = '<'.$htmlArray['name'];
         foreach ($htmlArray['attributes'] as $key => $value) {
-            $html .= " {$key}='{$value}'";
+            $html .= ' ' . $key;
+            if ($value !== '') {
+                $html .= '=' . '"' . $value . '"';
+            }
         }
         $html .= '>';
 
