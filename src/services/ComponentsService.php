@@ -227,7 +227,9 @@ class ComponentsService extends BaseComponent
      */
     private function htmlTagToArray($dom, $htmlTag)
     {
+        libxml_use_internal_errors(true);
         $dom->loadHTML($htmlTag, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_use_internal_errors(false);
         $domElement = $dom->firstChild;
         if ($domElement === null) {
             return null;
