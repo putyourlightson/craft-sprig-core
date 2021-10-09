@@ -133,14 +133,6 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('data-hx-get=', $html);
     }
 
-    public function testGetParsedTagAttributesWithVerbatim()
-    {
-        $html = 'x<s-verbatim><input sprig id="1"></s-verbatim><s-verbatim><input sprig id="2"></s-verbatim>y';
-        $html = Sprig::$core->components->parse($html);
-
-        $this->assertEquals('x<input sprig id="1"><input sprig id="2">y', $html);
-    }
-
     public function testGetParsedTagAttributesVals()
     {
         $html = '<div sprig s-val:x-y-z="a" s-vals=\'{"limit":1}\'></div>';
@@ -171,7 +163,7 @@ class ComponentsTest extends Unit
 
     public function testGetParsedTagAttributesDuplicateIds()
     {
-        $html = '<div id="my-id"><p id="my-id"><span id="my-id"></span></p></div>';
+        $html = "<div id='my-id'><p id='my-id'><span id='my-id'></span></p></div>";
         $result = Sprig::$core->components->parse($html);
         $this->assertEquals($html, $result);
     }
