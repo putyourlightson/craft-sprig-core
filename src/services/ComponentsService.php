@@ -15,8 +15,6 @@ use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\Request;
 use craft\web\View;
-use IvoPetkov\HTML5DOMDocument;
-use IvoPetkov\HTML5DOMElement;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
