@@ -132,7 +132,7 @@ class ComponentsTest extends Unit
 
         $this->assertStringContainsString('data-hx-get=', $html);
     }
-    
+
     public function testGetParsedTagAttributesVals()
     {
         $html = '<div sprig s-val:x-y-z="a" s-vals=\'{"limit":1}\'></div>';
