@@ -189,10 +189,10 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Parses content that is not wrapped in verbatim tags.
+     * Parses and returns content.
      *
-     * This method avoids using `preg_match` and `preg_replace` which can fail
-     * if the subject is very large due to the `pcre.backtrack_limit` configuration setting.
+     * Content wrapped in verbatim tags is not parsed. If the subject is very large
+     * then increasing the value of `pcre.backtrack_limit` may be necessary.
      * https://www.php.net/manual/en/pcre.configuration.php#ini.pcre.backtrack-limit
      *
      * @param string $content
@@ -229,9 +229,9 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Returns the verbatim placeholder with the given key.
+     * Returns the verbatim tag placeholder with the given key.
      */
-    private function _getVerbatimPlaceholder(string $key): string
+    private function _getVerbatimTagPlaceholder(string $key): string
     {
         // Use an HTML comment so that the tag is not parsed as an element.
         return '<!--'.self::SPRIG_VERBATIM_TAG.'-'.$key.'-->';
@@ -262,15 +262,12 @@ class ComponentsService extends BaseComponent
 
         /** @var HTML5DOMElement $element */
         foreach ($dom->getElementsByTagName('*') as $element) {
-            // Only bother parsing if a Sprig attribute is present
-            if ($element->getAttribute('sprig') !== '' || $element->getAttribute('data-sprig') !== '') {
-                $attributes = $element->getAttributes();
+            $attributes = $element->getAttributes();
 
-                $this->_parseAttributes($attributes);
+            $this->_parseAttributes($attributes);
 
-                foreach ($attributes as $attribute => $value) {
-                    $element->setAttribute($attribute, $value);
-                }
+            foreach ($attributes as $attribute => $value) {
+                $element->setAttribute($attribute, $value);
             }
         }
 
