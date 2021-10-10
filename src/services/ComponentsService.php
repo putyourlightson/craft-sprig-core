@@ -200,7 +200,7 @@ class ComponentsService extends BaseComponent
     {
         // Do this once, and stash the object for re-used
         $dom = new \DOMDocument();
-        $pattern = '<[a-z\s\'"\n]*[s-|sprig-|data-s|data-sprig][^>]*>';
+        $pattern = '<[a-z\s\'"]*[s-|sprig-|data-s|data-sprig][^>]*>';
         // The test
         if (preg_match_all('`'.$pattern.'`i', $content,$matches) !== false) {
             foreach ($matches[0] as $match) {
