@@ -1,4 +1,4 @@
-<p align="center"><img width="150" src="https://raw.githubusercontent.com/putyourlightson/craft-sprig/v1/src/icon.svg"></p>
+<p align="center"><img width="150" src="https://raw.githubusercontent.com/khalwat/craft-sprig-core/develop/src/resources/img/icon-01.svg"><img width="150" src="https://raw.githubusercontent.com/khalwat/craft-sprig-core/develop/src/resources/img/icon-02.svg"><img width="150" src="https://raw.githubusercontent.com/khalwat/craft-sprig-core/develop/src/resources/img/icon-03.svg"><img width="150" src="https://raw.githubusercontent.com/khalwat/craft-sprig-core/develop/src/resources/img/icon-04.svg"></p>
 
 # Sprig Core for Craft CMS
 
