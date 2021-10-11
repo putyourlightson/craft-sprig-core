@@ -12,7 +12,7 @@ First require the package in your plugin/module's `composer.json` file.
 ```json
 {
     "require": {
-        "putyourlightson/craft-sprig-core": "^1.0.0"
+        "putyourlightson/craft-sprig-core": "^1.0"
     }
 }
 ```
