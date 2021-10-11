@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 1.0.2 - Unreleased
+## 1.0.2 - 2021-10-11
 ### Added
 - Optimised the performance and overhead of parsing Sprig components ([#2](https://github.com/putyourlightson/craft-sprig-core/issues/2) ❤️@nystudio107).
 
