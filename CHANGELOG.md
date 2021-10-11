@@ -2,7 +2,7 @@
 
 ## 1.0.2 - Unreleased
 ### Added
-- Optimised the performance and overhead of parsing Sprig components (❤️@nystudio107).
+- Optimised the performance and overhead of parsing Sprig components ([#2](https://github.com/putyourlightson/craft-sprig-core/issues/2) ❤️@nystudio107).
 
 ## 1.0.1 - 2021-10-05
 ### Fixed

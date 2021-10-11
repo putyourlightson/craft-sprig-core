@@ -1,8 +1,11 @@
+[![Stable Version](https://img.shields.io/packagist/v/putyourlightson/craft-sprig-core?label=stable)]((https://packagist.org/packages/putyourlightson/craft-sprig-core))
+[![Total Downloads](https://img.shields.io/packagist/dt/putyourlightson/craft-sprig-core)](https://packagist.org/packages/putyourlightson/craft-sprig-core)
+
 <p align="center"><img width="150" src="https://raw.githubusercontent.com/putyourlightson/craft-sprig-core/v1/src/icon.svg"></p>
 
-# Sprig Core for Craft CMS
+# Sprig Core Module for Craft CMS
 
-This module provides the core functionality for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for Craft CMS. If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed. 
+This module provides the core functionality for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for [Craft CMS](https://craftcms.com/). If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed. 
 
 First require the package in your plugin/module's `composer.json` file.
 
@@ -29,6 +32,14 @@ class MyPlugin extends Plugin
         Sprig::bootstrap();
     }
 }
+```
+
+Then use the Sprig function and tags as normal in your control panel templates.
+
+```twig
+{{ sprig('_components/search') }}
+
+{{ sprig.script }}
 ```
 
 Sprig plugin issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
