@@ -2,7 +2,7 @@
 
 ## 1.0.2 - Unreleased
 ### Added
-- Added the `<s-verbatim>` tag that tells Sprig to not parse `sprig` and `s-` attributes in the content it wraps, useful for optimising large amounts of content that does not need to be interactive.
+- Optimised the performance and overhead of parsing Sprig components (❤️@nystudio107).
 
 ## 1.0.1 - 2021-10-05
 ### Fixed

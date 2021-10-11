@@ -15,6 +15,7 @@ use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\Request;
 use craft\web\View;
+use DOMDocument;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
@@ -49,12 +50,7 @@ class ComponentsService extends BaseComponent
     /**
      * @const string[]
      */
-    const SPRIG_PREFIXES = ['s', 'sprig', 'data-s', 'data-sprig'];
-
-    /**
-     * @const string
-     */
-    const SPRIG_VERBATIM_TAG = 's-verbatim';
+    const SPRIG_PREFIXES = ['s-', 'data-s-', 'sprig-', 'data-sprig-'];
 
     /**
      * @const string[]
@@ -65,6 +61,11 @@ class ComponentsService extends BaseComponent
      * @const string
      */
     const HTMX_PREFIX = 'data-hx-';
+
+    /**
+     * @var DOMDocument|null
+     */
+    private $_dom;
 
     /**
      * Creates a new component.
@@ -187,73 +188,89 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Parses and returns content.
-     *
-     * Content wrapped in verbatim tags is not parsed. If the subject is very large
-     * then increasing the value of `pcre.backtrack_limit` may be necessary.
-     * https://www.php.net/manual/en/pcre.configuration.php#ini.pcre.backtrack-limit
+     * Parses content for Sprig attributes.
      *
      * @param string $content
      * @return string
      */
     public function parse(string $content): string
     {
-        // Do this once, and stash the object for re-used
-        $dom = new \DOMDocument();
-        $pattern = '<[a-z\s\'"]*[s-|sprig-|data-s|data-sprig][^>]*>';
-        // The test
-        if (preg_match_all('`'.$pattern.'`i', $content,$matches) !== false) {
-            foreach ($matches[0] as $match) {
-                $htmlArray = $this->htmlTagToArray($dom, $match);
-                if ($htmlArray) {
-                    $this->_parseAttributes($htmlArray['attributes']);
-                    $newTag = $this->htmlArrayToTag($htmlArray);
-                    $content = str_replace($match, $newTag, $content);
-                }
-            }
+        $parseableTags = $this->_getParseableTags($content);
+
+        foreach ($parseableTags as $tag) {
+            list($name, $attributes) = $this->_parseHtmlTag($tag);
+            $this->_parseAttributes($attributes);
+            $newTag = $this->_renderHtmlTag($name, $attributes);
+            $content = str_replace($tag, $newTag, $content);
         }
 
         return $content;
     }
 
-    /**
-     * Convert an HTML tag passed in as a string to an array containing its name, and attributes
-     *
-     * @param \DOMDocument $dom The DOMDocument to use; allocate it once, and re-used it
-     * @param string $htmlTag   The HTML tag to be parsed
-     * @return array|null
-     */
-    private function htmlTagToArray($dom, $htmlTag)
+    private function _getParseableTags(string $content): array
     {
-        libxml_use_internal_errors(true);
-        $dom->loadHTML($htmlTag, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        libxml_use_internal_errors(false);
-        $domElement = $dom->firstChild;
-        if ($domElement === null) {
-            return null;
-        }
-        $attrs = [];
-        foreach($domElement->attributes as $attr) {
-            $attrs[$attr->name] = $attr->value;
+        $attributePrefixes = ['sprig', 'data-sprig'];
+
+        foreach (self::SPRIG_PREFIXES as $prefix) {
+            foreach ($attributePrefixes as $attributePrefix) {
+                if (stripos($prefix, $attributePrefix) === 0) {
+                    continue(2);
+                }
+            }
+
+            $attributePrefixes[] = $prefix;
         }
 
-        return [
-            'name' => $domElement->nodeName,
-            'attributes' => $attrs,
-        ];
+        $pattern = '/<[^>]+\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
+
+        if (preg_match_all($pattern, $content, $matches)) {
+            return $matches[0];
+        }
+
+        return [];
     }
 
     /**
-     * Convert an HTML tag passed in as an array to an HTML tag string
+     * Parses an HTML tag and returns an array containing its name and attributes.
      *
-     * @param array $htmlArray
-     * @return string
+     * @param string $html
+     * @return array|null
      */
-    private function htmlArrayToTag(array $htmlArray): string
+    private function _parseHtmlTag(string $html)
     {
-        $html = '<' . $htmlArray['name'] . Html::renderTagAttributes($htmlArray['attributes']) . '>';
+        if ($this->_dom === null) {
+            $this->_dom = new DOMDocument();
+        }
 
-        return $html;
+        libxml_use_internal_errors(true);
+        $this->_dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_use_internal_errors(false);
+
+        $domElement = $this->_dom->firstChild;
+
+        if ($domElement === null) {
+            return null;
+        }
+
+        $attributes = [];
+
+        foreach($domElement->attributes as $attribute) {
+            $attributes[$attribute->name] = $attribute->value;
+        }
+
+        return [$domElement->nodeName, $attributes];
+    }
+
+    /**
+     * Returns an HTML tag constructed via a name and attributes.
+     *
+     * @param string $name
+     * @param array $attributes
+     * @return array|null
+     */
+    private function _renderHtmlTag(string $name, array $attributes): string
+    {
+        return '<' . $name . Html::renderTagAttributes($attributes) . '>';
     }
 
     /**
@@ -263,10 +280,13 @@ class ComponentsService extends BaseComponent
      */
     private function _parseAttributes(array &$attributes)
     {
-        $this->_parseSprigAttribute($attributes);
-
-        foreach ($attributes as $key => $value) {
-            $this->_parseAttribute($attributes, $key, $value);
+        foreach ($attributes as $key => &$value) {
+            if ($key == 'sprig' || $key == 'data-sprig') {
+                $this->_parseSprigAttribute($attributes);
+            }
+            else {
+                $this->_parseAttribute($attributes, $key, $value);
+            }
         }
     }
 
@@ -277,11 +297,6 @@ class ComponentsService extends BaseComponent
      */
     private function _parseSprigAttribute(array &$attributes)
     {
-        // Use `!isset` over `!empty` because the attributes value will be an empty string
-        if (!isset($attributes['sprig']) && !isset($attributes['data-sprig'])) {
-            return;
-        }
-
         $verb = 'get';
         $params = [];
 
@@ -310,10 +325,11 @@ class ComponentsService extends BaseComponent
      *
      * @param array $attributes
      * @param string $key
-     * @param string $value
+     * @param string|array $value
      */
-    private function _parseAttribute(array &$attributes, string $key, string $value)
+    private function _parseAttribute(array &$attributes, string $key, $value)
     {
+        if (is_array($value)) Craft::dd($value);
         $name = $this->_getSprigAttributeName($key);
 
         if (!$name) {
@@ -330,13 +346,11 @@ class ComponentsService extends BaseComponent
             $attributes[self::HTMX_PREFIX.'target'] = $value;
             $attributes[self::HTMX_PREFIX.'swap'] = 'outerHTML';
         }
+        elseif ($name == 'headers' || $name == 'vals') {
+            $this->_mergeJsonAttributes($attributes, $name, $value);
+        }
         elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
-            if ($name == 'headers' || $name == 'vals') {
-                $this->_mergeJsonAttributes($attributes, $name, $value);
-            }
-            else {
-                $attributes[self::HTMX_PREFIX.$name] = $value;
-            }
+            $attributes[self::HTMX_PREFIX.$name] = $value;
 
             // Deprecate `s-vars`
             if ($name == 'vars') {
@@ -380,8 +394,8 @@ class ComponentsService extends BaseComponent
     private function _getSprigAttributeName(string $key): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
-            if (strpos($key, $prefix.'-') === 0) {
-                return substr($key, strlen($prefix) + 1);
+            if (strpos($key, $prefix) === 0) {
+                return substr($key, strlen($prefix));
             }
         }
 
@@ -398,8 +412,8 @@ class ComponentsService extends BaseComponent
     private function _getSprigAttributeValue(array $attributes, string $name): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
-            if (!empty($attributes[$prefix.'-'.$name])) {
-                return $attributes[$prefix.'-'.$name];
+            if (!empty($attributes[$prefix.$name])) {
+                return $attributes[$prefix.$name];
             }
         }
 

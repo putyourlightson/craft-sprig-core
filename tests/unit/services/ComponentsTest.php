@@ -48,11 +48,11 @@ class ComponentsTest extends Unit
         $html = (string)$markup;
 
         $this->assertStringContainsString('id="abc"', $html);
-        $this->assertStringContainsString('hx-include="#abc *"', $html);
-        $this->assertStringContainsString('hx-trigger="load"', $html);
+        $this->assertStringContainsString('data-hx-include="#abc *"', $html);
+        $this->assertStringContainsString('data-hx-trigger="load"', $html);
         $this->assertStringContainsString('sprig:template', $html);
         $this->assertStringContainsString('limit:1', $html);
-        $this->assertStringContainsString('hx-push-url="new-url"', $html);
+        $this->assertStringContainsString('data-hx-push-url="new-url"', $html);
         $this->assertStringContainsString('xyz 15', $html);
     }
 
@@ -61,7 +61,7 @@ class ComponentsTest extends Unit
         $markup = Sprig::$core->components->create('_empty');
         $html = (string)$markup;
 
-        $this->assertStringContainsString('hx-get', $html);
+        $this->assertStringContainsString('data-hx-get', $html);
     }
 
     public function testCreateNoComponent()
@@ -118,11 +118,10 @@ class ComponentsTest extends Unit
         $html = '<div sprig s-method="post" s-action="a/b/c" s-vals=\'{"limit":1}\'></div>';
         $html = Sprig::$core->components->parse($html);
 
-        $this->assertStringContainsString('data-hx-vals=\'{"limit":1}', $html);
         $this->assertStringContainsString('data-hx-post=', $html);
-        $this->assertStringContainsString('data-hx-headers=\'{"'.Request::CSRF_HEADER.'"', $html);
-        $this->assertStringContainsString('sprig:action', $html);
-        $this->assertStringContainsString('"limit":1', $html);
+        $this->assertStringContainsString('sprig:action=', $html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;'.Request::CSRF_HEADER.'&quot;', $html);
+        $this->assertStringContainsString('data-hx-vals="{&quot;limit&quot;:1}', $html);
     }
 
     public function testGetParsedTagAttributesWithData()
@@ -137,14 +136,14 @@ class ComponentsTest extends Unit
     {
         $html = '<div sprig s-val:x-y-z="a" s-vals=\'{"limit":1}\'></div>';
         $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('hx-vals=\'{"xYZ":"a","limit":1}\'', $html);
+        $this->assertStringContainsString('data-hx-vals="{&quot;xYZ&quot;:&quot;a&quot;,&quot;limit&quot;:1}"', $html);
     }
 
     public function testGetParsedTagAttributesValsEncodedAndSanitized()
     {
         $html = '<div sprig s-val:x="alert(\'xss\')" s-val:z=\'alert("xss")\' s-vals=\'{"limit":1}\'></div>';
         $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('hx-vals=\'{"x":"alert(\u0027xss\u0027)","z":"alert(\u0022xss\u0022)","limit":1}\'', $html);
+        $this->assertStringContainsString('data-hx-vals="{&quot;x&quot;:&quot;alert(\u0027xss\u0027)&quot;,&quot;z&quot;:&quot;alert(\u0022xss\u0022)&quot;,&quot;limit&quot;:1}"', $html);
     }
 
     public function testGetParsedTagAttributesEmpty()
