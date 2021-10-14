@@ -2,7 +2,7 @@
 
 ## 1.0.3 - 2021-10-14
 ### Fixed
-- Fixed multibyte character strings not being correctly converted ([#3](https://github.com/putyourlightson/craft-sprig-core/issues/3)). 
+- Fixed multibyte character strings not being correctly converted ([#173](https://github.com/putyourlightson/craft-sprig/issues/173)). 
 
 ## 1.0.2 - 2021-10-11
 ### Added
