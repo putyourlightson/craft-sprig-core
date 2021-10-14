@@ -68,6 +68,11 @@ class ComponentsService extends BaseComponent
     private $_dom;
 
     /**
+     * @var string|null
+     */
+    private $_sprigActionUrl;
+
+    /**
      * Creates a new component.
      *
      * @param string $value
@@ -141,7 +146,7 @@ class ComponentsService extends BaseComponent
                 self::HTMX_PREFIX.'target' => 'this',
                 self::HTMX_PREFIX.'include' => '#'.$id.' *',
                 self::HTMX_PREFIX.'trigger' => 'refresh',
-                self::HTMX_PREFIX.'get' => UrlHelper::actionUrl(self::RENDER_CONTROLLER_ACTION),
+                self::HTMX_PREFIX.'get' => $this->_getSprigActionUrl(),
                 self::HTMX_PREFIX.'vals' => Json::htmlEncode($values),
             ],
             $attributes
@@ -324,7 +329,7 @@ class ComponentsService extends BaseComponent
             $params['sprig:action'] = Craft::$app->getSecurity()->hashData($action);
         }
 
-        $attributes[self::HTMX_PREFIX.$verb] = UrlHelper::actionUrl(self::RENDER_CONTROLLER_ACTION, $params);
+        $attributes[self::HTMX_PREFIX.$verb] = $this->_getSprigActionUrl($params);
     }
 
     /**
@@ -390,6 +395,31 @@ class ComponentsService extends BaseComponent
         }
 
         $attributes[$key] = Json::htmlEncode($values);
+    }
+
+    /**
+     * Returns a Sprig action URL with optional params.
+     *
+     * @param array $params
+     * @return string
+     */
+    private function _getSprigActionUrl(array $params = []): string
+    {
+        if ($this->_sprigActionUrl === null) {
+            $this->_sprigActionUrl = UrlHelper::actionUrl(self::RENDER_CONTROLLER_ACTION);
+        }
+
+        if (empty($params)) {
+            return $this->_sprigActionUrl;
+        }
+
+        $query = UrlHelper::buildQuery($params);
+
+        if ($query !== ''){
+            return $this->_sprigActionUrl . '?' . $query;
+        }
+
+        return $this->_sprigActionUrl;
     }
 
     /**
