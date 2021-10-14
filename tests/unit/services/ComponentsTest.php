@@ -176,9 +176,10 @@ class ComponentsTest extends Unit
 
     public function testGetParsedTagAttributesUtfEncoding()
     {
-        $html = 'ÆØÅäöü';
+        $placeholder = 'ÆØÅäöü';
+        $html = '<div sprig placeholder="'.$placeholder.'"></div>';
         $result = Sprig::$core->components->parse($html);
-        $this->assertEquals($html, $result);
+        $this->assertStringContainsString($placeholder, $result);
     }
 
     private function _testCreateInvalidVariable(array $variables)

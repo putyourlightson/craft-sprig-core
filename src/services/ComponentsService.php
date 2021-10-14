@@ -240,11 +240,18 @@ class ComponentsService extends BaseComponent
     {
         if ($this->_dom === null) {
             $this->_dom = new DOMDocument();
+
+            // Suppress error output
+            libxml_use_internal_errors(true);
         }
 
-        libxml_use_internal_errors(true);
+        // Convert encoding to UTF-8 first (https://github.com/putyourlightson/craft-sprig/issues/173)
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+
         $this->_dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        libxml_use_internal_errors(false);
+
+        // Clear errors to avoid memory leak (https://stackoverflow.com/a/10360052/1769259)
+        libxml_clear_errors();
 
         $domElement = $this->_dom->firstChild;
 
