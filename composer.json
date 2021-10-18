@@ -1,12 +1,11 @@
 {
     "name": "putyourlightson/craft-sprig-core",
     "description": "A reactive Twig component framework for Craft.",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "type": "craft-module",
     "license": "mit",
     "require": {
-        "ext-dom": "*",
-        "craftcms/cms": "^3.1.19"
+        "craftcms/cms": "^3.3.0"
     },
     "require-dev": {
         "codeception/codeception": "^4.0.0",

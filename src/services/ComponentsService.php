@@ -15,7 +15,6 @@ use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\Request;
 use craft\web\View;
-use DOMDocument;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
@@ -50,7 +49,7 @@ class ComponentsService extends BaseComponent
     /**
      * @const string[]
      */
-    const SPRIG_PREFIXES = ['s-', 'data-s-', 'sprig-', 'data-sprig-'];
+    const SPRIG_PREFIXES = ['s-', 'sprig-'];
 
     /**
      * @const string[]
@@ -61,11 +60,6 @@ class ComponentsService extends BaseComponent
      * @const string
      */
     const HTMX_PREFIX = 'data-hx-';
-
-    /**
-     * @var DOMDocument|null
-     */
-    private $_dom;
 
     /**
      * @var string|null
@@ -200,32 +194,24 @@ class ComponentsService extends BaseComponent
      */
     public function parse(string $content): string
     {
+        $t = microtime(true);
         $parseableTags = $this->_getParseableTags($content);
 
         foreach ($parseableTags as $tag) {
-            list($name, $attributes) = $this->_parseHtmlTag($tag);
+            $name = substr($tag, 1, strpos($tag, ' '));
+            $attributes = Html::parseTagAttributes($tag);
             $this->_parseAttributes($attributes);
-            $newTag = $this->_renderHtmlTag($name, $attributes);
+            $newTag = '<' . $name . Html::renderTagAttributes($attributes) . '>';
             $content = str_replace($tag, $newTag, $content);
         }
 
+//        Craft::dd(microtime(true) - $t);
         return $content;
     }
 
     private function _getParseableTags(string $content): array
     {
-        $attributePrefixes = ['sprig', 'data-sprig'];
-
-        foreach (self::SPRIG_PREFIXES as $prefix) {
-            foreach ($attributePrefixes as $attributePrefix) {
-                if (stripos($prefix, $attributePrefix) === 0) {
-                    continue(2);
-                }
-            }
-
-            $attributePrefixes[] = $prefix;
-        }
-
+        $attributePrefixes = ['sprig', 'data-sprig', 's-', 'data-s-'];
         $pattern = '/<[^>]+\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
 
         if (preg_match_all($pattern, $content, $matches)) {
@@ -236,56 +222,6 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Parses an HTML tag and returns an array containing its name and attributes.
-     *
-     * @param string $html
-     * @return array|null
-     */
-    private function _parseHtmlTag(string $html)
-    {
-        if ($this->_dom === null) {
-            $this->_dom = new DOMDocument();
-
-            // Suppress error output
-            libxml_use_internal_errors(true);
-        }
-
-        // Convert encoding to UTF-8 first (https://github.com/putyourlightson/craft-sprig/issues/173)
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-
-        $this->_dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-        // Clear errors to avoid memory leak (https://stackoverflow.com/a/10360052/1769259)
-        libxml_clear_errors();
-
-        $domElement = $this->_dom->firstChild;
-
-        if ($domElement === null) {
-            return null;
-        }
-
-        $attributes = [];
-
-        foreach($domElement->attributes as $attribute) {
-            $attributes[$attribute->name] = $attribute->value;
-        }
-
-        return [$domElement->nodeName, $attributes];
-    }
-
-    /**
-     * Returns an HTML tag constructed via a name and attributes.
-     *
-     * @param string $name
-     * @param array $attributes
-     * @return array|null
-     */
-    private function _renderHtmlTag(string $name, array $attributes): string
-    {
-        return '<' . $name . Html::renderTagAttributes($attributes) . '>';
-    }
-
-    /**
      * Parses an array of attributes.
      *
      * @param array $attributes
@@ -293,12 +229,7 @@ class ComponentsService extends BaseComponent
     private function _parseAttributes(array &$attributes)
     {
         foreach ($attributes as $key => &$value) {
-            if ($key == 'sprig' || $key == 'data-sprig') {
-                $this->_parseSprigAttribute($attributes);
-            }
-            else {
-                $this->_parseAttribute($attributes, $key, $value);
-            }
+            $this->_parseAttribute($attributes, $key, $value);
         }
     }
 
@@ -341,7 +272,20 @@ class ComponentsService extends BaseComponent
      */
     private function _parseAttribute(array &$attributes, string $key, $value)
     {
-        if (is_array($value)) Craft::dd($value);
+        if ($key == 'data' && is_array($value)) {
+            foreach ($value as $key => $value) {
+                $this->_parseAttribute($attributes, $key, $value);
+            }
+
+            return;
+        }
+
+        if ($key == 'sprig' || $key == 'data-sprig') {
+            $this->_parseSprigAttribute($attributes);
+
+            return;
+        }
+
         $name = $this->_getSprigAttributeName($key);
 
         if (!$name) {
@@ -451,6 +395,10 @@ class ComponentsService extends BaseComponent
         foreach (self::SPRIG_PREFIXES as $prefix) {
             if (!empty($attributes[$prefix.$name])) {
                 return $attributes[$prefix.$name];
+            }
+
+            if (!empty($attributes['data'][$prefix.$name])) {
+                return $attributes['data'][$prefix.$name];
             }
         }
 
