@@ -4,6 +4,8 @@
 ### Changed
 - Increased the minimum required Craft version to 3.3.0.
 - Removed the dependency on the DOMDocument library.
+- The `s-val:*` attribute can now contain square brackets, for example `s-val:fields[field-handle]=""`.
+- General performance optimisations.
 
 ## 1.0.3 - 2021-10-14
 ### Fixed

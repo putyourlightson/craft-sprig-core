@@ -146,7 +146,7 @@ class ComponentsService extends BaseComponent
             $attributes
         );
 
-        $this->_parseAttributes($attributes);
+        $attributes = $this->_getParsedAttributes($attributes);
 
         $event->output = Html::tag('div', $content, $attributes);
 
@@ -194,18 +194,16 @@ class ComponentsService extends BaseComponent
      */
     public function parse(string $content): string
     {
-        $t = microtime(true);
         $parseableTags = $this->_getParseableTags($content);
 
         foreach ($parseableTags as $tag) {
             $name = substr($tag, 1, strpos($tag, ' '));
             $attributes = Html::parseTagAttributes($tag);
-            $this->_parseAttributes($attributes);
+            $attributes = $this->_getParsedAttributes($attributes);
             $newTag = '<' . $name . Html::renderTagAttributes($attributes) . '>';
             $content = str_replace($tag, $newTag, $content);
         }
 
-//        Craft::dd(microtime(true) - $t);
         return $content;
     }
 
@@ -222,15 +220,18 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Parses an array of attributes.
+     * Returns a parsed array of attributes.
      *
      * @param array $attributes
+     * @return array
      */
-    private function _parseAttributes(array &$attributes)
+    private function _getParsedAttributes(array $attributes): array
     {
         foreach ($attributes as $key => &$value) {
             $this->_parseAttribute($attributes, $key, $value);
         }
+
+        return $attributes;
     }
 
     /**
