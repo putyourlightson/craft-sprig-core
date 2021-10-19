@@ -7,6 +7,9 @@
 - The `s-val:*` attribute can now contain square brackets, for example `s-val:fields[field-handle]=""`.
 - General performance optimisations.
 
+### Fixed
+- Fixed a bug in which comments and script tags containing `sprig` could throw an exception when parsed ([#3](https://github.com/putyourlightson/craft-sprig-core/issues/3)). 
+
 ## 1.0.3 - 2021-10-14
 ### Fixed
 - Fixed multibyte character strings not being correctly converted ([#173](https://github.com/putyourlightson/craft-sprig/issues/173)). 

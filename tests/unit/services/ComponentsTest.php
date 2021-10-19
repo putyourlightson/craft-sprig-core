@@ -174,9 +174,16 @@ class ComponentsTest extends Unit
         $this->assertEquals($html, $result);
     }
 
+    public function testGetParsedTagAttributesComment()
+    {
+        $html = '<!-- comment mentioning sprig -->';
+        $result = Sprig::$core->components->parse($html);
+        $this->assertEquals($html, $result);
+    }
+
     public function testGetParsedTagAttributesScript()
     {
-        $html = '<script><h1>Hello</h1></script>';
+        $html = '<script>if(i < 1) let sprig=1</script>';
         $result = Sprig::$core->components->parse($html);
         $this->assertEquals($html, $result);
     }

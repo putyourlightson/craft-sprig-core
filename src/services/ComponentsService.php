@@ -21,6 +21,7 @@ use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use Twig\Markup;
+use yii\base\InvalidArgumentException;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
 
@@ -146,7 +147,7 @@ class ComponentsService extends BaseComponent
             $attributes
         );
 
-        $attributes = $this->_getParsedAttributes($attributes);
+        $this->_parseAttributes($attributes);
 
         $event->output = Html::tag('div', $content, $attributes);
 
@@ -197,20 +198,24 @@ class ComponentsService extends BaseComponent
         $parseableTags = $this->_getParseableTags($content);
 
         foreach ($parseableTags as $tag) {
-            $name = substr($tag, 1, strpos($tag, ' '));
-            $attributes = Html::parseTagAttributes($tag);
-            $attributes = $this->_getParsedAttributes($attributes);
-            $newTag = '<' . $name . Html::renderTagAttributes($attributes) . '>';
-            $content = str_replace($tag, $newTag, $content);
+            if ($newTag = $this->_getParsedTag($tag)) {
+                $content = str_replace($tag, $newTag, $content);
+            }
         }
 
         return $content;
     }
 
+    /**
+     * Returns parseable tags.
+     *
+     * @param string $content
+     * @return array
+     */
     private function _getParseableTags(string $content): array
     {
         $attributePrefixes = ['sprig', 'data-sprig', 's-', 'data-s-'];
-        $pattern = '/<[^>]+\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
+        $pattern = '/<[^!>][^>]*\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
 
         if (preg_match_all($pattern, $content, $matches)) {
             return $matches[0];
@@ -220,12 +225,33 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Returns a parsed array of attributes.
+     * Returns a parsed tag.
+     *
+     * @param string $tag
+     * @return string|null
+     */
+    private function _getParsedTag(string $tag)
+    {
+        try {
+            $attributes = Html::parseTagAttributes($tag);
+        }
+        catch (InvalidArgumentException $exception) {
+            return null;
+        }
+
+        $name = substr($tag, 1, strpos($tag, ' '));
+        $this->_parseAttributes($attributes);
+
+        return '<' . $name . Html::renderTagAttributes($attributes) . '>';
+    }
+
+    /**
+     * Parses an array of attributes.
      *
      * @param array $attributes
      * @return array
      */
-    private function _getParsedAttributes(array $attributes): array
+    private function _parseAttributes(array &$attributes): array
     {
         foreach ($attributes as $key => &$value) {
             $this->_parseAttribute($attributes, $key, $value);
