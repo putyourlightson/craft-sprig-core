@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 1.1.0 - Unreleased
+## 1.1.0 - 2021-10-19
 ### Changed
 - Increased the minimum required Craft version to 3.3.0.
 - Removed the dependency on the DOMDocument library.
