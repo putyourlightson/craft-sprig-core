@@ -119,7 +119,7 @@ class ComponentsTest extends Unit
         $html = Sprig::$core->components->parse($html);
 
         $this->assertStringContainsString('data-hx-post=', $html);
-        $this->assertStringContainsString('sprig:action=', $html);
+        $this->assertStringContainsString('&amp;sprig:action=', $html);
         $this->assertStringContainsString('data-hx-headers="{&quot;'.Request::CSRF_HEADER.'&quot;', $html);
         $this->assertStringContainsString('data-hx-vals="{&quot;limit&quot;:1}', $html);
     }

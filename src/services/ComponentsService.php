@@ -384,8 +384,10 @@ class ComponentsService extends BaseComponent
 
         $query = UrlHelper::buildQuery($params);
 
-        if ($query !== ''){
-            return $this->_sprigActionUrl . '?' . $query;
+        if ($query !== '') {
+            $joinSymbol = strpos($this->_sprigActionUrl, '?') === false ? '?' : '&';
+
+            return $this->_sprigActionUrl . $joinSymbol . $query;
         }
 
         return $this->_sprigActionUrl;
