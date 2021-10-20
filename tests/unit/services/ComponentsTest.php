@@ -141,14 +141,21 @@ class ComponentsTest extends Unit
 
     public function testGetParsedTagAttributesValsWithBrackets()
     {
-        $html = '<div sprig s-val:fields[x-y-z]="a"></div>';
+        $html = '<div s-val:fields[x-y-z]="a"></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-vals="{&quot;fields[xYZ]&quot;:&quot;a&quot;}"', $html);
     }
 
+    public function testGetParsedTagAttributesValsWithEncoded()
+    {
+        $html = '<div s-vals=\'{&quot;limit&quot;:1}\'></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-vals="{&quot;limit&quot;:1}"', $html);
+    }
+
     public function testGetParsedTagAttributesValsEncodedAndSanitized()
     {
-        $html = '<div sprig s-val:x="alert(\'xss\')" s-val:z=\'alert("xss")\' s-vals=\'{"limit":1}\'></div>';
+        $html = '<div s-val:x="alert(\'xss\')" s-val:z=\'alert("xss")\' s-vals=\'{"limit":1}\'></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-vals="{&quot;x&quot;:&quot;alert(\u0027xss\u0027)&quot;,&quot;z&quot;:&quot;alert(\u0022xss\u0022)&quot;,&quot;limit&quot;:1}"', $html);
     }

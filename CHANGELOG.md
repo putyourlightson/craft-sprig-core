@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 1.1.1 - 2021-10-20
+### Fixed
+- Fixed a bug in which using `s-vals` with JSON encoded variables could throw an exception when parsed ([#176](https://github.com/putyourlightson/craft-sprig/issues/176)). 
+
 ## 1.1.0 - 2021-10-19
 ### Changed
 - Increased the minimum required Craft version to 3.3.0.

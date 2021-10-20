@@ -249,15 +249,12 @@ class ComponentsService extends BaseComponent
      * Parses an array of attributes.
      *
      * @param array $attributes
-     * @return array
      */
-    private function _parseAttributes(array &$attributes): array
+    private function _parseAttributes(array &$attributes)
     {
         foreach ($attributes as $key => &$value) {
             $this->_parseAttribute($attributes, $key, $value);
         }
-
-        return $attributes;
     }
 
     /**
@@ -300,8 +297,8 @@ class ComponentsService extends BaseComponent
     private function _parseAttribute(array &$attributes, string $key, $value)
     {
         if ($key == 'data' && is_array($value)) {
-            foreach ($value as $key => $value) {
-                $this->_parseAttribute($attributes, $key, $value);
+            foreach ($value as $dataKey => $dataValue) {
+                $this->_parseAttribute($attributes, $dataKey, $dataValue);
             }
 
             return;
@@ -348,6 +345,7 @@ class ComponentsService extends BaseComponent
      * @param array $attributes
      * @param string $name
      * @param array|string $values
+     * @throws BadRequestHttpException
      */
     private function _mergeJsonAttributes(array &$attributes, string $name, $values)
     {
@@ -356,7 +354,7 @@ class ComponentsService extends BaseComponent
                 throw new BadRequestHttpException('The “s-'.$name.'” attribute in Sprig components may not contain a “javascript:” prefix for security reasons. Use a JSON encoded value instead.');
             }
 
-            $values = Json::decode($values);
+            $values = Json::decode(html_entity_decode($values));
         }
 
         $key = self::HTMX_PREFIX.$name;
