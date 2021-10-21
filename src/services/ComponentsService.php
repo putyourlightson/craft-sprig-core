@@ -8,7 +8,6 @@ namespace putyourlightson\sprig\services;
 use Craft;
 use craft\base\Component as BaseComponent;
 use craft\base\ElementInterface;
-use craft\helpers\Html;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\helpers\Template;
@@ -18,6 +17,7 @@ use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
+use putyourlightson\sprig\helpers\HtmlHelper;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use Twig\Markup;
@@ -149,7 +149,7 @@ class ComponentsService extends BaseComponent
 
         $this->_parseAttributes($attributes);
 
-        $event->output = Html::tag('div', $content, $attributes);
+        $event->output = HtmlHelper::tag('div', $content, $attributes);
 
         if ($this->hasEventHandlers(self::EVENT_AFTER_CREATE_COMPONENT)) {
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
@@ -233,16 +233,16 @@ class ComponentsService extends BaseComponent
     private function _getParsedTag(string $tag)
     {
         try {
-            $attributes = Html::parseTagAttributes($tag);
+            $attributes = HtmlHelper::parseTagAttributes($tag);
         }
         catch (InvalidArgumentException $exception) {
             return null;
         }
 
-        $name = substr($tag, 1, strpos($tag, ' '));
+        $name = substr($tag, 1, strpos($tag, ' ') - 1);
         $this->_parseAttributes($attributes);
 
-        return '<' . $name . Html::renderTagAttributes($attributes) . '>';
+        return HtmlHelper::beginTag($name, $attributes);
     }
 
     /**
