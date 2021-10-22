@@ -17,6 +17,7 @@ use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
+use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\helpers\HtmlHelper;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
@@ -149,7 +150,7 @@ class ComponentsService extends BaseComponent
 
         $this->_parseAttributes($attributes);
 
-        $event->output = HtmlHelper::tag('div', $content, $attributes);
+        $event->output = Html::tag('div', $content, $attributes);
 
         if ($this->hasEventHandlers(self::EVENT_AFTER_CREATE_COMPONENT)) {
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
@@ -242,7 +243,7 @@ class ComponentsService extends BaseComponent
         $name = substr($tag, 1, strpos($tag, ' ') - 1);
         $this->_parseAttributes($attributes);
 
-        return HtmlHelper::beginTag($name, $attributes);
+        return Html::beginTag($name, $attributes);
     }
 
     /**
