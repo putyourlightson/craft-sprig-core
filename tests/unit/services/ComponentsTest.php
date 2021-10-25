@@ -134,15 +134,19 @@ class ComponentsTest extends Unit
 
     public function testGetParsedTagAttributesWithSpaces()
     {
-        $html = '<div s-target = "#id"></div>';
+        $html = '<div s-target = "#id" ></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-target="#id"', $html);
 
-        $html = '<div s-target = \'#id\'></div>';
+        $html = '<div s-target = \'#id\' ></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-target="#id"', $html);
 
-        $html = '<div s-target = #id></div>';
+        $html = '<div s-target = #id ></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-target="#id"', $html);
+
+        $html = '<div s-target = #id'.PHP_EOL.'></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-target="#id"', $html);
     }

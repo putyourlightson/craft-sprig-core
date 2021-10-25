@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 1.1.5 - Unreleased
+## 1.1.5 - 2021-10-25
 ### Fixed
 - Fixed the parsing of empty `s-val:` values to ensure the value is maintained ([#178](https://github.com/putyourlightson/craft-sprig/issues/178)). 
 
