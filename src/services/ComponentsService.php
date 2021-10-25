@@ -321,7 +321,8 @@ class ComponentsService extends BaseComponent
             $name = StringHelper::toCamelCase(substr($name, 4));
 
             /**
-             * If the value is `true` then convert it back to a blank string
+             * If the value is `true` then convert it back to a blank string.
+             * https://github.com/putyourlightson/craft-sprig/issues/178#issuecomment-950415937
              * @see HtmlHelper::parseTagAttribute()
              */
             $value = $value === true ? '' : $value;
