@@ -320,6 +320,12 @@ class ComponentsService extends BaseComponent
         if (strpos($name, 'val:') === 0) {
             $name = StringHelper::toCamelCase(substr($name, 4));
 
+            /**
+             * If the value is `true` then convert it back to a blank string
+             * @see HtmlHelper::parseTagAttribute()
+             */
+            $value = $value === true ? '' : $value;
+
             $this->_mergeJsonAttributes($attributes, 'vals', [$name => $value]);
         }
         elseif ($name == 'replace') {

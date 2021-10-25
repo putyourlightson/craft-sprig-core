@@ -154,6 +154,13 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('data-hx-vals="{&quot;xYZ&quot;:&quot;a&quot;,&quot;limit&quot;:1}"', $html);
     }
 
+    public function testGetParsedTagAttributesValsWithEmpty()
+    {
+        $html = '<div s-val:x-y-z="" s-vals=\'{"limit":1}\'></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-vals="{&quot;xYZ&quot;:&quot;&quot;,&quot;limit&quot;:1}"', $html);
+    }
+
     public function testGetParsedTagAttributesValsWithEncoded()
     {
         $html = '<div s-val:x-y-z="a" s-vals=\'{&quot;limit&quot;:1}\'></div>';
