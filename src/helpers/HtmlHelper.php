@@ -64,7 +64,7 @@ class HtmlHelper
      */
     public static function parseTagAttribute(string $html, int $offset = 0, int &$start = null, int &$end = null)
     {
-        if (!preg_match('/\s*([^=\/>\s]+)\s*/A', $html, $match, PREG_OFFSET_CAPTURE, $offset)) {
+        if (!preg_match('/\s*([^=\/>\s]+)/A', $html, $match, PREG_OFFSET_CAPTURE, $offset)) {
             if (!preg_match('/(\s*)\/?>/A', $html, $m, 0, $offset)) {
                 // No `>`
                 throw new InvalidArgumentException("Malformed HTML tag attribute in string: $html");
@@ -79,7 +79,7 @@ class HtmlHelper
         // Does the tag have an explicit value?
         $offset += strlen($match[0][0]);
 
-        if (preg_match('/=\s*/A', $html, $m, 0, $offset)) {
+        if (preg_match('/\s*=\s*/A', $html, $m, 0, $offset)) {
             $offset += strlen($m[0]);
 
             // Wrapped in quotes?
