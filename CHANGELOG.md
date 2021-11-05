@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 1.1.6 - Unreleased
+### Fixed
+- Fixed a bug when parsing tags when the tag name is followed by a tab ([#183](https://github.com/putyourlightson/craft-sprig/issues/183)). 
+
 ## 1.1.5 - 2021-10-25
 ### Fixed
 - Fixed the parsing of empty `s-val:` values to ensure the value is maintained ([#178](https://github.com/putyourlightson/craft-sprig/issues/178)). 

@@ -240,10 +240,23 @@ class ComponentsService extends BaseComponent
             return null;
         }
 
-        $name = substr($tag, 1, strpos($tag, ' ') - 1);
+        $name = $this->_getTagName($tag);
         $this->_parseAttributes($attributes);
 
         return Html::beginTag($name, $attributes);
+    }
+
+    /**
+     * Returns the name of a given tag.
+     *
+     * @param string $tag
+     * @return string
+     */
+    private function _getTagName(string $tag): string
+    {
+        preg_match('/<([\w\-]+)/', $tag, $match);
+
+        return strtolower($match[1]);
     }
 
     /**
