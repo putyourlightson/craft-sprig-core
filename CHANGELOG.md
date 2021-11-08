@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 1.1.6 - Unreleased
+## 1.1.6 - 2021-11-08
 ### Fixed
 - Fixed a bug when parsing tags when the tag name is followed by a tab ([#183](https://github.com/putyourlightson/craft-sprig/issues/183)). 
 
