@@ -141,6 +141,17 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Retargets the element to update with a CSS selector.
+     * https://htmx.org/reference#response_headers
+     *
+     * @param string $target
+     */
+    public function retarget(string $target)
+    {
+        Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $target);
+    }
+
+    /**
      * Triggers client-side events.
      * https://htmx.org/headers/x-hx-trigger/
      *

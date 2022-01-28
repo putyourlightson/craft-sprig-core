@@ -19,14 +19,14 @@ class SprigVariable
     /**
      * @var string
      */
-    public $htmxVersion = '1.6.0';
+    public $htmxVersion = '1.6.1';
 
     /**
      * Generate the SRI hash at https://www.srihash.org/
      *
      * @var string
      */
-    public $htmxSRIHash = 'sha384-G4dtlRlMBrk5fEiRXDsLjriPo8Qk5ZeHVVxS8KhX6D7I9XXJlNqbdvRlp9/glk5D';
+    public $htmxSRIHash = 'sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW';
 
     /**
      * Returns the script tag with the given attributes.
@@ -215,6 +215,17 @@ class SprigVariable
     public function refresh(bool $refresh = true)
     {
         Component::refresh($refresh);
+    }
+
+    /**
+     * Retargets the element to update with a CSS selector.
+     * https://htmx.org/reference#response_headers
+     *
+     * @param string $target
+     */
+    public function retarget(string $target)
+    {
+        Component::retarget($target);
     }
 
     /**
