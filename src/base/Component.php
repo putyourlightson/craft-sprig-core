@@ -58,6 +58,16 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Returns whether this is a boosted request.
+     *
+     * @return bool
+     */
+    public static function getIsBoosted(): bool
+    {
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted', false, true) == 'true';
+    }
+
+    /**
      * Returns the value entered by the user when prompted via `s-prompt` or `hx-prompt`.
      *
      * @return string

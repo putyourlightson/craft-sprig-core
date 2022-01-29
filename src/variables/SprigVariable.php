@@ -60,6 +60,16 @@ class SprigVariable
     }
 
     /**
+     * Returns whether this is a boosted request.
+     *
+     * @return bool
+     */
+    public static function getIsBoosted(): bool
+    {
+        return Component::getIsBoosted();
+    }
+
+    /**
      * Returns the ID of the active element.
      *
      * @return string
