@@ -3,7 +3,7 @@
 ## 1.2.0 - Unreleased
 ### Added
 - Added the [sprig.isBoosted](https://putyourlightson.com/plugins/sprig#sprig.isBoosted) template variable that returns whether this is a boosted request (requires htmx 1.6.0 or later).
-- Added the [sprig.retarget()](https://putyourlightson.com/plugins/sprig#sprig.retarget) template variable that retargets the element to update with a CSS selector (requires htmx 1.6.1 or later).
+- Added the [sprig.retarget()](https://putyourlightson.com/plugins/sprig#sprig.retargettarget) template variable that overrides the element to target via a CSS selector (requires htmx 1.6.1 or later).
 
 ### Changed
 - Updated htmx to version 1.6.1 ([release notes](https://htmx.org/posts/2021-11-22-htmx-1.6.1-is-released/)).
