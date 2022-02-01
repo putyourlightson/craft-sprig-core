@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 1.2.0 - Unreleased
+## 1.2.0 - 2022-02-01
 ### Added
 - Added the [sprig.isBoosted](https://putyourlightson.com/plugins/sprig#sprig.isBoosted) template variable that returns whether this is a boosted request (requires htmx 1.6.0 or later).
 - Added the [sprig.retarget()](https://putyourlightson.com/plugins/sprig#sprig.retargettarget) template variable that overrides the element to target via a CSS selector (requires htmx 1.6.1 or later).
