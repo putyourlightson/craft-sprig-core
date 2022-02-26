@@ -156,7 +156,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      *
      * @param string $target
      */
-    public function retarget(string $target)
+    public static function retarget(string $target)
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $target);
     }

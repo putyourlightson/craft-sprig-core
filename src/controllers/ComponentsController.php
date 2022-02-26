@@ -6,6 +6,7 @@
 namespace putyourlightson\sprig\controllers;
 
 use Craft;
+use craft\base\Element;
 use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\helpers\ArrayHelper;
@@ -150,7 +151,7 @@ class ComponentsController extends Controller
             return;
         }
 
-        Event::on(User::class, User::EVENT_AFTER_SAVE, function (ModelEvent $event) {
+        Event::on(User::class, Element::EVENT_AFTER_SAVE, function (ModelEvent $event) {
             /** @var User $user */
             $user = $event->sender;
 

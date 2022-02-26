@@ -61,7 +61,7 @@ class PaginateVariable extends Paginate
      * @return int[]
      * @see Paginate::getDynamicRangeUrls()
      */
-    public function getDynamicRange(int $max = 10)
+    public function getDynamicRange(int $max = 10): array
     {
         $start = max(1, $this->currentPage - floor($max / 2));
         $end = min($this->totalPages, $start + $max - 1);
