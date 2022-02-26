@@ -12,7 +12,6 @@ use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\helpers\Template;
 use craft\helpers\UrlHelper;
-use craft\web\Request;
 use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
@@ -25,6 +24,7 @@ use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
+use yii\web\Request;
 
 class ComponentsService extends BaseComponent
 {
@@ -56,7 +56,7 @@ class ComponentsService extends BaseComponent
     /**
      * @const string[]
      */
-    const HTMX_ATTRIBUTES = ['boost', 'confirm', 'delete', 'disable', 'encoding', 'ext', 'get', 'headers', 'history-elt', 'include', 'indicator', 'params', 'patch', 'post', 'preserve', 'prompt', 'push-url', 'put', 'request', 'select', 'sse', 'swap', 'swap-oob', 'target', 'trigger', 'vals', 'vars', 'ws'];
+    const HTMX_ATTRIBUTES = ['boost', 'confirm', 'delete', 'disable', 'disinherit', 'encoding', 'ext', 'get', 'headers', 'history-elt', 'include', 'indicator', 'params', 'patch', 'post', 'preserve', 'prompt', 'push-url', 'put', 'request', 'select', 'sse', 'swap', 'swap-oob', 'sync', 'target', 'trigger', 'vals', 'vars', 'ws'];
 
     /**
      * @const string
