@@ -6,6 +6,7 @@
 namespace putyourlightson\sprig\test\mockclasses\controllers;
 
 use Craft;
+use craft\elements\Entry;
 use craft\web\Controller;
 use putyourlightson\sprig\test\mockclasses\models\TestModel;
 use yii\base\Model;
@@ -55,7 +56,7 @@ class TestController extends Controller
     {
         Craft::$app->getSession()->setNotice('Success');
 
-        return $this->redirectToPostedUrl(['id' => 1]);
+        return $this->redirectToPostedUrl(new Entry(['id' => 1]));
     }
 
     /**

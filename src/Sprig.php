@@ -22,17 +22,17 @@ use yii\base\Module;
  */
 class Sprig extends Module
 {
-    const ID = 'sprig-core';
+    public const ID = 'sprig-core';
 
     /**
      * @var Sprig
      */
-    public static $core;
+    public static Sprig $core;
 
     /**
      * @var SprigVariable
      */
-    public static $sprigVariable;
+    public static SprigVariable $sprigVariable;
 
     public static function bootstrap()
     {

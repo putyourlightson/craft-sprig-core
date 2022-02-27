@@ -9,8 +9,6 @@ interface ComponentInterface
 {
     /**
      * Returns the rendered component as a string.
-     *
-     * @return string
      */
     public function render(): string;
 }

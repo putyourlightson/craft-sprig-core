@@ -11,8 +11,7 @@ use craft\web\twig\variables\Paginate;
 class PaginateVariable extends Paginate
 {
     /**
-     * @param Paginator $paginator
-     * @return PaginateVariable
+     * Creates and returns a paginate variable.
      */
     public static function create(Paginator $paginator): Paginate
     {
@@ -25,13 +24,11 @@ class PaginateVariable extends Paginate
     /**
      * @var array
      */
-    public $pageResults = [];
+    public array $pageResults = [];
 
     /**
      * Returns a range of page numbers as an array.
      *
-     * @param int $start
-     * @param int $end
      * @return int[]
      * @see Paginate::getRangeUrls()
      */
@@ -57,7 +54,6 @@ class PaginateVariable extends Paginate
     /**
      * Returns a dynamic range of page numbers that surround (and include) the current page as an array.
      *
-     * @param int $max The maximum number of links to return
      * @return int[]
      * @see Paginate::getDynamicRangeUrls()
      */

@@ -11,11 +11,9 @@ use craft\base\Component as BaseComponent;
 abstract class Component extends BaseComponent implements ComponentInterface
 {
     /**
-     * The path to the template that the `render` method should render.
-     *
-     * @var string|null
+     * @var string|null The path to the template that the `render` method should render.
      */
-    protected $_template;
+    protected ?string $_template;
 
     /**
      * Set all attributes to be safe by default.
@@ -39,8 +37,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns whether this is a Sprig request.
-     *
-     * @return bool
      */
     public static function getIsRequest(): bool
     {
@@ -49,8 +45,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns whether this is a Sprig include.
-     *
-     * @return bool
      */
     public static function getIsInclude(): bool
     {
@@ -59,8 +53,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns whether this is a boosted request.
-     *
-     * @return bool
      */
     public static function getIsBoosted(): bool
     {
@@ -69,8 +61,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns the value entered by the user when prompted via `s-prompt` or `hx-prompt`.
-     *
-     * @return string
      */
     public static function getPrompt(): string
     {
@@ -79,8 +69,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns the ID of the target element.
-     *
-     * @return string
      */
     public static function getTarget(): string
     {
@@ -89,8 +77,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns the ID of the element that triggered the request.
-     *
-     * @return string
      */
     public static function getTrigger(): string
     {
@@ -99,8 +85,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns the name of the element that triggered the request.
-     *
-     * @return string
      */
     public static function getTriggerName(): string
     {
@@ -109,8 +93,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Returns the URL that the Sprig component was loaded from.
-     *
-     * @return string
      */
     public static function getUrl(): string
     {
@@ -120,8 +102,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * Pushes the URL into the history stack.
      * https://htmx.org/reference#response_headers
-     *
-     * @param string $url
      */
     public static function pushUrl(string $url)
     {
@@ -131,8 +111,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * Redirects the browser to the URL.
      * https://htmx.org/reference#response_headers
-     *
-     * @param string $url
      */
     public static function redirect(string $url)
     {
@@ -142,8 +120,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * Refreshes the browser.
      * https://htmx.org/reference#response_headers
-     *
-     * @param bool $refresh
      */
     public static function refresh(bool $refresh = true)
     {
@@ -153,8 +129,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * Retargets the element to update with a CSS selector.
      * https://htmx.org/reference#response_headers
-     *
-     * @param string $target
      */
     public static function retarget(string $target)
     {
@@ -164,11 +138,8 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * Triggers client-side events.
      * https://htmx.org/headers/x-hx-trigger/
-     *
-     * @param array|string $events
-     * @param string $on
      */
-    public static function triggerEvents($events, string $on = 'load')
+    public static function triggerEvents(array|string $events, string $on = 'load')
     {
         if (is_array($events)) {
             $events = implode(' ', $events);

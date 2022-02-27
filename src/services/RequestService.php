@@ -8,7 +8,6 @@ namespace putyourlightson\sprig\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\Json;
-use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 
 /**
@@ -19,12 +18,10 @@ class RequestService extends Component
     /**
      * @const string[]
      */
-    const DISALLOWED_PREFIXES = ['_', 'sprig:'];
+    public const DISALLOWED_PREFIXES = ['_', 'sprig:'];
 
     /**
      * Returns allowed request variables.
-     *
-     * @return array
      */
     public function getVariables(): array
     {
@@ -48,11 +45,8 @@ class RequestService extends Component
 
     /**
      * Returns a validated request parameter.
-     *
-     * @param string $name
-     * @return string|false|null
      */
-    public function getValidatedParam(string $name)
+    public function getValidatedParam(string $name): bool|string|null
     {
         $value = Craft::$app->getRequest()->getParam($name);
 
@@ -66,7 +60,6 @@ class RequestService extends Component
     /**
      * Returns an array of validated request parameter values.
      *
-     * @param string $name
      * @return string[]
      */
     public function getValidatedParamValues(string $name): array
@@ -86,12 +79,8 @@ class RequestService extends Component
 
     /**
      * Validates if the given data is tampered with and throws an exception if it is.
-     *
-     * @param mixed $value
-     * @return string
-     * @throws Exception
      */
-    public function validateData($value): string
+    public function validateData(mixed $value): string
     {
         $value = Craft::$app->getSecurity()->validateData($value);
 
@@ -104,9 +93,6 @@ class RequestService extends Component
 
     /**
      * Returns whether a variable name is allowed.
-     *
-     * @param string $name
-     * @return bool
      */
     private function _getIsVariableAllowed(string $name): bool
     {
@@ -115,7 +101,7 @@ class RequestService extends Component
         }
 
         foreach (self::DISALLOWED_PREFIXES as $prefix) {
-            if (strpos($name, $prefix) === 0) {
+            if (str_starts_with($name, $prefix)) {
                 return false;
             }
         }

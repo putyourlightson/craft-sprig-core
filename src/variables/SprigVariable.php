@@ -10,6 +10,7 @@ use craft\db\Paginator;
 use craft\db\Query;
 use craft\helpers\Html;
 use craft\helpers\Template;
+use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
@@ -19,7 +20,7 @@ class SprigVariable
     /**
      * @var string
      */
-    public $htmxVersion = '1.7.0';
+    public string $htmxVersion = '1.7.0';
 
     /**
      * Get the SRI hash from https://htmx.org/docs/#installing
@@ -27,13 +28,10 @@ class SprigVariable
      *
      * @var string
      */
-    public $htmxSRIHash = 'sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo';
+    public string $htmxSRIHash = 'sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo';
 
     /**
      * Returns the script tag with the given attributes.
-     *
-     * @param array $attributes
-     * @return Markup
      */
     public function getScript(array $attributes = []): Markup
     {
@@ -42,8 +40,6 @@ class SprigVariable
 
     /**
      * Returns whether this is a Sprig request.
-     *
-     * @return bool
      */
     public function getIsRequest(): bool
     {
@@ -52,8 +48,6 @@ class SprigVariable
 
     /**
      * Returns whether this is a Sprig include.
-     *
-     * @return bool
      */
     public function getIsInclude(): bool
     {
@@ -62,8 +56,6 @@ class SprigVariable
 
     /**
      * Returns whether this is a boosted request.
-     *
-     * @return bool
      */
     public static function getIsBoosted(): bool
     {
@@ -71,61 +63,7 @@ class SprigVariable
     }
 
     /**
-     * Returns the ID of the active element.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function getElement(): string
-    {
-        Craft::$app->getDeprecator()->log(__METHOD__, 'The “sprig.element” tag has been deprecated and should be removed from templates.');
-
-        return '';
-    }
-
-    /**
-     * Returns the name of the active element.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function getElementName(): string
-    {
-        Craft::$app->getDeprecator()->log(__METHOD__, 'The “sprig.elementName” tag has been deprecated and should be removed from templates.');
-
-        return '';
-    }
-
-    /**
-     * Returns the value of the active element.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function getElementValue(): string
-    {
-        Craft::$app->getDeprecator()->log(__METHOD__, 'The “sprig.elementValue” tag has been deprecated and should be removed from templates.');
-
-        return '';
-    }
-
-    /**
-     * Returns the ID of the original target of the event that triggered the request.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function getEventTarget(): string
-    {
-        Craft::$app->getDeprecator()->log(__METHOD__, 'The “sprig.eventTarget” tag has been deprecated and should be removed from templates.');
-
-        return '';
-    }
-
-    /**
      * Returns the value entered by the user when prompted via `s-prompt`.
-     *
-     * @return string
      */
     public function getPrompt(): string
     {
@@ -134,8 +72,6 @@ class SprigVariable
 
     /**
      * Returns the ID of the target element.
-     *
-     * @return string
      */
     public function getTarget(): string
     {
@@ -144,8 +80,6 @@ class SprigVariable
 
     /**
      * Returns the ID of the element that triggered the request.
-     *
-     * @return string
      */
     public function getTrigger(): string
     {
@@ -154,8 +88,6 @@ class SprigVariable
 
     /**
      * Returns the name of the element that triggered the request.
-     *
-     * @return string
      */
     public function getTriggerName(): string
     {
@@ -164,8 +96,6 @@ class SprigVariable
 
     /**
      * Returns the URL that the Sprig component was loaded from.
-     *
-     * @return string
      */
     public function getUrl(): string
     {
@@ -174,13 +104,8 @@ class SprigVariable
 
     /**
      * Paginates an element query.
-     *
-     * @param Query $query
-     * @param int $currentPage
-     * @param array $config
-     * @return PaginateVariable
      */
-    public function paginate(Query $query, int $currentPage = 1, array $config = []): PaginateVariable
+    public function paginate(Query $query, int $currentPage = 1, array $config = []): Paginate
     {
         /** @see Template::paginateCriteria() */
         $paginatorQuery = clone $query;
@@ -198,8 +123,6 @@ class SprigVariable
 
     /**
      * Pushes the URL into the history stack.
-     *
-     * @param string $url
      */
     public function pushUrl(string $url)
     {
@@ -209,8 +132,6 @@ class SprigVariable
     /**
      * Redirects the browser to the URL.
      * https://htmx.org/reference#response_headers
-     *
-     * @param string $url
      */
     public function redirect(string $url)
     {
@@ -220,8 +141,6 @@ class SprigVariable
     /**
      * Refreshes the browser.
      * https://htmx.org/reference#response_headers
-     *
-     * @param bool $refresh
      */
     public function refresh(bool $refresh = true)
     {
@@ -231,8 +150,6 @@ class SprigVariable
     /**
      * Retargets the element to update with a CSS selector.
      * https://htmx.org/reference#response_headers
-     *
-     * @param string $target
      */
     public function retarget(string $target)
     {
@@ -241,22 +158,14 @@ class SprigVariable
 
     /**
      * Triggers client-side events.
-     *
-     * @param string|array $events
-     * @param string $on
      */
-    public function triggerEvents($events, string $on = 'load')
+    public function triggerEvents(array|string $events, string $on = 'load')
     {
         Component::triggerEvents($events, $on);
     }
 
     /**
      * Returns a new component.
-     *
-     * @param string $value
-     * @param array $variables
-     * @param array $attributes
-     * @return Markup
      */
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
@@ -265,9 +174,6 @@ class SprigVariable
 
     /**
      * Returns a script tag to the source file.
-     *
-     * @param array $attributes
-     * @return Markup
      */
     private function _getScript(array $attributes = []): Markup
     {

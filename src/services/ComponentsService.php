@@ -17,7 +17,6 @@ use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
-use putyourlightson\sprig\helpers\HtmlHelper;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use Twig\Markup;
@@ -31,50 +30,76 @@ class ComponentsService extends BaseComponent
     /**
      * @event ComponentEvent
      */
-    const EVENT_BEFORE_CREATE_COMPONENT = 'beforeCreateComponent';
+    public const EVENT_BEFORE_CREATE_COMPONENT = 'beforeCreateComponent';
 
     /**
      * @event ComponentEvent
      */
-    const EVENT_AFTER_CREATE_COMPONENT = 'afterCreateComponent';
+    public const EVENT_AFTER_CREATE_COMPONENT = 'afterCreateComponent';
 
     /**
      * @const string
      */
-    const COMPONENT_NAMESPACE = 'sprig\\components\\';
+    public const COMPONENT_NAMESPACE = 'sprig\\components\\';
 
     /**
      * @const string
      */
-    const RENDER_CONTROLLER_ACTION = 'sprig-core/components/render';
+    public const RENDER_CONTROLLER_ACTION = 'sprig-core/components/render';
 
     /**
      * @const string[]
      */
-    const SPRIG_PREFIXES = ['s-', 'sprig-'];
+    public const SPRIG_PREFIXES = ['s-', 'sprig-'];
 
     /**
      * @const string[]
      */
-    const HTMX_ATTRIBUTES = ['boost', 'confirm', 'delete', 'disable', 'disinherit', 'encoding', 'ext', 'get', 'headers', 'history-elt', 'include', 'indicator', 'params', 'patch', 'post', 'preserve', 'prompt', 'push-url', 'put', 'request', 'select', 'sse', 'swap', 'swap-oob', 'sync', 'target', 'trigger', 'vals', 'vars', 'ws'];
+    public const HTMX_ATTRIBUTES = [
+        'boost',
+        'confirm',
+        'delete',
+        'disable',
+        'disinherit',
+        'encoding',
+        'ext',
+        'get',
+        'headers',
+        'history-elt',
+        'include',
+        'indicator',
+        'params',
+        'patch',
+        'post',
+        'preserve',
+        'prompt',
+        'push-url',
+        'put',
+        'request',
+        'select',
+        'sse',
+        'swap',
+        'swap-oob',
+        'sync',
+        'target',
+        'trigger',
+        'vals',
+        'vars',
+        'ws'
+    ];
 
     /**
      * @const string
      */
-    const HTMX_PREFIX = 'data-hx-';
+    public const HTMX_PREFIX = 'data-hx-';
 
     /**
      * @var string|null
      */
-    private $_sprigActionUrl;
+    private ?string $_sprigActionUrl;
 
     /**
      * Creates a new component.
-     *
-     * @param string $value
-     * @param array $variables
-     * @param array $attributes
-     * @return Markup
      */
     public function create(string $value, array $variables = [], array $attributes = []): Markup
     {
@@ -161,12 +186,8 @@ class ComponentsService extends BaseComponent
 
     /**
      * Creates a new component object with the provided variables.
-     *
-     * @param string $component
-     * @param array $variables
-     * @return Component|object|null
      */
-    public function createObject(string $component, array $variables = [])
+    public function createObject(string $component, array $variables = []): ?Component
     {
         if ($component == 'SprigPlayground') {
             return new SprigPlayground(['variables' => $variables]);
@@ -190,9 +211,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Parses content for Sprig attributes.
-     *
-     * @param string $content
-     * @return string
      */
     public function parse(string $content): string
     {
@@ -209,9 +227,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns parseable tags.
-     *
-     * @param string $content
-     * @return array
      */
     private function _getParseableTags(string $content): array
     {
@@ -227,16 +242,13 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns a parsed tag.
-     *
-     * @param string $tag
-     * @return string|null
      */
-    private function _getParsedTag(string $tag)
+    private function _getParsedTag(string $tag): ?string
     {
         try {
-            $attributes = HtmlHelper::parseTagAttributes($tag);
+            $attributes = Html::parseTagAttributes($tag);
         }
-        catch (InvalidArgumentException $exception) {
+        catch (InvalidArgumentException) {
             return null;
         }
 
@@ -248,9 +260,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns the name of a given tag.
-     *
-     * @param string $tag
-     * @return string
      */
     private function _getTagName(string $tag): string
     {
@@ -261,8 +270,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Parses an array of attributes.
-     *
-     * @param array $attributes
      */
     private function _parseAttributes(array &$attributes)
     {
@@ -273,8 +280,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Parses the Sprig attribute on an array of attributes.
-     *
-     * @param array $attributes
      */
     private function _parseSprigAttribute(array &$attributes)
     {
@@ -303,12 +308,8 @@ class ComponentsService extends BaseComponent
 
     /**
      * Parses an attribute in an array of attributes.
-     *
-     * @param array $attributes
-     * @param string $key
-     * @param string|array $value
      */
-    private function _parseAttribute(array &$attributes, string $key, $value)
+    private function _parseAttribute(array &$attributes, string $key, array|string|bool $value)
     {
         if ($key == 'data' && is_array($value)) {
             foreach ($value as $dataKey => $dataValue) {
@@ -330,13 +331,13 @@ class ComponentsService extends BaseComponent
             return;
         }
 
-        if (strpos($name, 'val:') === 0) {
+        if (str_starts_with($name, 'val:')) {
             $name = StringHelper::toCamelCase(substr($name, 4));
 
             /**
              * If the value is `true` then convert it back to a blank string.
              * https://github.com/putyourlightson/craft-sprig/issues/178#issuecomment-950415937
-             * @see HtmlHelper::parseTagAttribute()
+             * @see Html::parseTagAttribute()
              */
             $value = $value === true ? '' : $value;
 
@@ -362,16 +363,11 @@ class ComponentsService extends BaseComponent
 
     /**
      * Merges new values to existing JSON attribute values.
-     *
-     * @param array $attributes
-     * @param string $name
-     * @param array|string $values
-     * @throws BadRequestHttpException
      */
-    private function _mergeJsonAttributes(array &$attributes, string $name, $values)
+    private function _mergeJsonAttributes(array &$attributes, string $name, array|string $values)
     {
         if (is_string($values)) {
-            if (strpos($values, 'javascript:') === 0) {
+            if (str_starts_with($values, 'javascript:')) {
                 throw new BadRequestHttpException('The “s-'.$name.'” attribute in Sprig components may not contain a “javascript:” prefix for security reasons. Use a JSON encoded value instead.');
             }
 
@@ -389,9 +385,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns a Sprig action URL with optional params.
-     *
-     * @param array $params
-     * @return string
      */
     private function _getSprigActionUrl(array $params = []): string
     {
@@ -406,7 +399,7 @@ class ComponentsService extends BaseComponent
         $query = UrlHelper::buildQuery($params);
 
         if ($query !== '') {
-            $joinSymbol = strpos($this->_sprigActionUrl, '?') === false ? '?' : '&';
+            $joinSymbol = !str_contains($this->_sprigActionUrl, '?') ? '?' : '&';
 
             return $this->_sprigActionUrl . $joinSymbol . $query;
         }
@@ -416,14 +409,11 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns a Sprig attribute name if it exists.
-     *
-     * @param string $key
-     * @return string
      */
     private function _getSprigAttributeName(string $key): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
-            if (strpos($key, $prefix) === 0) {
+            if (str_starts_with($key, $prefix)) {
                 return substr($key, strlen($prefix));
             }
         }
@@ -433,10 +423,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns a Sprig attribute value if it exists.
-     *
-     * @param array $attributes
-     * @param string $name
-     * @return string
      */
     private function _getSprigAttributeValue(array $attributes, string $name): string
     {
@@ -455,13 +441,8 @@ class ComponentsService extends BaseComponent
 
     /**
      * Hashes a variable, possibly throwing an exception.
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return string
-     * @throws InvalidVariableException
      */
-    private function _hashVariable(string $name, $value): string
+    private function _hashVariable(string $name, mixed $value): string
     {
         $this->_validateVariableType($name, $value);
 
@@ -472,6 +453,9 @@ class ComponentsService extends BaseComponent
         return Craft::$app->getSecurity()->hashData($value);
     }
 
+    /**
+     * Validates a variable type.
+     */
     private function _validateVariableType(string $name, $value, $isArray = false)
     {
         $variable = [
@@ -507,10 +491,6 @@ class ComponentsService extends BaseComponent
 
     /**
      * Returns an error from a rendered template.
-     *
-     * @param string $templateName
-     * @param array $variables
-     * @return string
      */
     private function _getError(string $templateName, array $variables = []): string
     {

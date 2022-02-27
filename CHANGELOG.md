@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.0 - Unreleased
+### Added
+- Added compatibility with Craft 4.
+
 ## 1.3.0 - Unreleased
 ### Added
 - Added the [s-sync](https://putyourlightson.com/plugins/sprig#s-sync) attribute that allows you to synchronize AJAX requests between multiple elements.
