@@ -96,7 +96,7 @@ class ComponentsService extends BaseComponent
     /**
      * @var string|null
      */
-    private ?string $_sprigActionUrl;
+    private ?string $_sprigActionUrl = null;
 
     /**
      * Creates a new component.

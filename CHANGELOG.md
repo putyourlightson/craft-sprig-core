@@ -4,6 +4,9 @@
 ### Added
 - Added compatibility with Craft 4.
 
+### Removed
+- Removed the deprecated `sprig.element`, `sprig.elementName`, `sprig.elementValue` and `sprig.eventTarget` tags.
+
 ## 1.3.0 - Unreleased
 ### Added
 - Added the [s-sync](https://putyourlightson.com/plugins/sprig#s-sync) attribute that allows you to synchronize AJAX requests between multiple elements.

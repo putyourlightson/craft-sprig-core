@@ -8,11 +8,11 @@ namespace putyourlightson\sprigcoretests\unit\services;
 use Codeception\Test\Unit;
 use Craft;
 use craft\elements\Entry;
-use craft\web\Request;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\Sprig;
 use UnitTester;
 use yii\base\Model;
+use yii\web\Request;
 use yii\web\BadRequestHttpException;
 
 /**
