@@ -13,7 +13,7 @@ class PaginateVariable extends Paginate
     /**
      * Creates and returns a paginate variable.
      */
-//    public static function create(Paginator $paginator): PaginateVariable
+//    public static function create(Paginator $paginator): self
 //    {
 //        $paginateVariable = parent::create($paginator);
 //        $paginateVariable->pageResults = $paginator->getPageResults();
