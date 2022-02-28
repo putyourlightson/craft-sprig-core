@@ -40,11 +40,12 @@ class Sprig extends Module
     }
 
     /**
-     * @return Sprig
+     * @inheritdoc
      */
-    public static function getInstance(): Module
+    public static function getInstance(): Sprig
     {
         if ($module = Craft::$app->getModule(self::ID)) {
+            /** @var Sprig $module */
             return $module;
         }
 

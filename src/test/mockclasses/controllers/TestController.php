@@ -21,7 +21,7 @@ use yii\web\Response;
 class TestController extends Controller
 {
     /**
-     * @var array
+     * @inheritdoc
      */
     protected $allowAnonymous = true;
 
@@ -33,25 +33,16 @@ class TestController extends Controller
         return null;
     }
 
-    /**
-     * @return Response
-     */
     public function actionGetArray(): Response
     {
         return $this->asJson(['success' => true]);
     }
 
-    /**
-     * @return Response
-     */
     public function actionGetModel(): Response
     {
         return $this->asJson(new TestModel(['success' => true]));
     }
 
-    /**
-     * @return Response
-     */
     public function actionSaveSuccess(): Response
     {
         Craft::$app->getSession()->setNotice('Success');

@@ -26,8 +26,6 @@ class ComponentsController extends Controller
 
     /**
      * Renders a component.
-     *
-     * @return Response
      */
     public function actionRender(): Response
     {
@@ -75,9 +73,6 @@ class ComponentsController extends Controller
 
     /**
      * Runs an action and returns the variables from the response
-     *
-     * @param string $action
-     * @return array
      */
     private function _runActionInternal(string $action): array
     {
