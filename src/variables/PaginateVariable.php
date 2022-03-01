@@ -13,30 +13,12 @@ class PaginateVariable extends Paginate
     /**
      * Creates and returns a paginate variable.
      */
-//    public static function create(Paginator $paginator): self
-//    {
-//        $paginateVariable = parent::create($paginator);
-//        $paginateVariable->pageResults = $paginator->getPageResults();
-//
-//        return $paginateVariable;
-//    }
-
-    /**
-     * @inheritdoc
-     */
     public static function create(Paginator $paginator): self
     {
-        $pageResults = $paginator->getPageResults();
-        $pageOffset = $paginator->getPageOffset();
+        $paginateVariable = parent::create($paginator);
+        $paginateVariable->pageResults = $paginator->getPageResults();
 
-        return new static([
-            'first' => $pageOffset + 1,
-            'last' => $pageOffset + count($pageResults),
-            'total' => $paginator->getTotalResults(),
-            'currentPage' => $paginator->getCurrentPage(),
-            'totalPages' => $paginator->getTotalPages(),
-            'pageResults' => $paginator->getPageResults(),
-        ]);
+        return $paginateVariable;
     }
 
     /**
