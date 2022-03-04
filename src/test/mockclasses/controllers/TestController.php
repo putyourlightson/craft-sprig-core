@@ -33,16 +33,25 @@ class TestController extends Controller
         return null;
     }
 
+    /**
+     * Mocks an array response.
+     */
     public function actionGetArray(): Response
     {
         return $this->asJson(['success' => true]);
     }
 
+    /**
+     * Mocks a Model response.
+     */
     public function actionGetModel(): Response
     {
         return $this->asJson(new TestModel(['success' => true]));
     }
 
+    /**
+     * Mocks a save success response.
+     */
     public function actionSaveSuccess(): Response
     {
         Craft::$app->getSession()->setNotice('Success');
@@ -51,7 +60,7 @@ class TestController extends Controller
     }
 
     /**
-     * @return null
+     * Mocks a save error response.
      */
     public function actionSaveError()
     {

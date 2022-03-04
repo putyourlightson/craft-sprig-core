@@ -37,7 +37,10 @@ class Sprig extends Module
      */
     public static SprigVariable $sprigVariable;
 
-    public static function bootstrap()
+    /**
+     * The bootstrap process creates an instance of the module.
+     */
+    public static function bootstrap(): void
     {
         static::getInstance();
     }
@@ -60,7 +63,10 @@ class Sprig extends Module
         return $module;
     }
 
-    public function init()
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
     {
         parent::init();
 
@@ -74,7 +80,7 @@ class Sprig extends Module
     }
 
     /**
-     * Registers components
+     * Registers components.
      */
     private function _registerComponents()
     {
@@ -85,7 +91,7 @@ class Sprig extends Module
     }
 
     /**
-     * Registers template roots
+     * Registers template roots.
      */
     private function _registerTemplateRoots()
     {
@@ -98,7 +104,7 @@ class Sprig extends Module
     }
 
     /**
-     * Registers Twig extensions
+     * Registers Twig extensions.
      */
     private function _registerTwigExtensions()
     {
