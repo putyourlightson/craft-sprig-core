@@ -117,8 +117,7 @@ class ComponentsControllerTest extends Unit
         $response = Sprig::$core->runAction('components/render');
 
         $this->assertStringContainsString('success:false', trim($response->data));
-        $this->assertStringContainsString('flashes[error]:Error', trim($response->data));
+        $this->assertStringContainsString('flashes[error]:the_error_message', trim($response->data));
         $this->assertStringContainsString('model', trim($response->data));
-        $this->assertStringContainsString('errors', trim($response->data));
     }
 }

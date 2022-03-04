@@ -10,18 +10,21 @@ use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use putyourlightson\sprig\services\ComponentsService;
-use putyourlightson\sprig\services\RequestService;
+use putyourlightson\sprig\services\RequestsService;
 use putyourlightson\sprig\twigextensions\SprigTwigExtension;
 use putyourlightson\sprig\variables\SprigVariable;
 use yii\base\Event;
 use yii\base\Module;
 
 /**
- * @property ComponentsService $components
- * @property RequestService $request
+ * @property-read ComponentsService $componentsService
+ * @property-read RequestsService $requestsService
  */
 class Sprig extends Module
 {
+    /**
+     * The unique ID of this module.
+     */
     public const ID = 'sprig-core';
 
     /**
@@ -64,14 +67,21 @@ class Sprig extends Module
         self::$core = $this;
         self::$sprigVariable = new SprigVariable();
 
-        $this->setComponents([
-            'components' => ComponentsService::class,
-            'request' => RequestService::class,
-        ]);
-
+        $this->_registerComponents();
         $this->_registerTemplateRoots();
         $this->_registerTwigExtensions();
         $this->_registerVariables();
+    }
+
+    /**
+     * Registers components
+     */
+    private function _registerComponents()
+    {
+        $this->setComponents([
+            'componentsService' => ComponentsService::class,
+            'requestsService' => RequestsService::class,
+        ]);
     }
 
     /**

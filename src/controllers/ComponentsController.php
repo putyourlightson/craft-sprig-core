@@ -28,21 +28,21 @@ class ComponentsController extends Controller
      */
     public function actionRender(): Response
     {
-        $siteId = Sprig::$core->request->getValidatedParam('sprig:siteId');
+        $siteId = Sprig::$core->requestsService->getValidatedParam('sprig:siteId');
         Craft::$app->getSites()->setCurrentSite($siteId);
 
-        $component = Sprig::$core->request->getValidatedParam('sprig:component');
-        $action = Sprig::$core->request->getValidatedParam('sprig:action');
+        $component = Sprig::$core->requestsService->getValidatedParam('sprig:component');
+        $action = Sprig::$core->requestsService->getValidatedParam('sprig:action');
 
         $variables = ArrayHelper::merge(
-            Sprig::$core->request->getValidatedParamValues('sprig:variables'),
-            Sprig::$core->request->getVariables()
+            Sprig::$core->requestsService->getValidatedParamValues('sprig:variables'),
+            Sprig::$core->requestsService->getVariables()
         );
 
         $content = '';
 
         if ($component) {
-            $componentObject = Sprig::$core->components->createObject($component, $variables);
+            $componentObject = Sprig::$core->componentsService->createObject($component, $variables);
 
             if ($componentObject) {
                 if ($action && method_exists($componentObject, $action)) {
@@ -58,14 +58,14 @@ class ComponentsController extends Controller
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
-            $template = Sprig::$core->request->getValidatedParam('sprig:template');
+            $template = Sprig::$core->requestsService->getValidatedParam('sprig:template');
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
         }
 
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
         $response->format = Response::FORMAT_HTML;
-        $response->data = Sprig::$core->components->parse($content);
+        $response->data = Sprig::$core->componentsService->parse($content);
 
         return $response;
     }

@@ -40,7 +40,7 @@ class RequestTest extends TestCase
             'sprig:template' => 't',
         ]]);
 
-        $variables = Sprig::$core->request->getVariables();
+        $variables = Sprig::$core->requestsService->getVariables();
 
         $this->assertEquals(['page' => 1], $variables);
     }
@@ -56,7 +56,7 @@ class RequestTest extends TestCase
             'getParam' => Craft::$app->getSecurity()->hashData('xyz'),
         ]);
 
-        $param = Sprig::$core->request->getValidatedParam('page');
+        $param = Sprig::$core->requestsService->getValidatedParam('page');
 
         $this->assertEquals('xyz', $param);
     }
@@ -68,7 +68,7 @@ class RequestTest extends TestCase
             Craft::$app->getSecurity()->hashData('xyz'),
         ]]);
 
-        $values = Sprig::$core->request->getValidatedParamValues('page');
+        $values = Sprig::$core->requestsService->getValidatedParamValues('page');
 
         $this->assertEquals(['abc', 'xyz'], $values);
     }
@@ -79,7 +79,7 @@ class RequestTest extends TestCase
 
         $data = Craft::$app->getSecurity()->hashData('xyz').'abc';
 
-        Sprig::$core->request->validateData($data);
+        Sprig::$core->requestsService->validateData($data);
     }
 
     private function _mockRequestMethods(array $methods)

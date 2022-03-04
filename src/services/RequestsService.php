@@ -13,7 +13,7 @@ use yii\web\BadRequestHttpException;
 /**
  * @property-read array $variables
  */
-class RequestService extends Component
+class RequestsService extends Component
 {
     /**
      * @const string[]
