@@ -85,7 +85,7 @@ class Sprig extends Module
     private function _registerComponents()
     {
         $this->setComponents([
-            'component' => ComponentsService::class,
+            'components' => ComponentsService::class,
             'requests' => RequestsService::class,
         ]);
     }
