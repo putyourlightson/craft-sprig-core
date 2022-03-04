@@ -102,16 +102,6 @@ class ComponentsController extends Controller
             unset($variables['variables']);
         }
 
-        // TODO: remove in 2.0.0
-        // Extract errors from the route param variables to maintain backwards compatibility.
-        foreach ($variables as $routeParamVariable) {
-            if ($routeParamVariable instanceof Model) {
-                $variables['errors'] = $routeParamVariable->getErrors();
-
-                break;
-            }
-        }
-
         // Override the `currentUser` global variable with a fresh version, in case it was just updated
         // https://github.com/putyourlightson/craft-sprig/issues/81#issuecomment-758619306
         $variables['currentUser'] = Craft::$app->getUser()->getIdentity();
