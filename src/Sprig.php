@@ -17,8 +17,8 @@ use yii\base\Event;
 use yii\base\Module;
 
 /**
- * @property-read ComponentsService $componentsService
- * @property-read RequestsService $requestsService
+ * @property-read ComponentsService $components
+ * @property-read RequestsService $requests
  */
 class Sprig extends Module
 {
@@ -85,8 +85,8 @@ class Sprig extends Module
     private function _registerComponents()
     {
         $this->setComponents([
-            'componentsService' => ComponentsService::class,
-            'requestsService' => RequestsService::class,
+            'component' => ComponentsService::class,
+            'requests' => RequestsService::class,
         ]);
     }
 
