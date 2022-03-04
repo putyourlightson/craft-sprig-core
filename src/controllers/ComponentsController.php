@@ -14,7 +14,6 @@ use craft\web\Controller;
 use craft\web\UrlRule;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
-use yii\base\Model;
 use yii\web\Response;
 
 class ComponentsController extends Controller
