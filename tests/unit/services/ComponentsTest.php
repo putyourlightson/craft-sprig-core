@@ -48,7 +48,7 @@ class ComponentsTest extends Unit
         $html = (string)$markup;
 
         $this->assertStringContainsString('id="abc"', $html);
-        $this->assertStringContainsString('data-hx-include="#abc *"', $html);
+        $this->assertStringContainsString('data-hx-include="this"', $html);
         $this->assertStringContainsString('data-hx-trigger="load"', $html);
         $this->assertStringContainsString('sprig:template', $html);
         $this->assertStringContainsString('limit:1', $html);

@@ -140,7 +140,7 @@ class ComponentsService extends BaseComponent
                 'id' => $id,
                 'class' => 'sprig-component',
                 self::HTMX_PREFIX.'target' => 'this',
-                self::HTMX_PREFIX.'include' => '#'.$id.' *',
+                self::HTMX_PREFIX.'include' => 'this',
                 self::HTMX_PREFIX.'trigger' => 'refresh',
                 self::HTMX_PREFIX.'get' => $this->_getSprigActionUrl(),
                 self::HTMX_PREFIX.'vals' => Json::htmlEncode($values),
