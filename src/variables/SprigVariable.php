@@ -7,13 +7,13 @@ namespace putyourlightson\sprig\variables;
 
 use Craft;
 use craft\db\Paginator;
-use craft\db\Query;
 use craft\helpers\Html;
 use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
+use yii\db\Query;
 
 class SprigVariable
 {
@@ -107,7 +107,6 @@ class SprigVariable
      */
     public function paginate(Query $query, int $currentPage = 1, array $config = []): Paginate
     {
-        /** @see Template::paginateCriteria() */
         $paginatorQuery = clone $query;
         $paginatorQuery->limit(null);
 
