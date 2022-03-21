@@ -19,6 +19,7 @@ use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
+use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
@@ -96,6 +97,11 @@ class ComponentsService extends BaseComponent
     /**
      * @var string|null
      */
+    private ?string $_componentName = null;
+
+    /**
+     * @var string|null
+     */
     private ?string $_sprigActionUrl = null;
 
     /**
@@ -103,6 +109,7 @@ class ComponentsService extends BaseComponent
      */
     public function create(string $value, array $variables = [], array $attributes = []): Markup
     {
+        $this->_componentName = $value;
         $values = [];
 
         $siteId = Craft::$app->getSites()->getCurrentSite()->id;
@@ -465,21 +472,15 @@ class ComponentsService extends BaseComponent
         ];
 
         if ($value instanceof ElementInterface) {
-            throw new InvalidVariableException(
-                $this->_getError('variable-element', $variable)
-            );
+            $this->_throwError('element', $variable);
         }
 
         if ($value instanceof Model) {
-            throw new InvalidVariableException(
-                $this->_getError('variable-model', $variable)
-            );
+            $this->_throwError('model', $variable);
         }
 
         if (is_object($value)) {
-            throw new InvalidVariableException(
-                $this->_getError('variable-object', $variable)
-            );
+            $this->_throwError('object', $variable);
         }
 
         if (is_array($value)) {
@@ -497,5 +498,20 @@ class ComponentsService extends BaseComponent
         $template = 'sprig-core/_errors/'.$templateName;
 
         return Craft::$app->getView()->renderTemplate($template, $variables, View::TEMPLATE_MODE_CP);
+    }
+
+    /**
+     * Throws an error from a rendered template.
+     */
+    private function _throwError(string $type, array $variables = []): void
+    {
+        $variables['type'] = $type;
+        $variables['componentName'] = $this->_componentName;
+
+        $template = 'sprig-core/_errors/index';
+        $content = Craft::$app->getView()->renderPageTemplate('sprig-core/_error', $variables, View::TEMPLATE_MODE_CP);
+
+        Craft::$app->getResponse()->content = $content;
+        Craft::$app->end();
     }
 }
