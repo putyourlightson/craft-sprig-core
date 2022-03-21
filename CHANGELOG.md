@@ -1,12 +1,15 @@
 # Release Notes for Sprig Core
 
-## 2.0.0-alpha.1 - 2022-03-03
+## 2.0.0-beta.1 - 2022-03-21
 ### Added
 - Added compatibility with Craft 4.
 
+### Changed
+- Invalid variable error messages have been restyled.
+
 ### Removed
 - Removed the deprecated `sprig.element`, `sprig.elementName`, `sprig.elementValue` and `sprig.eventTarget` tags.
-- 
+
 ## 1.3.2 - Unreleased
 ### Fixed
 - Fixed a bug that was throwing an error when using the `paginate` variable with an ActiveRecord query. ([#6](https://github.com/putyourlightson/craft-sprig-core/issues/6)).
