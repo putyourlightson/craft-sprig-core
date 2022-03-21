@@ -5,7 +5,7 @@
 - Added compatibility with Craft 4.
 
 ### Changed
-- Invalid variable error messages have been restyled.
+- Restyled invalid variable error messages.
 
 ### Removed
 - Removed the deprecated `sprig.element`, `sprig.elementName`, `sprig.elementValue` and `sprig.eventTarget` tags.
