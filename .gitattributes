@@ -2,6 +2,7 @@
 /.gitattributes export-ignore
 /.github/ export-ignore
 /.gitignore export-ignore
+/ecs.php export-ignore
 /codeception.yml export-ignore
 /phpstan.neon export-ignore
 /tests/ export-ignore
