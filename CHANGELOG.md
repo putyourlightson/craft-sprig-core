@@ -1,8 +1,9 @@
 # Release Notes for Sprig Core
 
-## 1.3.2 - Unreleased
+## 1.3.2 - 2022-03-24
 ### Fixed
-- Fixed a bug that was throwing an error when using the `paginate` variable with an ActiveRecord query. ([#6](https://github.com/putyourlightson/craft-sprig-core/issues/6)).
+- Fixed a bug that was throwing an error when using the `paginate` variable with an ActiveRecord query ([#6](https://github.com/putyourlightson/craft-sprig-core/issues/6)).
+- Fixed nested components being parsed twice, resulting in duplicate attributes ([#208](https://github.com/putyourlightson/craft-sprig-core/issues/208)).
 
 ## 1.3.1 - 2022-03-15
 ### Fixed

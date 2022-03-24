@@ -240,8 +240,13 @@ class ComponentsService extends BaseComponent
             return null;
         }
 
+        if (isset($attributes['data']['sprig-parsed'])) {
+            return $tag;
+        }
+
         $name = $this->_getTagName($tag);
         $this->_parseAttributes($attributes);
+        $attributes['data-sprig-parsed'] = true;
 
         return Html::beginTag($name, $attributes);
     }
