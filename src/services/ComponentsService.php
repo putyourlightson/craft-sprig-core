@@ -52,6 +52,11 @@ class ComponentsService extends BaseComponent
     public const SPRIG_PREFIXES = ['s-', 'sprig-'];
 
     /**
+     * @const string
+     */
+    public const SPRIG_PARSED_ATTRIBUTE= 'data-sprig-parsed';
+
+    /**
      * @const string[]
      */
     public const HTMX_ATTRIBUTES = [
@@ -257,8 +262,13 @@ class ComponentsService extends BaseComponent
             return null;
         }
 
+        if (isset($attributes['data']['sprig-parsed'])) {
+            return $tag;
+        }
+
         $name = $this->_getTagName($tag);
         $this->_parseAttributes($attributes);
+        $attributes['data-sprig-parsed'] = true;
 
         return Html::beginTag($name, $attributes);
     }

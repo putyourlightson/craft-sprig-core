@@ -123,6 +123,7 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('&amp;sprig:action=', $html);
         $this->assertStringContainsString('data-hx-headers="{&quot;' . Request::CSRF_HEADER . '&quot;', $html);
         $this->assertStringContainsString('data-hx-vals="{&quot;limit&quot;:1}', $html);
+        $this->assertStringContainsString('data-sprig-parsed', $html);
     }
 
     public function testGetParsedTagAttributesWithData()
@@ -156,7 +157,7 @@ class ComponentsTest extends Unit
     {
         $html = '<div	s-target="#id"></div>';
         $html = Sprig::$core->components->parse($html);
-        $this->assertEquals('<div s-target="#id" data-hx-target="#id"></div>', $html);
+        $this->assertStringContainsString('div s-target="#id" data-hx-target="#id"', $html);
     }
 
     public function testGetParsedTagAttributesVals()
