@@ -8,14 +8,13 @@ namespace putyourlightson\sprigcoretests\unit\services;
 use Codeception\Test\Unit;
 use Craft;
 use craft\elements\Entry;
-use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\Sprig;
 use UnitTester;
 use yii\base\Application;
 use yii\base\ExitException;
 use yii\base\Model;
-use yii\web\Request;
 use yii\web\BadRequestHttpException;
+use yii\web\Request;
 
 /**
  * @author    PutYourLightsOn
@@ -76,7 +75,7 @@ class ComponentsTest extends Unit
     public function testCreateObjectFromComponent()
     {
         // Require the class since it is not autoloaded.
-        require CRAFT_TESTS_PATH.'/_craft/sprig/components/TestComponent.php';
+        require CRAFT_TESTS_PATH . '/_craft/sprig/components/TestComponent.php';
 
         $object = Sprig::$core->components->createObject(
             'TestComponent',
@@ -122,7 +121,7 @@ class ComponentsTest extends Unit
 
         $this->assertStringContainsString('data-hx-post=', $html);
         $this->assertStringContainsString('&amp;sprig:action=', $html);
-        $this->assertStringContainsString('data-hx-headers="{&quot;'.Request::CSRF_HEADER.'&quot;', $html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;' . Request::CSRF_HEADER . '&quot;', $html);
         $this->assertStringContainsString('data-hx-vals="{&quot;limit&quot;:1}', $html);
     }
 
@@ -148,7 +147,7 @@ class ComponentsTest extends Unit
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-target="#id"', $html);
 
-        $html = '<div s-target = #id'.PHP_EOL.'></div>';
+        $html = '<div s-target = #id' . PHP_EOL . '></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-target="#id"', $html);
     }
@@ -233,7 +232,7 @@ class ComponentsTest extends Unit
     public function testGetParsedTagAttributesUtfEncoding()
     {
         $placeholder = 'ÆØÅäöü';
-        $html = '<div sprig placeholder="'.$placeholder.'"></div>';
+        $html = '<div sprig placeholder="' . $placeholder . '"></div>';
         $result = Sprig::$core->components->parse($html);
         $this->assertStringContainsString($placeholder, $result);
     }

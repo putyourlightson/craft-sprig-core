@@ -83,7 +83,7 @@ class ComponentsController extends Controller
         $redirectPrefix = 'https://';
         Craft::$app->getRequest()->setBodyParams(ArrayHelper::merge(
             Craft::$app->getRequest()->getBodyParams(),
-            ['redirect' => Craft::$app->getSecurity()->hashData($redirectPrefix.'{id}')]
+            ['redirect' => Craft::$app->getSecurity()->hashData($redirectPrefix . '{id}')]
         ));
 
         $actionResponse = Craft::$app->runAction($action);
@@ -135,7 +135,7 @@ class ComponentsController extends Controller
             return;
         }
 
-        Event::on(User::class, Element::EVENT_AFTER_SAVE, function (ModelEvent $event) {
+        Event::on(User::class, Element::EVENT_AFTER_SAVE, function(ModelEvent $event) {
             /** @var User $user */
             $user = $event->sender;
 

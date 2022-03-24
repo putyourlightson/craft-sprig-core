@@ -16,8 +16,8 @@ use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
-use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
+use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
@@ -84,7 +84,7 @@ class ComponentsService extends BaseComponent
         'trigger',
         'vals',
         'vars',
-        'ws'
+        'ws',
     ];
 
     /**
@@ -140,7 +140,7 @@ class ComponentsService extends BaseComponent
             $type = 'template';
 
             if (!Craft::$app->getView()->doesTemplateExist($value)) {
-                throw new BadRequestHttpException('Unable to find the component or template “'.$value.'”.');
+                throw new BadRequestHttpException('Unable to find the component or template “' . $value . '”.');
             }
 
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
@@ -148,10 +148,10 @@ class ComponentsService extends BaseComponent
 
         $content = $this->parse($renderedContent);
 
-        $values['sprig:'.$type] = Craft::$app->getSecurity()->hashData($value);
+        $values['sprig:' . $type] = Craft::$app->getSecurity()->hashData($value);
 
         foreach ($variables as $name => $val) {
-            $values['sprig:variables['.$name.']'] = $this->_hashVariable($name, $val);
+            $values['sprig:variables[' . $name . ']'] = $this->_hashVariable($name, $val);
         }
 
         // Add token to values if this is a preview request.
@@ -162,18 +162,18 @@ class ComponentsService extends BaseComponent
         }
 
         // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
-        $id = $attributes['id'] ?? ('component-'.StringHelper::randomString(6));
+        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
 
         // Merge base attributes with provided attributes first, to ensure that `hx-vals` is included in the attributes when they are parsed.
         $attributes = array_merge(
             [
                 'id' => $id,
                 'class' => 'sprig-component',
-                self::HTMX_PREFIX.'target' => 'this',
-                self::HTMX_PREFIX.'include' => 'this',
-                self::HTMX_PREFIX.'trigger' => 'refresh',
-                self::HTMX_PREFIX.'get' => $this->_getSprigActionUrl(),
-                self::HTMX_PREFIX.'vals' => Json::htmlEncode($values),
+                self::HTMX_PREFIX . 'target' => 'this',
+                self::HTMX_PREFIX . 'include' => 'this',
+                self::HTMX_PREFIX . 'trigger' => 'refresh',
+                self::HTMX_PREFIX . 'get' => $this->_getSprigActionUrl(),
+                self::HTMX_PREFIX . 'vals' => Json::htmlEncode($values),
             ],
             $attributes
         );
@@ -198,14 +198,14 @@ class ComponentsService extends BaseComponent
             return new SprigPlayground(['variables' => $variables]);
         }
 
-        $componentClass = self::COMPONENT_NAMESPACE.$component;
+        $componentClass = self::COMPONENT_NAMESPACE . $component;
 
         if (!class_exists($componentClass)) {
             return null;
         }
 
         if (!is_subclass_of($componentClass, Component::class)) {
-            throw new BadRequestHttpException('Component class “'.$componentClass.'” must extend “'.Component::class.'”.');
+            throw new BadRequestHttpException('Component class “' . $componentClass . '” must extend “' . Component::class . '”.');
         }
 
         return Craft::createObject([
@@ -308,7 +308,7 @@ class ComponentsService extends BaseComponent
             $params['sprig:action'] = Craft::$app->getSecurity()->hashData($action);
         }
 
-        $attributes[self::HTMX_PREFIX.$verb] = $this->_getSprigActionUrl($params);
+        $attributes[self::HTMX_PREFIX . $verb] = $this->_getSprigActionUrl($params);
     }
 
     /**
@@ -349,19 +349,19 @@ class ComponentsService extends BaseComponent
             $this->_mergeJsonAttributes($attributes, 'vals', [$name => $value]);
         }
         elseif ($name == 'replace') {
-            $attributes[self::HTMX_PREFIX.'select'] = $value;
-            $attributes[self::HTMX_PREFIX.'target'] = $value;
-            $attributes[self::HTMX_PREFIX.'swap'] = 'outerHTML';
+            $attributes[self::HTMX_PREFIX . 'select'] = $value;
+            $attributes[self::HTMX_PREFIX . 'target'] = $value;
+            $attributes[self::HTMX_PREFIX . 'swap'] = 'outerHTML';
         }
         elseif ($name == 'headers' || $name == 'vals') {
             $this->_mergeJsonAttributes($attributes, $name, $value);
         }
         elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
-            $attributes[self::HTMX_PREFIX.$name] = $value;
+            $attributes[self::HTMX_PREFIX . $name] = $value;
 
             // Deprecate `s-vars`
             if ($name == 'vars') {
-                Craft::$app->getDeprecator()->log(__METHOD__.':vars', 'The “s-vars” attribute in Sprig components has been deprecated for security reasons. Use the new “s-vals” or “s-val:*” attribute instead.');
+                Craft::$app->getDeprecator()->log(__METHOD__ . ':vars', 'The “s-vars” attribute in Sprig components has been deprecated for security reasons. Use the new “s-vals” or “s-val:*” attribute instead.');
             }
         }
     }
@@ -373,13 +373,13 @@ class ComponentsService extends BaseComponent
     {
         if (is_string($values)) {
             if (str_starts_with($values, 'javascript:')) {
-                throw new BadRequestHttpException('The “s-'.$name.'” attribute in Sprig components may not contain a “javascript:” prefix for security reasons. Use a JSON encoded value instead.');
+                throw new BadRequestHttpException('The “s-' . $name . '” attribute in Sprig components may not contain a “javascript:” prefix for security reasons. Use a JSON encoded value instead.');
             }
 
             $values = Json::decode(html_entity_decode($values));
         }
 
-        $key = self::HTMX_PREFIX.$name;
+        $key = self::HTMX_PREFIX . $name;
 
         if (!empty($attributes[$key])) {
             $values = array_merge(Json::decode($attributes[$key]), $values);
@@ -432,12 +432,12 @@ class ComponentsService extends BaseComponent
     private function _getSprigAttributeValue(array $attributes, string $name): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
-            if (!empty($attributes[$prefix.$name])) {
-                return $attributes[$prefix.$name];
+            if (!empty($attributes[$prefix . $name])) {
+                return $attributes[$prefix . $name];
             }
 
-            if (!empty($attributes['data'][$prefix.$name])) {
-                return $attributes['data'][$prefix.$name];
+            if (!empty($attributes['data'][$prefix . $name])) {
+                return $attributes['data'][$prefix . $name];
             }
         }
 

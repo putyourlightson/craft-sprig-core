@@ -77,7 +77,7 @@ class RequestTest extends TestCase
     {
         $this->expectException(BadRequestHttpException::class);
 
-        $data = Craft::$app->getSecurity()->hashData('xyz').'abc';
+        $data = Craft::$app->getSecurity()->hashData('xyz') . 'abc';
 
         Sprig::$core->requests->validateData($data);
     }

@@ -98,7 +98,7 @@ class Sprig extends Module
         Event::on(
             View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
             function(RegisterTemplateRootsEvent $event) {
-                $event->roots['sprig-core'] = $this->getBasePath().'/templates';
+                $event->roots['sprig-core'] = $this->getBasePath() . '/templates';
             }
         );
     }

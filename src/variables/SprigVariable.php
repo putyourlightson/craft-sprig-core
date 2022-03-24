@@ -176,7 +176,7 @@ class SprigVariable
      */
     private function _getScript(array $attributes = []): Markup
     {
-        $url = 'https://unpkg.com/htmx.org@'.$this->htmxVersion.'/dist/htmx.min.js';
+        $url = 'https://unpkg.com/htmx.org@' . $this->htmxVersion . '/dist/htmx.min.js';
 
         if (Craft::$app->getConfig()->env == 'dev') {
             $url = str_replace('htmx.min.js', 'htmx.js', $url);
