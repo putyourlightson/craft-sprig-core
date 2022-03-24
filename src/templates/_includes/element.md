@@ -1,4 +1,4 @@
-The variable `{{ name }}` {{ isArray ? 'is an array that contains' : 'is' }} an element of type `{{ value.className }}` and cannot be passed into a Sprig component.
+The variable `{{ name|e }}` {{ isArray ? 'is an array that contains' : 'is' }} an element of type `{{ value.className|e }}` and cannot be passed into a Sprig component.
 
 Instead of passing an element, consider passing its `id`.
 

@@ -11,6 +11,8 @@ use craft\elements\Entry;
 use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\Sprig;
 use UnitTester;
+use yii\base\Application;
+use yii\base\ExitException;
 use yii\base\Model;
 use yii\web\Request;
 use yii\web\BadRequestHttpException;
@@ -241,7 +243,11 @@ class ComponentsTest extends Unit
         $this->tester->mockCraftMethods('view', ['doesTemplateExist' => true]);
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
 
-        $this->expectException(InvalidVariableException::class);
+        /**
+         * Yii exits with an exception when `YII_ENV_TEST` is set.
+         * @see Application::end()
+         */
+        $this->expectException(ExitException::class);
 
         Sprig::$core->components->create('_component', $variables);
     }

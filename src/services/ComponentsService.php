@@ -14,12 +14,10 @@ use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\View;
 use putyourlightson\sprig\base\Component;
-use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
-use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
@@ -491,16 +489,6 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Returns an error from a rendered template.
-     */
-    private function _getError(string $templateName, array $variables = []): string
-    {
-        $template = 'sprig-core/_errors/'.$templateName;
-
-        return Craft::$app->getView()->renderTemplate($template, $variables, View::TEMPLATE_MODE_CP);
-    }
-
-    /**
      * Throws an error from a rendered template.
      */
     private function _throwError(string $type, array $variables = []): void
@@ -508,10 +496,12 @@ class ComponentsService extends BaseComponent
         $variables['type'] = $type;
         $variables['componentName'] = $this->_componentName;
 
-        $template = 'sprig-core/_errors/index';
         $content = Craft::$app->getView()->renderPageTemplate('sprig-core/_error', $variables, View::TEMPLATE_MODE_CP);
 
-        Craft::$app->getResponse()->content = $content;
+        $response = Craft::$app->getResponse();
+        $response->content = $content;
+        $response->setStatusCode(400);
+
         Craft::$app->end();
     }
 }
