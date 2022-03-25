@@ -23,6 +23,7 @@ use putyourlightson\sprig\plugin\components\SprigPlayground;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
+use yii\log\Logger;
 use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
@@ -220,6 +221,10 @@ class ComponentsService extends BaseComponent
 
         if (preg_match_all($pattern, $content, $matches)) {
             return $matches[0];
+        }
+
+        if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR) {
+            Craft::getLogger()->log('Backtrack limit was exhausted!', Logger::LEVEL_ERROR, 'sprig-core');
         }
 
         return [];
