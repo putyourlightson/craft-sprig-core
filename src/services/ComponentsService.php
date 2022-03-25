@@ -88,7 +88,6 @@ class ComponentsService extends BaseComponent
         'target',
         'trigger',
         'vals',
-        'vars',
         'ws',
     ];
 
@@ -368,11 +367,6 @@ class ComponentsService extends BaseComponent
         }
         elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
             $attributes[self::HTMX_PREFIX . $name] = $value;
-
-            // Deprecate `s-vars`
-            if ($name == 'vars') {
-                Craft::$app->getDeprecator()->log(__METHOD__ . ':vars', 'The “s-vars” attribute in Sprig components has been deprecated for security reasons. Use the new “s-vals” or “s-val:*” attribute instead.');
-            }
         }
     }
 
