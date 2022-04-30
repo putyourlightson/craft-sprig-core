@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.0-beta.2 - Unreleased
+### Added
+- Added the [s-listen](https://putyourlightson.com/plugins/sprig#s-listen) attribute that allows you to specify one or more components that when refreshed, should trigger a refresh of the current element.
+
 ## 2.0.0-beta.1 - 2022-03-21
 ### Added
 - Added compatibility with Craft 4.
