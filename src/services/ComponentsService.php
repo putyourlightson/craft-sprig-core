@@ -352,13 +352,20 @@ class ComponentsService extends BaseComponent
 
             $this->_mergeJsonAttributes($attributes, 'vals', [$name => $value]);
         }
+        elseif ($name == 'headers' || $name == 'vals') {
+            $this->_mergeJsonAttributes($attributes, $name, $value);
+        }
+        elseif ($name == 'listen') {
+            $cssSelectors = StringHelper::split($value);
+            $triggers = array_map(function ($selector) {
+                return 'htmx:afterOnLoad from:' . $selector;
+            }, $cssSelectors);
+            $attributes[self::HTMX_PREFIX . 'trigger'] = join(',', $triggers);
+        }
         elseif ($name == 'replace') {
             $attributes[self::HTMX_PREFIX.'select'] = $value;
             $attributes[self::HTMX_PREFIX.'target'] = $value;
             $attributes[self::HTMX_PREFIX.'swap'] = 'outerHTML';
-        }
-        elseif ($name == 'headers' || $name == 'vals') {
-            $this->_mergeJsonAttributes($attributes, $name, $value);
         }
         elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
             $attributes[self::HTMX_PREFIX.$name] = $value;

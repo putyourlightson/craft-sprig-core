@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 1.4.0 - 2022-04-30
+### Added
+- Added the [s-listen](https://putyourlightson.com/plugins/sprig#s-listen) attribute that allows you to specify one or more components that when refreshed, should trigger a refresh of the current element.
+
 ## 1.3.2 - 2022-03-24
 ### Fixed
 - Fixed a bug that was throwing an error when using the `paginate` variable with an ActiveRecord query ([#6](https://github.com/putyourlightson/craft-sprig-core/issues/6)).

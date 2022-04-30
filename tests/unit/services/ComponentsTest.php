@@ -194,6 +194,13 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('data-hx-vals="{&quot;x&quot;:&quot;alert(\u0027xss\u0027)&quot;,&quot;z&quot;:&quot;alert(\u0022xss\u0022)&quot;,&quot;limit&quot;:1}"', $html);
     }
 
+    public function testGetParsedTagAttributesListen()
+    {
+        $html = '<div s-listen="#component1, #component2"></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-trigger="htmx:afterOnLoad from:#component1,htmx:afterOnLoad from:#component2"', $html);
+    }
+
     public function testGetParsedTagAttributesEmpty()
     {
         $html = '';
