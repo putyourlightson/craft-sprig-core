@@ -27,7 +27,7 @@ class ComponentsTest extends Unit
     /**
      * @var UnitTester
      */
-    protected $tester;
+    protected UnitTester $tester;
 
     protected function _before()
     {
@@ -193,6 +193,13 @@ class ComponentsTest extends Unit
         $html = '<div s-val:x="alert(\'xss\')" s-val:z=\'alert("xss")\' s-vals=\'{"limit":1}\'></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-vals="{&quot;x&quot;:&quot;alert(\u0027xss\u0027)&quot;,&quot;z&quot;:&quot;alert(\u0022xss\u0022)&quot;,&quot;limit&quot;:1}"', $html);
+    }
+
+    public function testGetParsedTagAttributesListen()
+    {
+        $html = '<div s-listen="#component1, #component2"></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-trigger="htmx:afterOnLoad from:#component1,htmx:afterOnLoad from:#component2"', $html);
     }
 
     public function testGetParsedTagAttributesEmpty()
