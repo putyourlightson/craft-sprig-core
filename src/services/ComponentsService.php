@@ -55,7 +55,7 @@ class ComponentsService extends BaseComponent
     /**
      * @const string
      */
-    public const SPRIG_PARSED_ATTRIBUTE= 'data-sprig-parsed';
+    public const SPRIG_PARSED_ATTRIBUTE = 'data-sprig-parsed';
 
     /**
      * @const string[]
@@ -116,7 +116,7 @@ class ComponentsService extends BaseComponent
         $values = [];
 
         $siteId = Craft::$app->getSites()->getCurrentSite()->id;
-        $values['sprig:siteId'] = Craft::$app->getSecurity()->hashData($siteId);
+        $values['sprig:siteId'] = Craft::$app->getSecurity()->hashData((string)$siteId);
 
         $mergedVariables = array_merge(
             $variables,
