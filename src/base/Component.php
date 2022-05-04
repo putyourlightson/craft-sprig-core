@@ -40,7 +40,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getIsRequest(): bool
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false, true) == 'true';
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false) == 'true';
     }
 
     /**
@@ -56,7 +56,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getIsBoosted(): bool
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted', false, true) == 'true';
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted', false) == 'true';
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getPrompt(): string
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Prompt', '', true);
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Prompt', '');
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getTarget(): string
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Target', '', true);
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Target', '');
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getTrigger(): string
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Trigger', '', true);
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Trigger', '');
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getTriggerName(): string
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Trigger-Name', '', true);
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Trigger-Name', '');
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getUrl(): string
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Current-URL', '', true);
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Current-URL', '');
     }
 
     /**

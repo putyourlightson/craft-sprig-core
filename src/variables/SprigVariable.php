@@ -123,7 +123,7 @@ class SprigVariable
     /**
      * Pushes the URL into the history stack.
      */
-    public function pushUrl(string $url)
+    public function pushUrl(string $url): void
     {
         Component::pushUrl($url);
     }
@@ -132,7 +132,7 @@ class SprigVariable
      * Redirects the browser to the URL.
      * https://htmx.org/reference#response_headers
      */
-    public function redirect(string $url)
+    public function redirect(string $url): void
     {
         Component::redirect($url);
     }
@@ -141,7 +141,7 @@ class SprigVariable
      * Refreshes the browser.
      * https://htmx.org/reference#response_headers
      */
-    public function refresh(bool $refresh = true)
+    public function refresh(bool $refresh = true): void
     {
         Component::refresh($refresh);
     }
@@ -150,7 +150,7 @@ class SprigVariable
      * Retargets the element to update with a CSS selector.
      * https://htmx.org/reference#response_headers
      */
-    public function retarget(string $target)
+    public function retarget(string $target): void
     {
         Component::retarget($target);
     }
@@ -158,7 +158,7 @@ class SprigVariable
     /**
      * Triggers client-side events.
      */
-    public function triggerEvents(array|string $events, string $on = 'load')
+    public function triggerEvents(array|string $events, string $on = 'load'): void
     {
         Component::triggerEvents($events, $on);
     }
