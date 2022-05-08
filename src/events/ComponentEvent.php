@@ -9,26 +9,23 @@ use yii\base\Event;
 
 class ComponentEvent extends Event
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string
      */
-    public $value;
+    public string $value;
 
     /**
      * @var array
      */
-    public $variables;
+    public array $variables;
 
     /**
      * @var array
      */
-    public $attributes;
+    public array $attributes;
 
     /**
      * @var string|null
      */
-    public $output;
+    public ?string $output;
 }

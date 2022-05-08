@@ -23,7 +23,7 @@ class SprigTwigExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @inheritdoc
+     * Returns the globals to add.
      */
     public function getGlobals(): array
     {

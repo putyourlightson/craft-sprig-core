@@ -18,5 +18,5 @@ class TestModel extends Model
     /**
      * @var bool
      */
-    public $success = false;
+    public bool $success = false;
 }

@@ -10,41 +10,48 @@ use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use putyourlightson\sprig\services\ComponentsService;
-use putyourlightson\sprig\services\RequestService;
+use putyourlightson\sprig\services\RequestsService;
 use putyourlightson\sprig\twigextensions\SprigTwigExtension;
 use putyourlightson\sprig\variables\SprigVariable;
 use yii\base\Event;
 use yii\base\Module;
 
 /**
- * @property ComponentsService $components
- * @property RequestService $request
+ * @property-read ComponentsService $components
+ * @property-read RequestsService $requests
  */
 class Sprig extends Module
 {
-    const ID = 'sprig-core';
+    /**
+     * The unique ID of this module.
+     */
+    public const ID = 'sprig-core';
 
     /**
      * @var Sprig
      */
-    public static $core;
+    public static Sprig $core;
 
     /**
      * @var SprigVariable
      */
-    public static $sprigVariable;
+    public static SprigVariable $sprigVariable;
 
-    public static function bootstrap()
+    /**
+     * The bootstrap process creates an instance of the module.
+     */
+    public static function bootstrap(): void
     {
         static::getInstance();
     }
 
     /**
-     * @return Sprig
+     * @inheritdoc
      */
-    public static function getInstance(): Module
+    public static function getInstance(): Sprig
     {
         if ($module = Craft::$app->getModule(self::ID)) {
+            /** @var Sprig $module */
             return $module;
         }
 
@@ -56,38 +63,48 @@ class Sprig extends Module
         return $module;
     }
 
-    public function init()
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
     {
         parent::init();
 
         self::$core = $this;
         self::$sprigVariable = new SprigVariable();
 
-        $this->setComponents([
-            'components' => ComponentsService::class,
-            'request' => RequestService::class,
-        ]);
-
+        $this->_registerComponents();
         $this->_registerTemplateRoots();
         $this->_registerTwigExtensions();
         $this->_registerVariables();
     }
 
     /**
-     * Registers template roots
+     * Registers components.
+     */
+    private function _registerComponents()
+    {
+        $this->setComponents([
+            'components' => ComponentsService::class,
+            'requests' => RequestsService::class,
+        ]);
+    }
+
+    /**
+     * Registers template roots.
      */
     private function _registerTemplateRoots()
     {
         Event::on(
             View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
             function(RegisterTemplateRootsEvent $event) {
-                $event->roots['sprig-core'] = $this->getBasePath().'/templates';
+                $event->roots['sprig-core'] = $this->getBasePath() . '/templates';
             }
         );
     }
 
     /**
-     * Registers Twig extensions
+     * Registers Twig extensions.
      */
     private function _registerTwigExtensions()
     {

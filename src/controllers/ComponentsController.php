@@ -14,7 +14,6 @@ use craft\web\Controller;
 use craft\web\UrlRule;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
-use yii\base\Model;
 use yii\web\Response;
 
 class ComponentsController extends Controller
@@ -22,24 +21,22 @@ class ComponentsController extends Controller
     /**
      * @inheritdoc
      */
-    protected $allowAnonymous = true;
+    protected int|bool|array $allowAnonymous = true;
 
     /**
      * Renders a component.
-     *
-     * @return Response
      */
     public function actionRender(): Response
     {
-        $siteId = Sprig::$core->request->getValidatedParam('sprig:siteId');
+        $siteId = Sprig::$core->requests->getValidatedParam('sprig:siteId');
         Craft::$app->getSites()->setCurrentSite($siteId);
 
-        $component = Sprig::$core->request->getValidatedParam('sprig:component');
-        $action = Sprig::$core->request->getValidatedParam('sprig:action');
+        $component = Sprig::$core->requests->getValidatedParam('sprig:component');
+        $action = Sprig::$core->requests->getValidatedParam('sprig:action');
 
         $variables = ArrayHelper::merge(
-            Sprig::$core->request->getValidatedParamValues('sprig:variables'),
-            Sprig::$core->request->getVariables()
+            Sprig::$core->requests->getValidatedParamValues('sprig:variables'),
+            Sprig::$core->requests->getVariables()
         );
 
         $content = '';
@@ -61,7 +58,7 @@ class ComponentsController extends Controller
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
-            $template = Sprig::$core->request->getValidatedParam('sprig:template');
+            $template = Sprig::$core->requests->getValidatedParam('sprig:template');
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
         }
 
@@ -75,9 +72,6 @@ class ComponentsController extends Controller
 
     /**
      * Runs an action and returns the variables from the response
-     *
-     * @param string $action
-     * @return array
      */
     private function _runActionInternal(string $action): array
     {
@@ -89,7 +83,7 @@ class ComponentsController extends Controller
         $redirectPrefix = 'https://';
         Craft::$app->getRequest()->setBodyParams(ArrayHelper::merge(
             Craft::$app->getRequest()->getBodyParams(),
-            ['redirect' => Craft::$app->getSecurity()->hashData($redirectPrefix.'{id}')]
+            ['redirect' => Craft::$app->getSecurity()->hashData($redirectPrefix . '{id}')]
         ));
 
         $actionResponse = Craft::$app->runAction($action);
@@ -105,16 +99,6 @@ class ComponentsController extends Controller
         if (isset($variables['variables'])) {
             $variables = ArrayHelper::merge($variables, $variables['variables']);
             unset($variables['variables']);
-        }
-
-        // TODO: remove in 2.0.0
-        // Extract errors from the route param variables to maintain backwards compatibility.
-        foreach ($variables as $routeParamVariable) {
-            if ($routeParamVariable instanceof Model) {
-                $variables['errors'] = $routeParamVariable->getErrors();
-
-                break;
-            }
         }
 
         // Override the `currentUser` global variable with a fresh version, in case it was just updated
@@ -151,7 +135,7 @@ class ComponentsController extends Controller
             return;
         }
 
-        Event::on(User::class, Element::EVENT_AFTER_SAVE, function (ModelEvent $event) {
+        Event::on(User::class, Element::EVENT_AFTER_SAVE, function(ModelEvent $event) {
             /** @var User $user */
             $user = $event->sender;
 

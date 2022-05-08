@@ -5,7 +5,7 @@
 
 namespace putyourlightson\sprig\helpers;
 
-use Yii;
+use Craft;
 
 /**
  * This class overrides Craft’s Html helper to fix a double encoding issue.
@@ -19,6 +19,6 @@ class Html extends \craft\helpers\Html
      */
     public static function encode($content, $doubleEncode = false): string
     {
-        return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, Yii::$app ? Yii::$app->charset : 'UTF-8', $doubleEncode);
+        return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, Craft::$app->charset, $doubleEncode);
     }
 }

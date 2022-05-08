@@ -1,0 +1,27 @@
+{% extends '_layouts/message' %}
+
+{% set title = 'Invalid Variable' %}
+
+
+{% block message %}
+
+    <h1>
+        Invalid variable <code>{{ name }}</code> passed into <code>{{ componentName }}</code>
+    </h1>
+
+    {{ include('sprig-core/_includes/' ~ type ~ '.md')|md }}
+
+{% endblock %}
+
+
+{% css %}
+    .message-container .pane {
+        width: 90%;
+    }
+
+    @media (min-width: 900px) {
+        .message-container .pane {
+            width: 800px;
+        }
+    }
+{% endcss %}

@@ -6,6 +6,7 @@
 namespace putyourlightson\sprig\test\mockclasses\controllers;
 
 use Craft;
+use craft\models\Section;
 use craft\web\Controller;
 use putyourlightson\sprig\test\mockclasses\models\TestModel;
 use yii\base\Model;
@@ -20,9 +21,9 @@ use yii\web\Response;
 class TestController extends Controller
 {
     /**
-     * @var array
+     * @inheritdoc
      */
-    protected $allowAnonymous = true;
+    protected int|bool|array $allowAnonymous = true;
 
     /**
      * @return null
@@ -33,7 +34,7 @@ class TestController extends Controller
     }
 
     /**
-     * @return Response
+     * Mocks an array response.
      */
     public function actionGetArray(): Response
     {
@@ -41,7 +42,7 @@ class TestController extends Controller
     }
 
     /**
-     * @return Response
+     * Mocks a Model response.
      */
     public function actionGetModel(): Response
     {
@@ -49,21 +50,21 @@ class TestController extends Controller
     }
 
     /**
-     * @return Response
+     * Mocks a save success response.
      */
     public function actionSaveSuccess(): Response
     {
         Craft::$app->getSession()->setNotice('Success');
 
-        return $this->redirectToPostedUrl(['id' => 1]);
+        return $this->redirectToPostedUrl(new Section(['id' => 1]));
     }
 
     /**
-     * @return null
+     * Mocks a save error response.
      */
     public function actionSaveError()
     {
-        Craft::$app->getSession()->setError('Error');
+        Craft::$app->getSession()->setError('the_error_message');
 
         Craft::$app->getUrlManager()->setRouteParams(['model' => new Model()]);
 
