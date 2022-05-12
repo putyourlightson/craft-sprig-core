@@ -69,7 +69,6 @@ class Sprig extends Module
     public function init(): void
     {
         parent::init();
-
         self::$core = $this;
         self::$sprigVariable = new SprigVariable();
 

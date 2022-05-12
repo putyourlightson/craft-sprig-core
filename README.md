@@ -64,7 +64,7 @@ This module requires [Craft CMS](https://craftcms.com/) 3.1.19 or later, or 4.0.
 
 Install this package via composer.
 
-```
+```shell
 composer require putyourlightson/craft-sprig-core
 ```
 
