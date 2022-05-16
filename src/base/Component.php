@@ -7,6 +7,7 @@ namespace putyourlightson\sprig\base;
 
 use Craft;
 use craft\base\Component as BaseComponent;
+use craft\helpers\StringHelper;
 
 abstract class Component extends BaseComponent implements ComponentInterface
 {
@@ -137,12 +138,12 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
     /**
      * Triggers client-side events.
-     * https://htmx.org/headers/x-hx-trigger/
+     * https://htmx.org/headers/hx-trigger/
      */
     public static function triggerEvents(array|string $events, string $on = 'load')
     {
         if (is_array($events)) {
-            $events = implode(' ', $events);
+            $events = json_encode(array_combine($events, $events));
         }
 
         $headerMap = [
