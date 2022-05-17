@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.0.1 - UNRELEASED
+## 2.0.1 - 2022-05-17
 ### Fixed
 - Fixed the format of the `sprig.triggerEvents` function to work with htmx.
 
