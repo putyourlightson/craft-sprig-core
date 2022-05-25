@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.4 - 2022-05-25
+### Changed
+- Optimised the regular expression pattern in the component parser by matching all possible Sprig attributes only.
+
 ## 2.0.3 - 2022-05-25
 ### Changed
 - Improved the parser to help prevent backtick limit errors by enforcing reasonable backtick limits.

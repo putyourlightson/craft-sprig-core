@@ -60,6 +60,17 @@ class ComponentsService extends BaseComponent
     /**
      * @const string[]
      */
+    public const SPRIG_ATTRIBUTES = [
+        'action',
+        'listen',
+        'method',
+        'replace',
+        'val',
+    ];
+
+    /**
+     * @const string[]
+     */
     public const HTMX_ATTRIBUTES = [
         'boost',
         'confirm',
@@ -240,9 +251,16 @@ class ComponentsService extends BaseComponent
      */
     private function _getParseableTags(string $content): array
     {
-        // Look for attribute prefixes, with reasonable backtick limits.
-        $attributePrefixes = ['sprig', 'data-sprig', 's-', 'data-s-'];
-        $pattern = '/<[^>]{1,10000}\s(' . implode('|', $attributePrefixes) . ')[^>]{0,10000}>/im';
+        // Look for all possible Sprig attributes, with reasonable backtick limits.
+        $attributes = array_merge(self::SPRIG_ATTRIBUTES, self::HTMX_ATTRIBUTES);
+        $attributes = array_merge(
+            ['sprig', 'data-sprig'],
+            array_map(fn($attribute) => 's-' . $attribute, $attributes),
+            array_map(fn($attribute) => 'data-s-' . $attribute, $attributes),
+            array_map(fn($attribute) => 'sprig-' . $attribute, $attributes),
+            array_map(fn($attribute) => 'data-sprig-' . $attribute, $attributes),
+        );
+        $pattern = '/<[^>]{1,10000}\s(' . implode('|', $attributes) . ')[^>]{0,10000}>/im';
 
         if (preg_match_all($pattern, $content, $matches)) {
             return $matches[0];

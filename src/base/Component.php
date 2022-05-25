@@ -7,7 +7,6 @@ namespace putyourlightson\sprig\base;
 
 use Craft;
 use craft\base\Component as BaseComponent;
-use craft\helpers\StringHelper;
 
 abstract class Component extends BaseComponent implements ComponentInterface
 {
