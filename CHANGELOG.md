@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.2 - 2022-05-25
+### Changed
+- Improved the parser to return matches even if a backtick limit error is encountered.
+
 ## 2.0.1 - 2022-05-17
 ### Fixed
 - Fixed the format of the `sprig.triggerEvents` function to work with htmx.

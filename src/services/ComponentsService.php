@@ -241,7 +241,7 @@ class ComponentsService extends BaseComponent
     private function _getParseableTags(string $content): array
     {
         $attributePrefixes = ['sprig', 'data-sprig', 's-', 'data-s-'];
-        $pattern = '/<[^!>][^>]*\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
+        $pattern = '/<[^>]+\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
 
         if (preg_match_all($pattern, $content, $matches)) {
             return $matches[0];
@@ -251,7 +251,7 @@ class ComponentsService extends BaseComponent
             Craft::getLogger()->log('Backtrack limit was exhausted!', Logger::LEVEL_ERROR, 'sprig-core');
         }
 
-        return [];
+        return $matches[0] ?? [];
     }
 
     /**
