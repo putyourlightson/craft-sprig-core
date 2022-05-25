@@ -240,8 +240,9 @@ class ComponentsService extends BaseComponent
      */
     private function _getParseableTags(string $content): array
     {
+        // Look for attribute prefixes, with reasonable backtick limits.
         $attributePrefixes = ['sprig', 'data-sprig', 's-', 'data-s-'];
-        $pattern = '/<[^>]+\s(' . implode('|', $attributePrefixes) . ')[^>]*>/im';
+        $pattern = '/<[^>]{1,10000}\s(' . implode('|', $attributePrefixes) . ')[^>]{0,10000}>/im';
 
         if (preg_match_all($pattern, $content, $matches)) {
             return $matches[0];

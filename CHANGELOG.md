@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.3 - 2022-05-25
+### Changed
+- Improved the parser to help prevent backtick limit errors by enforcing reasonable backtick limits.
+
 ## 2.0.2 - 2022-05-25
 ### Changed
 - Improved the parser to return matches even if a backtick limit error is encountered.
