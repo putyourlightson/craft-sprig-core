@@ -159,6 +159,10 @@ class ComponentsService extends BaseComponent
                 throw new BadRequestHttpException('Unable to find the component or template “' . $value . '”.');
             }
 
+            // Unset the component type, so that nested components will work.
+            // https://github.com/putyourlightson/craft-sprig/issues/243
+            $values['sprig:component'] = Craft::$app->getSecurity()->hashData(null);
+
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
         }
 

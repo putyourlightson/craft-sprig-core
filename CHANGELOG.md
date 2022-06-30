@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.5 - 2022-06-30
+### Fixed
+- Fixed a bug in which nested components were inheriting their parent's component type ([#243](https://github.com/putyourlightson/craft-sprig/issues/243)).
+
 ## 2.0.4 - 2022-05-25
 ### Changed
 - Optimised the regular expression pattern in the component parser by matching all possible Sprig attributes only.
