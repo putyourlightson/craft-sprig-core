@@ -121,6 +121,11 @@ class ComponentsService extends BaseComponent
 
         $values['sprig:'.$type] = Craft::$app->getSecurity()->hashData($value);
 
+        // Unset the other type, so that nested components will work.
+        // https://github.com/putyourlightson/craft-sprig/issues/243
+        $unsetType = $type == 'component' ? 'template' : 'component';
+        $values['sprig:'.$unsetType] = Craft::$app->getSecurity()->hashData(null);;
+
         foreach ($variables as $name => $val) {
             $values['sprig:variables['.$name.']'] = $this->_hashVariable($name, $val);
         }

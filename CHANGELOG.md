@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 1.4.1 - 2022-06-30
+### Fixed
+- Fixed a bug in which nested components were inheriting their parent's component type ([#243](https://github.com/putyourlightson/craft-sprig/issues/243)).
+
 ## 1.4.0 - 2022-04-30
 ### Added
 - Added the [s-listen](https://putyourlightson.com/plugins/sprig#s-listen) attribute that allows you to specify one or more components that when refreshed, should trigger a refresh of the current element.
