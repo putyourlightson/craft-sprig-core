@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.0.6 - 2022-09-25
+### Fixed
+- Fixed a bug in which tags containing line breaks were not being parsed ([#264](https://github.com/putyourlightson/craft-sprig/issues/264)).
+
 ## 2.0.5 - 2022-06-30
 ### Fixed
 - Fixed a bug in which nested components were inheriting their parent's component type ([#243](https://github.com/putyourlightson/craft-sprig/issues/243)).

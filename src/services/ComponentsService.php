@@ -271,7 +271,7 @@ class ComponentsService extends BaseComponent
         }
 
         if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR) {
-            Craft::getLogger()->log('Backtrack limit was exhausted!', Logger::LEVEL_ERROR, 'sprig-core');
+            Craft::getLogger()->log('Backtrack limit was exhausted!', Logger::LEVEL_ERROR, 'sprig');
         }
 
         return $matches[0] ?? [];
@@ -283,9 +283,15 @@ class ComponentsService extends BaseComponent
     private function _getParsedTag(string $tag): ?string
     {
         try {
+            // Replace new lines with spaces, to ensure parsing works.
+            // https://github.com/putyourlightson/craft-sprig/issues/264
+            $tag = str_replace(PHP_EOL, ' ', $tag);
+
             $attributes = Html::parseTagAttributes($tag);
         }
-        catch (InvalidArgumentException) {
+        catch (InvalidArgumentException $exception) {
+            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'sprig');
+
             return null;
         }
 

@@ -7,8 +7,11 @@ namespace putyourlightson\sprig;
 
 use Craft;
 use craft\events\RegisterTemplateRootsEvent;
+use craft\log\MonologTarget;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
+use Monolog\Formatter\LineFormatter;
+use Psr\Log\LogLevel;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\services\RequestsService;
 use putyourlightson\sprig\twigextensions\SprigTwigExtension;
@@ -76,6 +79,7 @@ class Sprig extends Module
         $this->_registerTemplateRoots();
         $this->_registerTwigExtensions();
         $this->_registerVariables();
+        $this->_registerLogTarget();
     }
 
     /**
@@ -122,5 +126,29 @@ class Sprig extends Module
                 $variable->set('sprig', self::$sprigVariable);
             }
         );
+    }
+
+    /**
+     * Registers a custom log target, keeping the format as simple as possible.
+     *
+     * @see LineFormatter::SIMPLE_FORMAT
+     */
+    private function _registerLogTarget(): void
+    {
+        // Check that dispatcher exists, to avoid error when testing, since this is a bootstrapped module.
+        // https://github.com/verbb/verbb-base/pull/1/files
+        if (Craft::getLogger()->dispatcher) {
+            Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
+                'name' => 'sprig',
+                'categories' => ['sprig'],
+                'level' => LogLevel::INFO,
+                'logContext' => false,
+                'allowLineBreaks' => false,
+                'formatter' => new LineFormatter(
+                    format: "[%datetime%] %message%\n",
+                    dateFormat: 'Y-m-d H:i:s',
+                ),
+            ]);
+        }
     }
 }

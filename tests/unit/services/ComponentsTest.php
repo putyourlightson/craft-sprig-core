@@ -33,6 +33,9 @@ class ComponentsTest extends Unit
     {
         parent::_before();
 
+        // Disable cookie validation
+        Craft::$app->getRequest()->enableCookieValidation = false;
+
         // Bootstrap the module
         Sprig::bootstrap();
 
@@ -62,7 +65,7 @@ class ComponentsTest extends Unit
         $markup = Sprig::$core->components->create('_empty');
         $html = (string)$markup;
 
-        $this->assertStringContainsString('data-hx-get', $html);
+        $this->assertStringContainsString('data-hx-get=', $html);
     }
 
     public function testCreateNoComponent()
@@ -158,6 +161,13 @@ class ComponentsTest extends Unit
         $html = '<div	s-target="#id"></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('div s-target="#id" data-hx-target="#id"', $html);
+    }
+
+    public function testGetParsedTagAttributesWithLineBreaks()
+    {
+        $html = '<div sprig class="a' . PHP_EOL . 'b"></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-get=', $html);
     }
 
     public function testGetParsedTagAttributesVals()
