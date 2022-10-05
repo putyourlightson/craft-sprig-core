@@ -20,7 +20,7 @@ class SprigVariable
     /**
      * @var string
      */
-    public string $htmxVersion = '1.7.0';
+    public string $htmxVersion = '1.8.0';
 
     /**
      * Get the SRI hash from https://htmx.org/docs/#installing
@@ -28,7 +28,7 @@ class SprigVariable
      *
      * @var string
      */
-    public string $htmxSRIHash = 'sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo';
+    public string $htmxSRIHash = 'sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc';
 
     /**
      * Returns the script tag with the given attributes.
@@ -120,44 +120,41 @@ class SprigVariable
         return PaginateVariable::create($paginator);
     }
 
-    /**
-     * Pushes the URL into the history stack.
-     */
-    public function pushUrl(string $url): void
+    public function location(string $value): void
     {
-        Component::pushUrl($url);
+        Component::location($value);
     }
 
-    /**
-     * Redirects the browser to the URL.
-     * https://htmx.org/reference#response_headers
-     */
-    public function redirect(string $url): void
+    public function pushUrl(string $value): void
     {
-        Component::redirect($url);
+        Component::pushUrl($value);
     }
 
-    /**
-     * Refreshes the browser.
-     * https://htmx.org/reference#response_headers
-     */
+    public function redirect(string $value): void
+    {
+        Component::redirect($value);
+    }
+
+    public function replaceUrl(string $value): void
+    {
+        Component::replaceUrl($value);
+    }
+
     public function refresh(bool $refresh = true): void
     {
         Component::refresh($refresh);
     }
 
-    /**
-     * Retargets the element to update with a CSS selector.
-     * https://htmx.org/reference#response_headers
-     */
-    public function retarget(string $target): void
+    public function reswap(string $value): void
     {
-        Component::retarget($target);
+        Component::reswap($value);
     }
 
-    /**
-     * Triggers client-side events.
-     */
+    public function retarget(string $value): void
+    {
+        Component::retarget($value);
+    }
+
     public function triggerEvents(array|string $events, string $on = 'load'): void
     {
         Component::triggerEvents($events, $on);

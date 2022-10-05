@@ -100,21 +100,39 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
-     * Pushes the URL into the history stack.
-     * https://htmx.org/reference#response_headers
+     * Triggers a client-side redirect without reloading the page.
+     * https://htmx.org/headers/hx-location/
      */
-    public static function pushUrl(string $url)
+    public static function location(string $value)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Push', $url);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Location', $value);
+    }
+
+    /**
+     * Pushes the URL into the history stack.
+     * https://htmx.org/headers/hx-push-url/
+     */
+    public static function pushUrl(string $value)
+    {
+        Craft::$app->getResponse()->getHeaders()->set('HX-Push-Url', $value);
     }
 
     /**
      * Redirects the browser to the URL.
      * https://htmx.org/reference#response_headers
      */
-    public static function redirect(string $url)
+    public static function redirect(string $value)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $value);
+    }
+
+    /**
+     * Replaces the current URL in the location bar.
+     * https://htmx.org/headers/hx-replace-url/
+     */
+    public static function replaceUrl(string $value)
+    {
+        Craft::$app->getResponse()->getHeaders()->set('HX-Replace-Url', $value);
     }
 
     /**
@@ -127,12 +145,21 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Specifies how the response will be swapped.
+     * https://htmx.org/reference#response_headers
+     */
+    public static function reswap(string $value)
+    {
+        Craft::$app->getResponse()->getHeaders()->set('HX-Reswap', $value);
+    }
+
+    /**
      * Retargets the element to update with a CSS selector.
      * https://htmx.org/reference#response_headers
      */
-    public static function retarget(string $target)
+    public static function retarget(string $value)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $target);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $value);
     }
 
     /**

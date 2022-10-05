@@ -8,6 +8,7 @@ namespace putyourlightson\sprig\test\mockclasses\controllers;
 use Craft;
 use craft\models\Section;
 use craft\web\Controller;
+use craft\web\UrlManager;
 use putyourlightson\sprig\test\mockclasses\models\TestModel;
 use yii\base\Model;
 use yii\web\Response;
@@ -66,7 +67,9 @@ class TestController extends Controller
     {
         Craft::$app->getSession()->setError('the_error_message');
 
-        Craft::$app->getUrlManager()->setRouteParams(['model' => new Model()]);
+        /** @var UrlManager $urlManager */
+        $urlManager = Craft::$app->getUrlManager();
+        $urlManager->setRouteParams(['model' => new Model()]);
 
         return null;
     }

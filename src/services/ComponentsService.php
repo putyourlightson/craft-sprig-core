@@ -91,8 +91,10 @@ class ComponentsService extends BaseComponent
         'prompt',
         'push-url',
         'put',
+        'replace-url',
         'request',
         'select',
+        'select-oob',
         'sse',
         'swap',
         'swap-oob',
@@ -161,7 +163,7 @@ class ComponentsService extends BaseComponent
 
             // Unset the component type, so that nested components will work.
             // https://github.com/putyourlightson/craft-sprig/issues/243
-            $values['sprig:component'] = Craft::$app->getSecurity()->hashData(null);
+            $values['sprig:component'] = Craft::$app->getSecurity()->hashData('');
 
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
         }

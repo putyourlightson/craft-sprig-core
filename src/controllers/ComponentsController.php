@@ -11,6 +11,7 @@ use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\helpers\ArrayHelper;
 use craft\web\Controller;
+use craft\web\UrlManager;
 use craft\web\UrlRule;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
@@ -89,7 +90,9 @@ class ComponentsController extends Controller
         $actionResponse = Craft::$app->runAction($action);
 
         // Extract the variables from the route params which are generally set when there are errors
-        $variables = Craft::$app->getUrlManager()->getRouteParams() ?: [];
+        /** @var UrlManager $urlManager */
+        $urlManager = Craft::$app->getUrlManager();
+        $variables = $urlManager->getRouteParams() ?: [];
 
         /**
          * Merge and unset any variable called `variables`
