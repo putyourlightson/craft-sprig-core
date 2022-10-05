@@ -120,24 +120,19 @@ class SprigVariable
         return PaginateVariable::create($paginator);
     }
 
-    public function location(string $value): void
+    public function location(string $url): void
     {
-        Component::location($value);
+        Component::location($url);
     }
 
-    public function pushUrl(string $value): void
+    public function pushUrl(string $url): void
     {
-        Component::pushUrl($value);
+        Component::pushUrl($url);
     }
 
-    public function redirect(string $value): void
+    public function redirect(string $url): void
     {
-        Component::redirect($value);
-    }
-
-    public function replaceUrl(string $value): void
-    {
-        Component::replaceUrl($value);
+        Component::redirect($url);
     }
 
     public function refresh(bool $refresh = true): void
@@ -145,14 +140,19 @@ class SprigVariable
         Component::refresh($refresh);
     }
 
+    public function replaceUrl(string $url): void
+    {
+        Component::replaceUrl($url);
+    }
+
     public function reswap(string $value): void
     {
         Component::reswap($value);
     }
 
-    public function retarget(string $value): void
+    public function retarget(string $target): void
     {
-        Component::retarget($value);
+        Component::retarget($target);
     }
 
     public function triggerEvents(array|string $events, string $on = 'load'): void

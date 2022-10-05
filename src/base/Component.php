@@ -103,36 +103,36 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Triggers a client-side redirect without reloading the page.
      * https://htmx.org/headers/hx-location/
      */
-    public static function location(string $value)
+    public static function location(string $url)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Location', $value);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Location', $url);
     }
 
     /**
      * Pushes the URL into the history stack.
      * https://htmx.org/headers/hx-push-url/
      */
-    public static function pushUrl(string $value)
+    public static function pushUrl(string $url)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Push-Url', $value);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Push-Url', $url);
     }
 
     /**
      * Redirects the browser to the URL.
      * https://htmx.org/reference#response_headers
      */
-    public static function redirect(string $value)
+    public static function redirect(string $url)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $value);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
 
     /**
      * Replaces the current URL in the location bar.
      * https://htmx.org/headers/hx-replace-url/
      */
-    public static function replaceUrl(string $value)
+    public static function replaceUrl(string $url)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Replace-Url', $value);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Replace-Url', $url);
     }
 
     /**
@@ -157,9 +157,9 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Retargets the element to update with a CSS selector.
      * https://htmx.org/reference#response_headers
      */
-    public static function retarget(string $value)
+    public static function retarget(string $target)
     {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $value);
+        Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $target);
     }
 
     /**
