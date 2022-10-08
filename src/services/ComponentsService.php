@@ -179,8 +179,14 @@ class ComponentsService extends BaseComponent
         // Add token to values if this is a preview request.
         // https://github.com/putyourlightson/craft-sprig/issues/162
         if (Craft::$app->request->getIsPreview()) {
-            $tokenParam = Craft::$app->config->general->tokenParam;
-            $values[$tokenParam] = Craft::$app->request->getToken();
+            $token = Craft::$app->request->getToken();
+
+            // Ensure token is not null.
+            // https://github.com/putyourlightson/craft-sprig/issues/269
+            if ($token !== null) {
+                $tokenParam = Craft::$app->config->general->tokenParam;
+                $values[$tokenParam] = $token;
+            }
         }
 
         // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)

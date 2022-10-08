@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.1.1 - 2022-10-08
+### Fixed
+- Fixed a bug in which Sprig requests were failing in live preview requests ([#269](https://github.com/putyourlightson/craft-sprig/issues/269)).
+
 ## 2.1.0 - 2022-10-05
 ### Added
 - Added the [s-replace-url](https://putyourlightson.com/plugins/sprig#s-replace-url) attribute that allows you to replace the current url of the browser location history.
