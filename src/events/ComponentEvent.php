@@ -27,5 +27,5 @@ class ComponentEvent extends Event
     /**
      * @var string|null
      */
-    public ?string $output;
+    public ?string $output = null;
 }
