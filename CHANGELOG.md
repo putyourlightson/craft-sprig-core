@@ -17,7 +17,7 @@
 
 ### Fixed
 - Fixed a bug in the `sprig.pushUrl()` template variable.
-- 
+
 ## 2.0.6 - 2022-09-25
 ### Fixed
 - Fixed a bug in which tags containing line breaks were not being parsed ([#264](https://github.com/putyourlightson/craft-sprig/issues/264)).
