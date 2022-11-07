@@ -60,6 +60,14 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Returns whether this is a history restore request.
+     */
+    public static function getIsHistoryRestoreRequest(): bool
+    {
+        return Craft::$app->getRequest()->getHeaders()->get('HX-History-Restore-Request', false) == 'true';
+    }
+
+    /**
      * Returns the value entered by the user when prompted via `s-prompt` or `hx-prompt`.
      */
     public static function getPrompt(): string

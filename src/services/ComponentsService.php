@@ -101,6 +101,7 @@ class ComponentsService extends BaseComponent
         'sync',
         'target',
         'trigger',
+        'validate',
         'vals',
         'ws',
     ];

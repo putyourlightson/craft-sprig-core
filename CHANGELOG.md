@@ -1,5 +1,13 @@
 # Release Notes for Sprig Core
 
+## 2.2.0 - Unreleased
+### Added
+- Added the [s-validate](https://putyourlightson.com/plugins/sprig#s-validate) attribute that forces an element to validate itself before it submits a request.
+- Added the [sprig.isHistoryRestoreRequest](https://putyourlightson.com/plugins/sprig#sprig-ishistoryrestorerequest) template variable that returns whether the request is for history restoration after a miss in the local history cache a client-side redirect without reloading the page.
+
+### Changed
+- Updated htmx to version 1.8.4 ([release notes](https://htmx.org/talk/)).
+
 ## 2.1.1 - 2022-10-08
 ### Fixed
 - Fixed a bug in which Sprig requests were failing in live preview requests ([#269](https://github.com/putyourlightson/craft-sprig/issues/269)).
@@ -80,8 +88,8 @@
 
 ## 1.2.0 - 2022-02-01
 ### Added
-- Added the [sprig.isBoosted](https://putyourlightson.com/plugins/sprig#sprig.isBoosted) template variable that returns whether this is a boosted request (requires htmx 1.6.0 or later).
-- Added the [sprig.retarget()](https://putyourlightson.com/plugins/sprig#sprig.retargettarget) template variable that overrides the element to target via a CSS selector (requires htmx 1.6.1 or later).
+- Added the [sprig.isBoosted](https://putyourlightson.com/plugins/sprig#sprig-isboosted) template variable that returns whether this is a boosted request (requires htmx 1.6.0 or later).
+- Added the [sprig.retarget()](https://putyourlightson.com/plugins/sprig#sprig-retargettarget) template variable that overrides the element to target via a CSS selector (requires htmx 1.6.1 or later).
 
 ### Changed
 - Updated htmx to version 1.6.1 ([release notes](https://htmx.org/posts/2021-11-22-htmx-1.6.1-is-released/)).
