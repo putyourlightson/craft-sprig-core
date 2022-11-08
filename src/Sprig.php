@@ -137,6 +137,7 @@ class Sprig extends Module
     {
         // Check that dispatcher exists, to avoid error when testing, since this is a bootstrapped module.
         // https://github.com/verbb/verbb-base/pull/1/files
+        /** @phpstan-ignore-next-line */
         if (Craft::getLogger()->dispatcher) {
             Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
                 'name' => 'sprig',
