@@ -5,6 +5,10 @@ namespace putyourlightson\sprig\components;
 use Craft;
 use putyourlightson\sprig\base\Component;
 
+/**
+ * This component solves using CSRF tokens in multiple components on the first cached request.
+ * @see https://github.com/putyourlightson/craft-sprig/issues/279
+ */
 class RefreshOnLoad extends Component
 {
     /**
@@ -21,7 +25,7 @@ class RefreshOnLoad extends Component
             return '';
         }
 
-        // Get a CSRF token to ensure that a cookie is set
+        // Get a CSRF token to ensure that the cookie is set
         Craft::$app->request->getCsrfToken();
 
         // Fall back to the default CSS class

@@ -161,7 +161,8 @@ class SprigVariable
     }
 
     /**
-     * Returns a new initialising component.
+     * Returns a [[RefreshOnLoad]] component.
+     * @see https://github.com/putyourlightson/craft-sprig/issues/279
      */
     public function triggerRefreshOnLoad(string $selector = null): Markup
     {
