@@ -14,6 +14,7 @@ use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\View;
 use putyourlightson\sprig\base\Component;
+use putyourlightson\sprig\components\RefreshOnLoad;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
@@ -223,6 +224,10 @@ class ComponentsService extends BaseComponent
      */
     public function createObject(string $component, array $variables = []): ?Component
     {
+        if ($component == 'RefreshOnLoad') {
+            return new RefreshOnLoad();
+        }
+
         if ($component == 'SprigPlayground') {
             return new SprigPlayground(['variables' => $variables]);
         }

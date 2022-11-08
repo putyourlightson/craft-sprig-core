@@ -161,6 +161,18 @@ class SprigVariable
     }
 
     /**
+     * Returns a new initialising component.
+     */
+    public function triggerRefreshOnLoad(string $selector = null): Markup
+    {
+        return Sprig::$core->components->create(
+            'RefreshOnLoad',
+            ['selector' => $selector],
+            ['s-trigger' => 'load']
+        );
+    }
+
+    /**
      * Returns a new component.
      */
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
