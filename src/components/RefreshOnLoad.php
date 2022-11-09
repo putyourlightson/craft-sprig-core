@@ -12,9 +12,9 @@ use putyourlightson\sprig\base\Component;
 class RefreshOnLoad extends Component
 {
     /**
-     * @var string|null
+     * @var array
      */
-    public ?string $selector = null;
+    public array $variables = [];
 
     /**
      * @inheritdoc
@@ -29,7 +29,7 @@ class RefreshOnLoad extends Component
         Craft::$app->request->getCsrfToken();
 
         // Fall back to the default CSS class
-        $selector = $this->selector ?? '.sprig-component';
+        $selector = $this->variables['selector'] ?? '.sprig-component';
 
         return <<<EOD
             <script>
