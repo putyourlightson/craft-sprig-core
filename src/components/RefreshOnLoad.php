@@ -7,7 +7,8 @@ use putyourlightson\sprig\base\Component;
 
 /**
  * This component solves using CSRF tokens in multiple components on the first cached request.
- * @see https://github.com/putyourlightson/craft-sprig/issues/279
+ *
+ * @link https://github.com/putyourlightson/craft-sprig/issues/279
  */
 class RefreshOnLoad extends Component
 {
@@ -31,12 +32,12 @@ class RefreshOnLoad extends Component
         // Fall back to the default CSS class
         $selector = $this->variables['selector'] ?? '.sprig-component';
 
-        return <<<EOD
+        return <<<JS
             <script>
                 for (const component of htmx.findAll('$selector')) {
                     htmx.trigger(component, 'refresh');
                 }
             </script>
-        EOD;
+        JS;
     }
 }

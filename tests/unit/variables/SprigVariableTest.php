@@ -7,6 +7,7 @@ namespace putyourlightson\sprigcoretests\unit\variables;
 
 use Codeception\Test\Unit;
 use Craft;
+use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\variables\SprigVariable;
 use UnitTester;
 
@@ -33,6 +34,13 @@ class SprigVariableTest extends Unit
         parent::_before();
 
         $this->variable = new SprigVariable();
+    }
+
+    public function testCreateRefreshOnLoadComponent()
+    {
+        $html = $this->variable->triggerRefreshOnLoad();
+
+        $this->assertStringContainsString('RefreshOnLoad', $html);
     }
 
     public function testHtmxScriptExistsForDev()

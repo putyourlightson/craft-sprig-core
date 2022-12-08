@@ -75,6 +75,20 @@ class ComponentsTest extends Unit
         Sprig::$core->components->create('_no-component');
     }
 
+    public function testCreateRefreshOnLoadComponent()
+    {
+        $selector = '.test-class';
+        $object = Sprig::$core->components->createObject(
+            'RefreshOnLoad',
+            ['selector' => $selector]
+        );
+
+        Craft::$app->getRequest()->getHeaders()->set('HX-Request', 'true');
+        $html = $object->render();
+
+        $this->assertStringContainsString("htmx.findAll('$selector'))", $html);
+    }
+
     public function testCreateObjectFromComponent()
     {
         // Require the class since it is not autoloaded.
