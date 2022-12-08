@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.3.0 - Unreleased
+## 2.3.0 - 2022-12-08
 ### Added
 - Added the [sprig.triggerRefreshOnLoad](https://putyourlightson.com/plugins/sprig#sprig-triggerrefreshonload) template variable that triggers a refresh event on all components on page load ([#279](https://github.com/putyourlightson/craft-sprig/issues/279)).
 
