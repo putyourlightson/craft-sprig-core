@@ -59,6 +59,11 @@ class ComponentsService extends BaseComponent
     public const SPRIG_PARSED_ATTRIBUTE = 'data-sprig-parsed';
 
     /**
+     * @const string
+     */
+    public const SPRIG_CSS_CLASS = 'sprig-component';
+
+    /**
      * @const string[]
      */
     public const SPRIG_ATTRIBUTES = [
@@ -198,7 +203,7 @@ class ComponentsService extends BaseComponent
         $attributes = array_merge(
             [
                 'id' => $id,
-                'class' => 'sprig-component',
+                'class' => self::SPRIG_CSS_CLASS,
                 self::HTMX_PREFIX . 'target' => 'this',
                 self::HTMX_PREFIX . 'include' => 'this',
                 self::HTMX_PREFIX . 'trigger' => 'refresh',

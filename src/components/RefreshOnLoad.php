@@ -4,6 +4,7 @@ namespace putyourlightson\sprig\components;
 
 use Craft;
 use putyourlightson\sprig\base\Component;
+use putyourlightson\sprig\services\ComponentsService;
 
 /**
  * This component solves using CSRF tokens in multiple components on the first cached request.
@@ -30,7 +31,7 @@ class RefreshOnLoad extends Component
         Craft::$app->request->getCsrfToken();
 
         // Fall back to the default CSS class
-        $selector = $this->variables['selector'] ?? '.sprig-component';
+        $selector = $this->variables['selector'] ?? '.' . ComponentsService::SPRIG_CSS_CLASS;
 
         return <<<JS
             <script>
