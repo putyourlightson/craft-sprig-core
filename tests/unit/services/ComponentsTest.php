@@ -8,6 +8,7 @@ namespace putyourlightson\sprigcoretests\unit\services;
 use Codeception\Test\Unit;
 use Craft;
 use craft\elements\Entry;
+use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use UnitTester;
 use yii\base\Application;
@@ -77,6 +78,16 @@ class ComponentsTest extends Unit
 
     public function testCreateRefreshOnLoadComponent()
     {
+        $selector = ComponentsService::SPRIG_CSS_CLASS;
+        $object = Sprig::$core->components->createObject('RefreshOnLoad');
+
+        Craft::$app->getRequest()->getHeaders()->set('HX-Request', 'true');
+        $html = $object->render();
+        $this->assertStringContainsString("htmx.findAll('.$selector'))", $html);
+    }
+
+    public function testCreateRefreshOnLoadComponentWithSelector()
+    {
         $selector = '.test-class';
         $object = Sprig::$core->components->createObject(
             'RefreshOnLoad',
@@ -85,7 +96,6 @@ class ComponentsTest extends Unit
 
         Craft::$app->getRequest()->getHeaders()->set('HX-Request', 'true');
         $html = $object->render();
-
         $this->assertStringContainsString("htmx.findAll('$selector'))", $html);
     }
 
