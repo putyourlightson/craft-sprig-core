@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.4.0 - Unreleased
+## 2.4.0 - 2023-01-18
 ### Added
 - Added the [s-history](https://putyourlightson.com/plugins/sprig#s-history) attribute that prevents sensitive data being saved to the history cache.
 
