@@ -20,7 +20,7 @@ class SprigVariable
     /**
      * @var string
      */
-    public string $htmxVersion = '1.8.4';
+    public string $htmxVersion = '1.8.5';
 
     /**
      * Get the SRI hash from https://htmx.org/docs/#installing
@@ -28,7 +28,7 @@ class SprigVariable
      *
      * @var string
      */
-    public string $htmxSRIHash = 'sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV';
+    public string $htmxSRIHash = 'sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w';
 
     /**
      * Returns the script tag with the given attributes.
@@ -190,8 +190,7 @@ class SprigVariable
 
         if (Craft::$app->getConfig()->env == 'dev') {
             $url = str_replace('htmx.min.js', 'htmx.js', $url);
-        }
-        else {
+        } else {
             // Add subresource integrity
             // https://github.com/bigskysoftware/htmx/issues/261
             $attributes['integrity'] = $this->htmxSRIHash;
