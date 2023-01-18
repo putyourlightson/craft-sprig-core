@@ -1,6 +1,9 @@
 # Release Notes for Sprig Core
 
-## 2.3.1 - Unreleased
+## 2.4.0 - Unreleased
+### Added
+- Added the [s-history](https://putyourlightson.com/plugins/sprig#s-history) attribute that prevents sensitive data being saved to the history cache.
+
 ### Changed
 - Updated htmx to version 1.8.5 ([release notes](https://htmx.org/posts/2023-01-17-htmx-1.8.5-is-released/)).
 

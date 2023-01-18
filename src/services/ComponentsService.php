@@ -87,6 +87,7 @@ class ComponentsService extends BaseComponent
         'ext',
         'get',
         'headers',
+        'history',
         'history-elt',
         'include',
         'indicator',
