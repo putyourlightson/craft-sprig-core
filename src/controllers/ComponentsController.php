@@ -52,8 +52,7 @@ class ComponentsController extends Controller
 
                 $content = $componentObject->render();
             }
-        }
-        else {
+        } else {
             if ($action) {
                 $actionVariables = $this->_runActionInternal($action);
                 $variables = ArrayHelper::merge($variables, $actionVariables);

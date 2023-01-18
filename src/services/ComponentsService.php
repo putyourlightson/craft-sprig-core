@@ -160,8 +160,7 @@ class ComponentsService extends BaseComponent
         if ($componentObject) {
             $type = 'component';
             $renderedContent = $componentObject->render();
-        }
-        else {
+        } else {
             $type = 'template';
 
             if (!Craft::$app->getView()->doesTemplateExist($value)) {
@@ -307,8 +306,7 @@ class ComponentsService extends BaseComponent
             $tag = str_replace(PHP_EOL, ' ', $tag);
 
             $attributes = Html::parseTagAttributes($tag);
-        }
-        catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'sprig');
 
             return null;
@@ -409,21 +407,17 @@ class ComponentsService extends BaseComponent
             $value = $value === true ? '' : $value;
 
             $this->_mergeJsonAttributes($attributes, 'vals', [$name => $value]);
-        }
-        elseif ($name == 'headers' || $name == 'vals') {
+        } elseif ($name == 'headers' || $name == 'vals') {
             $this->_mergeJsonAttributes($attributes, $name, $value);
-        }
-        elseif ($name == 'listen') {
+        } elseif ($name == 'listen') {
             $cssSelectors = StringHelper::split($value);
             $triggers = array_map(fn($selector) => 'htmx:afterOnLoad from:' . $selector, $cssSelectors);
             $attributes[self::HTMX_PREFIX . 'trigger'] = join(',', $triggers);
-        }
-        elseif ($name == 'replace') {
+        } elseif ($name == 'replace') {
             $attributes[self::HTMX_PREFIX . 'select'] = $value;
             $attributes[self::HTMX_PREFIX . 'target'] = $value;
             $attributes[self::HTMX_PREFIX . 'swap'] = 'outerHTML';
-        }
-        elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
+        } elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
             $attributes[self::HTMX_PREFIX . $name] = $value;
         }
     }
