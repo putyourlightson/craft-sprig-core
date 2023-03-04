@@ -20,7 +20,7 @@ class SprigVariable
     /**
      * @var string
      */
-    public string $htmxVersion = '1.8.5';
+    public string $htmxVersion = '1.8.6';
 
     /**
      * Get the SRI hash from https://htmx.org/docs/#installing
@@ -28,7 +28,7 @@ class SprigVariable
      *
      * @var string
      */
-    public string $htmxSRIHash = 'sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w';
+    public string $htmxSRIHash = 'sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx';
 
     /**
      * Returns the script tag with the given attributes.
