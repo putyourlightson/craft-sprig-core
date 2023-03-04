@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 1.4.2 - 2023-03-03
+### Changed
+- Updated htmx to version 1.8.6 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md)).
+
 ## 1.4.1 - 2022-06-30
 ### Fixed
 - Fixed a bug in which nested components were inheriting their parent's component type ([#243](https://github.com/putyourlightson/craft-sprig/issues/243)).
