@@ -75,6 +75,10 @@ class ComponentsController extends Controller
      */
     private function _runActionInternal(string $action): array
     {
+        if ($action == 'users/set-password') {
+            return $this->_runActionWithJson($action);
+        }
+
         if ($action == 'users/save-user') {
             $this->_registerSaveCurrentUserEvent();
         }
@@ -121,6 +125,29 @@ class ComponentsController extends Controller
 
         // Set flash messages variable and delete them
         $variables['flashes'] = Craft::$app->getSession()->getAllFlashes(true);
+
+        return $variables;
+    }
+
+    /**
+     * Runs the action with JSON for special case handling.
+     * https://github.com/putyourlightson/craft-sprig/issues/300
+     */
+    private function _runActionWithJson(string $action): array
+    {
+        Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
+
+        $actionResponse = Craft::$app->runAction($action);
+
+        $variables = [
+            'success' => $actionResponse->getIsOk(),
+            'message' => $actionResponse->data['message'],
+        ];
+
+        if (!$actionResponse->getIsOk()) {
+            unset($actionResponse->data['message']);
+            $variables['errors'] = $actionResponse->data;
+        }
 
         return $variables;
     }

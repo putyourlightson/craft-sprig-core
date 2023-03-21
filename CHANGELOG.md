@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.4.2 - Unreleased
+### Changed
+- The set user password action is now specially handled to accommodate quirks ([#300](https://github.com/putyourlightson/craft-sprig/issues/300)).
+
 ## 2.4.1 - 2023-03-03
 ### Changed
 - Updated htmx to version 1.8.6 ([release notes](https://htmx.org/posts/2023-03-02-htmx-1.8.6-is-released/)).
