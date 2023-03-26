@@ -1,8 +1,8 @@
 # Release Notes for Sprig Core
 
-## 2.4.2 - Unreleased
+## 2.4.2 - 2023-26-03
 ### Changed
-- The set user password action is now specially handled to accommodate quirks ([#300](https://github.com/putyourlightson/craft-sprig/issues/300)).
+- The set user password action is now handled using a JSON request to accommodate its quirks ([#300](https://github.com/putyourlightson/craft-sprig/issues/300)).
 
 ## 2.4.1 - 2023-03-03
 ### Changed

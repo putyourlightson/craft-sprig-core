@@ -76,7 +76,7 @@ class ComponentsController extends Controller
     private function _runActionInternal(string $action): array
     {
         if ($action == 'users/set-password') {
-            return $this->_runActionWithJson($action);
+            return $this->_runActionWithJsonRequest($action);
         }
 
         if ($action == 'users/save-user') {
@@ -130,12 +130,14 @@ class ComponentsController extends Controller
     }
 
     /**
-     * Runs the action with JSON for special case handling.
+     * Runs the action with a JSON request for special case handling.
      * https://github.com/putyourlightson/craft-sprig/issues/300
      */
-    private function _runActionWithJson(string $action): array
+    private function _runActionWithJsonRequest(string $action): array
     {
         Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
+
+        // The set password action requires
 
         $actionResponse = Craft::$app->runAction($action);
 
