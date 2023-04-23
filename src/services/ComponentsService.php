@@ -91,6 +91,7 @@ class ComponentsService extends BaseComponent
         'history-elt',
         'include',
         'indicator',
+        'on',
         'params',
         'patch',
         'post',

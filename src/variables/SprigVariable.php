@@ -18,24 +18,21 @@ use yii\db\Query;
 class SprigVariable
 {
     /**
-     * @var string
+     * @var string The htmx version to load (must exist in `src/resources/lib/htmx`).
      */
-    public string $htmxVersion = '1.8.6';
-
-    /**
-     * Get the SRI hash from https://htmx.org/docs/#installing
-     * or generate it at https://www.srihash.org/
-     *
-     * @var string
-     */
-    public string $htmxSRIHash = 'sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx';
+    public string $htmxVersion = '1.9.0';
 
     /**
      * Returns the script tag with the given attributes.
      */
     public function getScript(array $attributes = []): Markup
     {
-        return $this->_getScript($attributes);
+        $path = '@putyourlightson/sprig/resources/lib/htmx/' . $this->htmxVersion . '/';
+        $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
+        $url = Craft::$app->getAssetManager()->getPublishedUrl($path);
+        $script = Html::jsFile($url, $attributes);
+
+        return Template::raw($script);
     }
 
     /**
@@ -100,6 +97,17 @@ class SprigVariable
     public function getUrl(): string
     {
         return Component::getUrl();
+    }
+
+    /**
+     * Sets config options and registers them as a meta tag.
+     */
+    public function setConfig(array $options = []): void
+    {
+        Craft::$app->getView()->registerMetaTag([
+            'name' => 'htmx-config',
+            'content' => json_encode($options),
+        ]);
     }
 
     /**
@@ -179,26 +187,5 @@ class SprigVariable
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
         return Sprig::$core->components->create($value, $variables, $attributes);
-    }
-
-    /**
-     * Returns a script tag to the source file.
-     */
-    private function _getScript(array $attributes = []): Markup
-    {
-        $url = 'https://unpkg.com/htmx.org@' . $this->htmxVersion . '/dist/htmx.min.js';
-
-        if (Craft::$app->getConfig()->env == 'dev') {
-            $url = str_replace('htmx.min.js', 'htmx.js', $url);
-        } else {
-            // Add subresource integrity
-            // https://github.com/bigskysoftware/htmx/issues/261
-            $attributes['integrity'] = $this->htmxSRIHash;
-            $attributes['crossorigin'] = 'anonymous';
-        }
-
-        $script = Html::jsFile($url, $attributes);
-
-        return Template::raw($script);
     }
 }
