@@ -35,6 +35,18 @@ class SprigVariableTest extends Unit
         $this->assertStringContainsString('RefreshOnLoad', $html);
     }
 
+    public function testSetConfig()
+    {
+        $config = ['x' => 1, 'y' => 2];
+        $this->variable->setConfig($config);
+        $content = str_replace('"', '&quot;', json_encode($config));
+
+        $this->assertEquals(
+            '<meta name="htmx-config" content="' . $content . '">',
+            Craft::$app->getView()->metaTags['htmx-config'],
+        );
+    }
+
     public function testHtmxScriptExistsForDev()
     {
         Craft::$app->getConfig()->env = 'dev';

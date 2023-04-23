@@ -107,7 +107,7 @@ class SprigVariable
         Craft::$app->getView()->registerMetaTag([
             'name' => 'htmx-config',
             'content' => json_encode($options),
-        ]);
+        ], 'htmx-config');
     }
 
     /**
