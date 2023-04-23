@@ -21,12 +21,9 @@ use yii\web\Response;
 
 class ComponentsControllerTest extends Unit
 {
-    /**
-     * @var UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
-    protected function _before()
+    protected function _before(): void
     {
         parent::_before();
 

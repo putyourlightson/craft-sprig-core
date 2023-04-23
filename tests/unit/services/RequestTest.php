@@ -19,12 +19,9 @@ use yii\web\BadRequestHttpException;
 
 class RequestTest extends TestCase
 {
-    /**
-     * @var UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
-    protected function _before()
+    protected function _before(): void
     {
         parent::_before();
 
@@ -82,7 +79,7 @@ class RequestTest extends TestCase
         Sprig::$core->requests->validateData($data);
     }
 
-    private function _mockRequestMethods(array $methods)
+    private function _mockRequestMethods(array $methods): void
     {
         $this->tester->mockCraftMethods('request',
             array_merge(['getFullPath' => ['']], $methods)

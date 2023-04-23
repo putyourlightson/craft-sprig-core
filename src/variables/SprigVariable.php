@@ -25,11 +25,11 @@ class SprigVariable
     /**
      * Returns the script tag with the given attributes.
      */
-    public function getScript(array $attributes = []): Markup
+    public function getScript(array $attributes = [], bool $publish = false): Markup
     {
         $path = '@putyourlightson/sprig/resources/lib/htmx/' . $this->htmxVersion . '/';
         $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
-        $url = Craft::$app->getAssetManager()->getPublishedUrl($path);
+        $url = Craft::$app->getAssetManager()->getPublishedUrl($path, $publish);
         $script = Html::jsFile($url, $attributes);
 
         return Template::raw($script);

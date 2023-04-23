@@ -7,7 +7,6 @@ namespace putyourlightson\sprigcoretests\unit\variables;
 
 use Codeception\Test\Unit;
 use Craft;
-use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\variables\SprigVariable;
 use UnitTester;
 
@@ -19,17 +18,10 @@ use UnitTester;
 
 class SprigVariableTest extends Unit
 {
-    /**
-     * @var UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
+    protected SprigVariable $variable;
 
-    /**
-     * @var SprigVariable
-     */
-    protected $variable;
-
-    protected function _before()
+    protected function _before(): void
     {
         parent::_before();
 
@@ -47,24 +39,22 @@ class SprigVariableTest extends Unit
     {
         Craft::$app->getConfig()->env = 'dev';
 
-        $this->_testScriptExistsRemotely($this->variable->getScript());
+        $this->_testScriptExistsLocally();
     }
 
     public function testHtmxScriptExistsForProduction()
     {
         Craft::$app->getConfig()->env = 'production';
 
-        $this->_testScriptExistsRemotely($this->variable->getScript());
+        $this->_testScriptExistsLocally();
     }
 
-    private function _testScriptExistsRemotely(string $script)
+    private function _testScriptExistsLocally(): void
     {
-        $client = Craft::createGuzzleClient();
+        $script = $this->variable->getScript([], true);
+        preg_match('/src=".*?\/cpresources(.*?)\?v=.*"/', $script, $matches);
+        $path = Craft::getAlias(Craft::$app->getConfig()->getGeneral()->resourceBasePath) . $matches[1];
 
-        preg_match('/src="(.*?)"/', $script, $matches);
-        $url = $matches[1];
-
-        $statusCode = $client->get($url)->getStatusCode();
-        $this->assertEquals(200, $statusCode);
+        $this->assertFileExists($path);
     }
 }

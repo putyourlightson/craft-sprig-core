@@ -25,12 +25,9 @@ use yii\web\Request;
 
 class ComponentsTest extends Unit
 {
-    /**
-     * @var UnitTester
-     */
     protected UnitTester $tester;
 
-    protected function _before()
+    protected function _before(): void
     {
         parent::_before();
 
@@ -279,7 +276,7 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString($placeholder, $result);
     }
 
-    private function _testCreateInvalidVariable(array $variables)
+    private function _testCreateInvalidVariable(array $variables): void
     {
         $this->tester->mockCraftMethods('view', ['doesTemplateExist' => true]);
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
