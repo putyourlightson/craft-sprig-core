@@ -19,8 +19,9 @@ class SprigVariable
 {
     /**
      * @var string The htmx version to load (must exist in `src/resources/lib/htmx`).
+     * Downloaded from https://unpkg.com/htmx.org
      */
-    public string $htmxVersion = '1.9.0';
+    public string $htmxVersion = '1.9.2';
 
     /**
      * Returns the script tag with the given attributes.
