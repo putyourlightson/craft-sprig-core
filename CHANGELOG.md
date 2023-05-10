@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.6.0 - Unreleased
+### Added
+- Added the Sprig component generator that scaffolds PHP components via a console command.
+
 ## 2.5.2 - 2023-05.01
 ### Changed
 - Updated htmx to version 1.9.2 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#192---2023-04-28)).

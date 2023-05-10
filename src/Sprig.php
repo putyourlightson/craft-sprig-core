@@ -6,12 +6,15 @@
 namespace putyourlightson\sprig;
 
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
+use craft\generator\Command;
 use craft\log\MonologTarget;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use Monolog\Formatter\LineFormatter;
 use Psr\Log\LogLevel;
+use putyourlightson\sprig\generators\SprigComponent;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\services\RequestsService;
 use putyourlightson\sprig\twigextensions\SprigTwigExtension;
@@ -79,13 +82,14 @@ class Sprig extends Module
         $this->_registerTemplateRoots();
         $this->_registerTwigExtensions();
         $this->_registerVariables();
+        $this->_registerGeneratorTypes();
         $this->_registerLogTarget();
     }
 
     /**
      * Registers components.
      */
-    private function _registerComponents()
+    private function _registerComponents(): void
     {
         $this->setComponents([
             'components' => ComponentsService::class,
@@ -96,7 +100,7 @@ class Sprig extends Module
     /**
      * Registers template roots.
      */
-    private function _registerTemplateRoots()
+    private function _registerTemplateRoots(): void
     {
         Event::on(
             View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
@@ -109,7 +113,7 @@ class Sprig extends Module
     /**
      * Registers Twig extensions.
      */
-    private function _registerTwigExtensions()
+    private function _registerTwigExtensions(): void
     {
         Craft::$app->view->registerTwigExtension(new SprigTwigExtension());
     }
@@ -117,7 +121,7 @@ class Sprig extends Module
     /**
      * Registers variables.
      */
-    private function _registerVariables()
+    private function _registerVariables(): void
     {
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT,
             function(Event $event) {
@@ -126,6 +130,18 @@ class Sprig extends Module
                 $variable->set('sprig', self::$sprigVariable);
             }
         );
+    }
+
+    /**
+     * Registers generator types.
+     */
+    private function _registerGeneratorTypes(): void
+    {
+        if (class_exists(Command::class)) {
+            Event::on(Command::class, Command::EVENT_REGISTER_GENERATOR_TYPES, function (RegisterComponentTypesEvent $event) {
+                $event->types[] = SprigComponent::class;
+            });
+        }
     }
 
     /**
