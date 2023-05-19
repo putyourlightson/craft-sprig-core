@@ -2,6 +2,7 @@
 
 namespace putyourlightson\sprig\generators;
 
+use craft\helpers\FileHelper;
 use Nette\PhpGenerator\PhpNamespace;
 use craft\generator\BaseGenerator;
 use putyourlightson\sprig\base\Component;
@@ -35,7 +36,10 @@ class SprigComponent extends BaseGenerator
         $class->setComment('Sprig component');
 
         $this->writePhpClass($namespace);
-        $this->command->success("**Sprig component created!**");
+
+        $path = $this->basePath . '/' . $className . '.php';
+        $path = FileHelper::relativePath($path);
+        $this->command->success('**Sprig component successfully created at: ' . $path . '**');
 
         return true;
     }
