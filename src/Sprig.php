@@ -104,7 +104,7 @@ class Sprig extends Module
     {
         Event::on(
             View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
-            function(RegisterTemplateRootsEvent $event) {
+            function (RegisterTemplateRootsEvent $event) {
                 $event->roots['sprig-core'] = $this->getBasePath() . '/templates';
             }
         );
@@ -124,7 +124,7 @@ class Sprig extends Module
     private function _registerVariables(): void
     {
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT,
-            function(Event $event) {
+            function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('sprig', self::$sprigVariable);

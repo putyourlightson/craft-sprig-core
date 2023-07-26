@@ -100,6 +100,7 @@ class ComponentsController extends Controller
         /**
          * Merge and unset any variable called `variables`
          * https://github.com/putyourlightson/craft-sprig/issues/94#issuecomment-771489394
+         *
          * @see UrlRule::parseRequest()
          */
         if (isset($variables['variables'])) {
@@ -166,14 +167,16 @@ class ComponentsController extends Controller
             return;
         }
 
-        Event::on(User::class, Element::EVENT_AFTER_SAVE, function(ModelEvent $event) {
-            /** @var User $user */
-            $user = $event->sender;
+        Event::on(User::class, Element::EVENT_AFTER_SAVE,
+            function (ModelEvent $event) {
+                /** @var User $user */
+                $user = $event->sender;
 
-            // Update the user identity and regenerate the CSRF token in case the password was changed
-            // https://github.com/putyourlightson/craft-sprig/issues/136
-            Craft::$app->getUser()->setIdentity($user);
-            Craft::$app->getRequest()->regenCsrfToken();
-        });
+                // Update the user identity and regenerate the CSRF token in case the password was changed
+                // https://github.com/putyourlightson/craft-sprig/issues/136
+                Craft::$app->getUser()->setIdentity($user);
+                Craft::$app->getRequest()->regenCsrfToken();
+            }
+        );
     }
 }
