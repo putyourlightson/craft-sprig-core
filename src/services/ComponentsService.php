@@ -447,6 +447,10 @@ class ComponentsService extends BaseComponent
         } elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
             $attributes[self::HTMX_PREFIX . $name] = $value;
         }
+
+        if ($name == 'on') {
+            Craft::$app->getDeprecator()->log(__METHOD__, '`s-on` has been deprecated. Use `s-on:*` instead.');
+        }
     }
 
     /**
