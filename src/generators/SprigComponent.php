@@ -2,9 +2,9 @@
 
 namespace putyourlightson\sprig\generators;
 
+use craft\generator\BaseGenerator;
 use craft\helpers\FileHelper;
 use Nette\PhpGenerator\PhpNamespace;
-use craft\generator\BaseGenerator;
 use putyourlightson\sprig\base\Component;
 
 /**

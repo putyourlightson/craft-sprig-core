@@ -168,7 +168,7 @@ class ComponentsController extends Controller
         }
 
         Event::on(User::class, Element::EVENT_AFTER_SAVE,
-            function (ModelEvent $event) {
+            function(ModelEvent $event) {
                 /** @var User $user */
                 $user = $event->sender;
 
