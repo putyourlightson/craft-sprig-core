@@ -126,7 +126,7 @@ class ComponentsService extends BaseComponent
      * @var string The htmx version to load (must exist in `src/resources/lib/htmx`).
      * Downloaded from https://unpkg.com/htmx.org
      */
-    public string $htmxVersion = '1.9.4';
+    public string $htmxVersion = '1.9.5';
 
     /**
      * @var string|null
