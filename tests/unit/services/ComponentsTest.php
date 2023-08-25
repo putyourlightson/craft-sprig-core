@@ -152,6 +152,11 @@ class ComponentsTest extends Unit
         $this->_testCreateInvalidVariable(['number' => '', 'array' => [new Model()]]);
     }
 
+    public function testCreateValidVariableNestedArray()
+    {
+        $this->_testCreateVariable(['number' => '', 'array' => [[[1, 2], 2]]]);
+    }
+
     public function testGetParsedTagAttributes()
     {
         $html = '<div sprig s-method="post" s-action="a/b/c" s-vals=\'{"limit":1}\'></div>';

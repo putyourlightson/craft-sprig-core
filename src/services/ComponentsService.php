@@ -200,7 +200,9 @@ class ComponentsService extends BaseComponent
 
         $values['sprig:' . $type] = Craft::$app->getSecurity()->hashData($value);
 
-        foreach ($variables as $name => $val) {
+        foreach ($variables as $name => $variable) {
+            $this->_validateVariable($name, $variable);
+            $val = $this->_normalizeVariable($variable);
             $values['sprig:variables[' . $name . ']'] = $this->_hashVariable($name, $val);
         }
 
@@ -557,15 +559,15 @@ class ComponentsService extends BaseComponent
         ];
 
         if ($value instanceof ElementInterface) {
-            $this->_throwError('element', $variable);
+            $this->_throwError('element', $variable, $isArray);
         }
 
         if ($value instanceof Model) {
-            $this->_throwError('model', $variable);
+            $this->_throwError('model', $variable, $isArray);
         }
 
         if (is_object($value)) {
-            $this->_throwError('object', $variable);
+            $this->_throwError('object', $variable, $isArray);
         }
 
         if (is_array($value)) {
@@ -576,12 +578,47 @@ class ComponentsService extends BaseComponent
     }
 
     /**
+     * Validates a variable.
+     */
+    private function _validateVariable(string $name, mixed $value, bool $isArray = false): void
+    {
+        if (is_array($value)) {
+            foreach ($value as $variable) {
+                $this->_validateVariable($name, $variable, true);
+            }
+        }
+
+        if (is_object($value)) {
+            $this->_throwError($name, $value, $isArray);
+        }
+    }
+
+    /**
+     * Normalizes a variable.
+     */
+    private function _normalizeVariable(mixed $value): ?string
+    {
+        if (is_array($value)) {
+            $value = Json::encode($value);
+        }
+
+        return $value;
+    }
+
+    /**
      * Throws an error from a rendered template.
      */
-    private function _throwError(string $type, array $variables = []): void
+    private function _throwError(string $name, mixed $value, bool $isArray = false): void
     {
-        $variables['type'] = $type;
-        $variables['componentName'] = $this->_componentName;
+        $variables = [
+            'name' => $name,
+            'value' => $value,
+            'isArray' => $isArray,
+            'isElement' => $value instanceof ElementInterface,
+            'isCraftElement' => str_starts_with($value::class, 'craft\\'),
+            'className' => $value::class,
+            'componentName' => $this->_componentName,
+        ];
 
         $content = Craft::$app->getView()->renderPageTemplate('sprig-core/_error', $variables, View::TEMPLATE_MODE_CP);
 
