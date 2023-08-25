@@ -132,14 +132,9 @@ class ComponentsTest extends Unit
         $this->assertNull($object);
     }
 
-    public function testCreateVariableEntry()
+    public function testCreateInvalidVariableEntry()
     {
-        $this->_testCreateVariable(['number' => '', 'entry' => new Entry()]);
-    }
-
-    public function testCreateValidVariableArray()
-    {
-        $this->_testCreateVariable(['number' => '', 'array' => [new Entry()]]);
+        $this->_testCreateInvalidVariable(['number' => '', 'entry' => new Entry()]);
     }
 
     public function testCreateInvalidVariableModel()
@@ -208,6 +203,13 @@ class ComponentsTest extends Unit
         $html = '<div sprig class="a' . PHP_EOL . 'b"></div>';
         $html = Sprig::$core->components->parse($html);
         $this->assertStringContainsString('data-hx-get=', $html);
+    }
+
+    public function testGetParsedTagAttributesOn()
+    {
+        $html = '<div s-on:x:y:z="a"></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-on:x:y:z="a"', $html);
     }
 
     public function testGetParsedTagAttributesVals()

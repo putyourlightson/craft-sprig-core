@@ -420,7 +420,9 @@ class ComponentsService extends BaseComponent
             return;
         }
 
-        if (str_starts_with($name, 'val:')) {
+        if (str_starts_with($name, 'on:')) {
+            $attributes[self::HTMX_PREFIX . $name] = $value;
+        } elseif (str_starts_with($name, 'val:')) {
             $name = StringHelper::toCamelCase(substr($name, 4));
 
             /**
