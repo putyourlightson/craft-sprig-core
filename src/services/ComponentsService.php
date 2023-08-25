@@ -360,7 +360,7 @@ class ComponentsService extends BaseComponent
     /**
      * Parses an array of attributes.
      */
-    private function _parseAttributes(array &$attributes)
+    private function _parseAttributes(array &$attributes): void
     {
         foreach ($attributes as $key => &$value) {
             $this->_parseAttribute($attributes, $key, $value);
@@ -370,7 +370,7 @@ class ComponentsService extends BaseComponent
     /**
      * Parses the Sprig attribute on an array of attributes.
      */
-    private function _parseSprigAttribute(array &$attributes)
+    private function _parseSprigAttribute(array &$attributes): void
     {
         $verb = 'get';
         $params = [];
@@ -398,7 +398,7 @@ class ComponentsService extends BaseComponent
     /**
      * Parses an attribute in an array of attributes.
      */
-    private function _parseAttribute(array &$attributes, string $key, array|string|bool $value)
+    private function _parseAttribute(array &$attributes, string $key, array|string|bool $value): void
     {
         if ($key == 'data' && is_array($value)) {
             foreach ($value as $dataKey => $dataValue) {
@@ -452,7 +452,7 @@ class ComponentsService extends BaseComponent
     /**
      * Merges new values to existing JSON attribute values.
      */
-    private function _mergeJsonAttributes(array &$attributes, string $name, array|string $values)
+    private function _mergeJsonAttributes(array &$attributes, string $name, array|string $values): void
     {
         if (is_string($values)) {
             if (str_starts_with($values, 'javascript:')) {
@@ -544,7 +544,7 @@ class ComponentsService extends BaseComponent
     /**
      * Validates a variable type.
      */
-    private function _validateVariableType(string $name, $value, $isArray = false)
+    private function _validateVariableType(string $name, $value, $isArray = false): void
     {
         $variable = [
             'name' => $name,
