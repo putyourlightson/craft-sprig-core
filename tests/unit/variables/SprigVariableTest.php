@@ -46,27 +46,4 @@ class SprigVariableTest extends Unit
             Craft::$app->getView()->metaTags['htmx-config'],
         );
     }
-
-    public function testHtmxScriptExistsForDev()
-    {
-        Craft::$app->getConfig()->env = 'dev';
-
-        $this->_testScriptExistsLocally();
-    }
-
-    public function testHtmxScriptExistsForProduction()
-    {
-        Craft::$app->getConfig()->env = 'production';
-
-        $this->_testScriptExistsLocally();
-    }
-
-    private function _testScriptExistsLocally(): void
-    {
-        $script = $this->variable->getScript([], true);
-        preg_match('/src=".*?\/cpresources(.*?)\?v=.*"/', $script, $matches);
-        $path = Craft::getAlias(Craft::$app->getConfig()->getGeneral()->resourceBasePath) . $matches[1];
-
-        $this->assertFileExists($path);
-    }
 }

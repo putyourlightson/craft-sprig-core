@@ -26,6 +26,9 @@ use yii\log\Logger;
 use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
+/**
+ * @property-read string $scriptUrl
+ */
 class ComponentsService extends BaseComponent
 {
     /**
@@ -120,6 +123,12 @@ class ComponentsService extends BaseComponent
     public const HTMX_PREFIX = 'data-hx-';
 
     /**
+     * @var string The htmx version to load (must exist in `src/resources/lib/htmx`).
+     * Downloaded from https://unpkg.com/htmx.org
+     */
+    public string $htmxVersion = '1.9.4';
+
+    /**
      * @var string|null
      */
     private ?string $_componentName = null;
@@ -128,6 +137,17 @@ class ComponentsService extends BaseComponent
      * @var string|null
      */
     private ?string $_sprigActionUrl = null;
+
+    /**
+     * Returns the URL to the htmx script.
+     */
+    public function getScriptUrl(): string
+    {
+        $path = '@putyourlightson/sprig/resources/lib/htmx/' . $this->htmxVersion . '/';
+        $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
+
+        return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
+    }
 
     /**
      * Creates a new component.
@@ -221,6 +241,8 @@ class ComponentsService extends BaseComponent
         if ($this->hasEventHandlers(self::EVENT_AFTER_CREATE_COMPONENT)) {
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
+
+        Craft::$app->getView()->registerJsFile($this->getScriptUrl());
 
         return Template::raw($event->output);
     }
@@ -404,6 +426,7 @@ class ComponentsService extends BaseComponent
             /**
              * If the value is `true` then convert it back to a blank string.
              * https://github.com/putyourlightson/craft-sprig/issues/178#issuecomment-950415937
+             *
              * @see Html::parseTagAttribute()
              */
             $value = $value === true ? '' : $value;
