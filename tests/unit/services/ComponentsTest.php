@@ -212,9 +212,13 @@ class ComponentsTest extends Unit
 
     public function testGetParsedTagAttributesOn()
     {
-        $html = '<div s-on:x:y:z="a"></div>';
+        $html = '<div s-on:htmx:before-request="a"></div>';
         $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('data-hx-on:x:y:z="a"', $html);
+        $this->assertStringContainsString('data-hx-on:htmx:before-request="a"', $html);
+
+        $html = '<div s-on::before-request="a"></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-on::before-request="a"', $html);
     }
 
     public function testGetParsedTagAttributesVals()
