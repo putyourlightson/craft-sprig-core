@@ -59,7 +59,7 @@ class ComponentsService extends BaseComponent
     /**
      * @const string
      */
-    public const SPRIG_PARSED_ATTRIBUTE = 'data-sprig-parsed';
+    public const SPRIG_PARSED_ATTRIBUTE = 'sprig-parsed';
 
     /**
      * @const string
@@ -71,6 +71,7 @@ class ComponentsService extends BaseComponent
      */
     public const SPRIG_ATTRIBUTES = [
         'action',
+        'cache',
         'listen',
         'method',
         'replace',
@@ -338,13 +339,13 @@ class ComponentsService extends BaseComponent
             return null;
         }
 
-        if (isset($attributes['data']['sprig-parsed'])) {
+        if (isset($attributes['data'][self::SPRIG_PARSED_ATTRIBUTE])) {
             return $tag;
         }
 
         $name = $this->_getTagName($tag);
         $this->_parseAttributes($attributes);
-        $attributes['data-sprig-parsed'] = true;
+        $attributes['data'][self::SPRIG_PARSED_ATTRIBUTE] = true;
 
         return Html::beginTag($name, $attributes);
     }
@@ -378,18 +379,14 @@ class ComponentsService extends BaseComponent
         $params = [];
 
         $method = $this->_getSprigAttributeValue($attributes, 'method');
-
-        // Make the check case-insensitive
         if (strtolower($method) == 'post') {
             $verb = 'post';
-
             $this->_mergeJsonAttributes($attributes, 'headers', [
                 Request::CSRF_HEADER => Craft::$app->getRequest()->getCsrfToken(),
             ]);
         }
 
         $action = $this->_getSprigAttributeValue($attributes, 'action');
-
         if ($action) {
             $params['sprig:action'] = Craft::$app->getSecurity()->hashData($action);
         }
@@ -438,6 +435,8 @@ class ComponentsService extends BaseComponent
             $this->_mergeJsonAttributes($attributes, 'vals', [$name => $value]);
         } elseif ($name == 'headers' || $name == 'vals') {
             $this->_mergeJsonAttributes($attributes, $name, $value);
+        } elseif ($name == 'cache') {
+            $this->_mergeJsonAttributes($attributes, 'headers', ['Sprig-Cache' => $value]);
         } elseif ($name == 'listen') {
             $cssSelectors = StringHelper::split($value);
             $triggers = array_map(fn($selector) => 'htmx:afterOnLoad from:' . $selector, $cssSelectors);

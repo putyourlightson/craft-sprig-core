@@ -12,9 +12,15 @@ use yii\web\BadRequestHttpException;
 
 /**
  * @property-read array $variables
+ * @property-read int $cacheDuration
  */
 class RequestsService extends Component
 {
+    /**
+     * @const int
+     */
+    public const DEFAULT_CACHE_DURATION = 300;
+
     /**
      * @const string[]
      */
@@ -75,6 +81,30 @@ class RequestsService extends Component
         }
 
         return $values;
+    }
+
+    /**
+     * Returns the request’s cache duration or `0` if not set.
+     */
+    public function getCacheDuration(): int
+    {
+        $duration = Craft::$app->getRequest()->getHeaders()->get('Sprig-Cache', 0);
+
+        if ($duration === 'true') {
+            return self::DEFAULT_CACHE_DURATION;
+        }
+
+        if (!is_numeric($duration)) {
+            return 0;
+        }
+
+        $duration = (int)$duration;
+
+        if ($duration < 0) {
+            return 0;
+        }
+
+        return $duration;
     }
 
     /**

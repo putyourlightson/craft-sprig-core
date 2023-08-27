@@ -5,6 +5,7 @@
 ### Added
 
 - Added the Sprig component generator that scaffolds PHP components via a console command (`php craft make sprig-component --path sprig/components`).
+- Added the [s-cache](https://putyourlightson.com/plugins/sprig#s-on) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
 - Added the [s-on:*](https://putyourlightson.com/plugins/sprig#s-on) attribute that allows you to respond to events directly on an element.
 - Added the `sprig.scriptUrl` tag.
 

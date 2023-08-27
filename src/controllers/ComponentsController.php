@@ -67,6 +67,11 @@ class ComponentsController extends Controller
         $response->format = Response::FORMAT_HTML;
         $response->data = Sprig::$core->components->parse($content);
 
+        $cacheDuration = Sprig::$core->requests->getCacheDuration();
+        if ($cacheDuration) {
+            $response->headers->set('Cache-Control', 'private, max-age=' . $cacheDuration);
+        }
+
         return $response;
     }
 
