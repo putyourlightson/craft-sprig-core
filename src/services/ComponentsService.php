@@ -74,6 +74,7 @@ class ComponentsService extends BaseComponent
         'cache',
         'listen',
         'method',
+        'preload',
         'replace',
         'val',
     ];
@@ -124,10 +125,15 @@ class ComponentsService extends BaseComponent
     public const HTMX_PREFIX = 'data-hx-';
 
     /**
-     * @var string The htmx version to load (must exist in `src/resources/lib/htmx`).
+     * @const string
+     */
+    public const HTMX_SCRIPT_BASE_PATH = '@putyourlightson/sprig/resources/lib/htmx/';
+
+    /**
+     * @const string The htmx version to load (must exist in `HTMX_SCRIPT_BASE_PATH`).
      * Downloaded from https://unpkg.com/htmx.org
      */
-    public string $htmxVersion = '1.9.5';
+    public const HTMX_VERSION = '1.9.5';
 
     /**
      * @var string|null
@@ -140,12 +146,27 @@ class ComponentsService extends BaseComponent
     private ?string $_sprigActionUrl = null;
 
     /**
+     * @var bool
+     */
+    private bool $_loadPreloadExtension = false;
+
+    /**
      * Returns the URL to the htmx script.
      */
     public function getScriptUrl(): string
     {
-        $path = '@putyourlightson/sprig/resources/lib/htmx/' . $this->htmxVersion . '/';
+        $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/';
         $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
+
+        return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
+    }
+
+    /**
+     * Returns the URL to the htmx preload extension script.
+     */
+    public function getPreloadScriptUrl(): string
+    {
+        $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/ext/preload.js';
 
         return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
     }
@@ -237,6 +258,10 @@ class ComponentsService extends BaseComponent
             $attributes
         );
 
+        if ($this->_loadPreloadExtension) {
+            $this->_mergeCommaSeperatedAttribute($attributes, 'ext', 'preload');
+        }
+
         $this->_parseAttributes($attributes);
 
         $event->output = Html::tag('div', $content, $attributes);
@@ -246,6 +271,10 @@ class ComponentsService extends BaseComponent
         }
 
         Craft::$app->getView()->registerJsFile($this->getScriptUrl());
+
+        if ($this->_loadPreloadExtension) {
+            Craft::$app->getView()->registerJsFile($this->getPreloadScriptUrl());
+        }
 
         return Template::raw($event->output);
     }
@@ -441,6 +470,11 @@ class ComponentsService extends BaseComponent
             $cssSelectors = StringHelper::split($value);
             $triggers = array_map(fn($selector) => 'htmx:afterOnLoad from:' . $selector, $cssSelectors);
             $attributes[self::HTMX_PREFIX . 'trigger'] = join(',', $triggers);
+        } elseif ($name == 'preload') {
+            if (Component::getIsInclude()) {
+                $attributes['preload'] = $value === true ? 'preload:init' : $value;
+                $this->_loadPreloadExtension = true;
+            }
         } elseif ($name == 'replace') {
             $attributes[self::HTMX_PREFIX . 'select'] = $value;
             $attributes[self::HTMX_PREFIX . 'target'] = $value;
@@ -474,6 +508,21 @@ class ComponentsService extends BaseComponent
         }
 
         $attributes[$key] = Json::htmlEncode($values);
+    }
+
+    /**
+     * Merges a new value to existing comma seperated attribute values.
+     */
+    private function _mergeCommaSeperatedAttribute(array &$attributes, string $name, string $value): void
+    {
+        $key = self::HTMX_PREFIX . $name;
+        $values = empty($attributes[$key]) ? [] : explode(',', $attributes[$key]);
+
+        if (!in_array($value, $values)) {
+            $values[] = $value;
+        }
+
+        $attributes[$key] = implode(',', $values);
     }
 
     /**
