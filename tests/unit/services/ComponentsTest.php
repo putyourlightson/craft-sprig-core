@@ -210,6 +210,17 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('data-hx-get=', $html);
     }
 
+    public function testGetParsedTagAttributesCache()
+    {
+        $html = '<div s-cache></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;Sprig-Cache&quot;:true}"', $html);
+
+        $html = '<div s-cache="10"></div>';
+        $html = Sprig::$core->components->parse($html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;Sprig-Cache&quot;:&quot;10&quot;}"', $html);
+    }
+
     public function testGetParsedTagAttributesOn()
     {
         $html = '<div s-on:htmx:before-request="a"></div>';
