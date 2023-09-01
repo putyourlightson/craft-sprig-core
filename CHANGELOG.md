@@ -14,6 +14,10 @@
 - Updated htmx to version 1.9.5 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#195---2023-08-25)).
 - Simplified and improved invalid variable error messages.
 
+### Fixed
+
+- Fixed the response status code that is sent when required request parameters are not supplied ([#325](https://github.com/putyourlightson/craft-sprig/issues/325)).
+
 ### Deprecated
 
 - Deprecated the `sprig.script` tag. It is no longer required and can be safely removed.

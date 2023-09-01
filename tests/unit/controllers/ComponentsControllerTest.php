@@ -11,6 +11,7 @@ use craft\web\View;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\test\mockclasses\controllers\TestController;
 use UnitTester;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
@@ -18,7 +19,6 @@ use yii\web\Response;
  * @package   Sprig
  * @since     1.0.0
  */
-
 class ComponentsControllerTest extends Unit
 {
     protected UnitTester $tester;
@@ -116,5 +116,12 @@ class ComponentsControllerTest extends Unit
         $this->assertStringContainsString('success:false', trim($response->data));
         $this->assertStringContainsString('flashes[error]:the_error_message', trim($response->data));
         $this->assertStringContainsString('model', trim($response->data));
+    }
+
+    public function testRenderWithoutParams()
+    {
+        $this->expectException(BadRequestHttpException::class);
+        Craft::$app->getRequest()->setQueryParams([]);
+        Sprig::$core->runAction('components/render');
     }
 }
