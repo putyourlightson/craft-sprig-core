@@ -77,19 +77,19 @@ class RequestTest extends TestCase
 
     public function testGetCacheDuration()
     {
-        Craft::$app->getRequest()->getHeaders()->set('Sprig-Cache', 'true');
+        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 'true');
         $this->assertEquals(Sprig::$core->requests::DEFAULT_CACHE_DURATION, Sprig::$core->requests->getCacheDuration());
 
-        Craft::$app->getRequest()->getHeaders()->set('Sprig-Cache', 10);
+        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 10);
         $this->assertEquals(10, Sprig::$core->requests->getCacheDuration());
 
-        Craft::$app->getRequest()->getHeaders()->set('Sprig-Cache', 10.2);
+        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 10.2);
         $this->assertEquals(10, Sprig::$core->requests->getCacheDuration());
 
-        Craft::$app->getRequest()->getHeaders()->set('Sprig-Cache', 'false');
+        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 'false');
         $this->assertEquals(0, Sprig::$core->requests->getCacheDuration());
 
-        Craft::$app->getRequest()->getHeaders()->set('Sprig-Cache', -10);
+        Craft::$app->getRequest()->getHeaders()->set('S-Cache', -10);
         $this->assertEquals(0, Sprig::$core->requests->getCacheDuration());
     }
 

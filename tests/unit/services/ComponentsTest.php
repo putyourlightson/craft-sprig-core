@@ -214,11 +214,11 @@ class ComponentsTest extends Unit
     {
         $html = '<div s-cache></div>';
         $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('data-hx-headers="{&quot;Sprig-Cache&quot;:true}"', $html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;S-Cache&quot;:true}"', $html);
 
         $html = '<div s-cache="10"></div>';
         $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('data-hx-headers="{&quot;Sprig-Cache&quot;:&quot;10&quot;}"', $html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;S-Cache&quot;:&quot;10&quot;}"', $html);
     }
 
     public function testGetParsedTagAttributesPreload()

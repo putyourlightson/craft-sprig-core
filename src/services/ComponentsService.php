@@ -465,7 +465,7 @@ class ComponentsService extends BaseComponent
         } elseif ($name == 'headers' || $name == 'vals') {
             $this->_mergeJsonAttributes($attributes, $name, $value);
         } elseif ($name == 'cache') {
-            $this->_mergeJsonAttributes($attributes, 'headers', ['Sprig-Cache' => $value]);
+            $this->_mergeJsonAttributes($attributes, 'headers', ['S-Cache' => $value]);
         } elseif ($name == 'listen') {
             $cssSelectors = StringHelper::split($value);
             $triggers = array_map(fn($selector) => 'htmx:afterOnLoad from:' . $selector, $cssSelectors);
