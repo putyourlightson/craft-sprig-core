@@ -10,6 +10,7 @@ use craft\db\Paginator;
 use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
+use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\db\Query;
@@ -31,11 +32,21 @@ class SprigVariable
     /**
      * Returns the URL to the script file.
      *
-     * @added in 2.6.0
+     * @since 2.6.0
      */
     public function getScriptUrl(): string
     {
         return Sprig::$core->components->getScriptUrl();
+    }
+
+    /**
+     * Returns the htmx version number.
+     *
+     * @since 2.6.0
+     */
+    public function getHtmxVersion(): string
+    {
+        return ComponentsService::HTMX_VERSION;
     }
 
     /**

@@ -5,13 +5,15 @@
 ### Added
 
 - Added the Sprig component generator that scaffolds PHP components via a console command (`php craft make sprig-component --path sprig/components`).
-- Added the [s-cache](https://putyourlightson.com/plugins/sprig#s-on) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
+- Added the [s-cache](https://putyourlightson.com/plugins/sprig#s-cache) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
+- Added the [s-preload](https://putyourlightson.com/plugins/sprig#s-preload) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
 - Added the [s-on:*](https://putyourlightson.com/plugins/sprig#s-on) attribute that allows you to respond to events directly on an element.
 - Added the `sprig.scriptUrl` tag.
+- Added the `sprig.htmxVersion` tag.
 
 ### Changed
 
-- The htmx script is now automatically injected into the end of the page whenever the `sprig()` function is called.
+- The htmx script is now automatically injected into the end of the page whenever the `sprig()` function is called, meaning that the `sprig.script` tag is no longer required and can be safely removed.
 - Updated htmx to version 1.9.5 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#195---2023-08-25)).
 - Simplified and improved invalid variable error messages.
 
