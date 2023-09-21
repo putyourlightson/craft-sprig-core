@@ -163,7 +163,7 @@ class ComponentsController extends Controller
     /**
      * Registers an event when saving the current user
      */
-    private function _registerSaveCurrentUserEvent()
+    private function _registerSaveCurrentUserEvent(): void
     {
         $currentUserId = Craft::$app->getUser()->getId();
         $userId = Craft::$app->getRequest()->getBodyParam('userId');

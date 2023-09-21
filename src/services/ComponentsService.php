@@ -28,6 +28,7 @@ use yii\web\Request;
 
 /**
  * @property-read string $scriptUrl
+ * @property-read string $preloadScriptUrl
  */
 class ComponentsService extends BaseComponent
 {

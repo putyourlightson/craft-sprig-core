@@ -111,7 +111,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Triggers a client-side redirect without reloading the page.
      * https://htmx.org/headers/hx-location/
      */
-    public static function location(string $url)
+    public static function location(string $url): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Location', $url);
     }
@@ -120,7 +120,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Pushes the URL into the history stack.
      * https://htmx.org/headers/hx-push-url/
      */
-    public static function pushUrl(string $url)
+    public static function pushUrl(string $url): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Push-Url', $url);
     }
@@ -129,7 +129,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Redirects the browser to the URL.
      * https://htmx.org/reference#response_headers
      */
-    public static function redirect(string $url)
+    public static function redirect(string $url): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
@@ -138,7 +138,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Replaces the current URL in the location bar.
      * https://htmx.org/headers/hx-replace-url/
      */
-    public static function replaceUrl(string $url)
+    public static function replaceUrl(string $url): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Replace-Url', $url);
     }
@@ -147,7 +147,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Refreshes the browser.
      * https://htmx.org/reference#response_headers
      */
-    public static function refresh(bool $refresh = true)
+    public static function refresh(bool $refresh = true): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Refresh', $refresh ? 'true' : '');
     }
@@ -156,7 +156,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Specifies how the response will be swapped.
      * https://htmx.org/reference#response_headers
      */
-    public static function reswap(string $value)
+    public static function reswap(string $value): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Reswap', $value);
     }
@@ -165,7 +165,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Retargets the element to update with a CSS selector.
      * https://htmx.org/reference#response_headers
      */
-    public static function retarget(string $target)
+    public static function retarget(string $target): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $target);
     }
@@ -174,7 +174,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Triggers client-side events.
      * https://htmx.org/headers/hx-trigger/
      */
-    public static function triggerEvents(array|string $events, string $on = 'load')
+    public static function triggerEvents(array|string $events, string $on = 'load'): void
     {
         if (is_array($events)) {
             $events = json_encode(array_combine($events, $events));
