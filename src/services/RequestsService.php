@@ -50,9 +50,23 @@ class RequestsService extends Component
     }
 
     /**
+     * Returns a required validated request parameter.
+     */
+    public function getRequiredValidatedParam(string $name): string|null
+    {
+        $value = $this->getValidatedParam($name);
+
+        if (empty($value)) {
+            throw new BadRequestHttpException('Request missing required param.');
+        }
+
+        return $value;
+    }
+
+    /**
      * Returns a validated request parameter.
      */
-    public function getValidatedParam(string $name): bool|string|null
+    public function getValidatedParam(string $name): string|null
     {
         $value = Craft::$app->getRequest()->getParam($name);
 
