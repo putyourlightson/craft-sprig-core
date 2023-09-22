@@ -40,27 +40,32 @@ class ComponentsTest extends Unit
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
     }
 
-    public function testHtmxScriptExistsForDev()
+    public function testScriptExistsForDev()
     {
         Craft::$app->getConfig()->env = 'dev';
 
         $this->_testScriptExistsLocally();
     }
 
-    public function testHtmxScriptExistsForProduction()
+    public function testScriptExistsForProduction()
     {
         Craft::$app->getConfig()->env = 'production';
 
         $this->_testScriptExistsLocally();
     }
 
-    public function testRemoteHtmxScriptUrl()
+    public function testScriptsAdded()
     {
-        $url = 'https://unpkg.com/htmx.org';
-        Sprig::$core->components->setScriptUrl($url);
-        $scriptUrl = Sprig::$core->components->getScriptUrl();
+        Craft::$app->getView()->jsFiles = [];
+        Sprig::$core->components->create('_component', [], ['preload' => true]);
+        $this->assertTrue($this->_testJsFileKeyExists('htmx'));
+        $this->assertTrue($this->_testJsFileKeyExists('htmx-preload'));
 
-        $this->assertEquals($url, $scriptUrl);
+        Craft::$app->getView()->jsFiles = [];
+        Sprig::$core->components->setAddScripts(false);
+        Sprig::$core->components->create('_component', [], ['preload' => true]);
+        $this->assertFalse($this->_testJsFileKeyExists('htmx'));
+        $this->assertFalse($this->_testJsFileKeyExists('htmx-preload'));
     }
 
     public function testCreate()
@@ -68,7 +73,13 @@ class ComponentsTest extends Unit
         $markup = Sprig::$core->components->create(
             '_component',
             ['number' => 15],
-            ['id' => 'abc', 's-trigger' => 'load', 's-vars' => 'limit:1', 's-push-url' => 'new-url']
+            [
+                'id' => 'abc',
+                's-trigger' => 'load',
+                's-vars' => 'limit:1',
+                's-push-url' => 'new-url',
+                's-cache' => 10,
+            ]
         );
         $html = (string)$markup;
 
@@ -78,6 +89,7 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('sprig:template', $html);
         $this->assertStringContainsString('limit:1', $html);
         $this->assertStringContainsString('data-hx-push-url="new-url"', $html);
+        $this->assertStringContainsString('data-hx-headers="{&quot;S-Cache&quot;:&quot;10&quot;}"', $html);
         $this->assertStringContainsString('xyz 15', $html);
     }
 
@@ -368,5 +380,16 @@ class ComponentsTest extends Unit
         $this->expectException(ExitException::class);
 
         Sprig::$core->components->create('_component', $variables);
+    }
+
+    private function _testJsFileKeyExists(string $key): bool
+    {
+        foreach (Craft::$app->getView()->jsFiles as $jsFile) {
+            if (!empty($jsFile['htmx'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

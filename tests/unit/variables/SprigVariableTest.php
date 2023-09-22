@@ -15,7 +15,6 @@ use UnitTester;
  * @package   Sprig
  * @since     1.0.0
  */
-
 class SprigVariableTest extends Unit
 {
     protected UnitTester $tester;

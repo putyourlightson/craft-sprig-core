@@ -9,7 +9,7 @@
 - Added the [s-preload](https://putyourlightson.com/plugins/sprig#s-preload) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
 - Added the [s-on:*](https://putyourlightson.com/plugins/sprig#s-on) attribute that allows you to respond to events directly on an element.
 - Added the `sprig.htmxVersion` tag.
-- Added the `sprig.setScriptUrl` tag.
+- Added the `sprig.setAddScripts()` tag.
 
 ### Changed
 

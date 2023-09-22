@@ -104,6 +104,14 @@ class SprigVariable
     }
 
     /**
+     * Sets whether scripts should be automatically added to the output.
+     */
+    public function setAddScripts(bool $value): void
+    {
+        Sprig::$core->components->setAddScripts($value);
+    }
+
+    /**
      * Sets config options and registers them as a meta tag.
      */
     public function setConfig(array $options = []): void
@@ -112,14 +120,6 @@ class SprigVariable
             'name' => 'htmx-config',
             'content' => json_encode($options),
         ], 'htmx-config');
-    }
-
-    /**
-     * Sets the script URL that should be used.
-     */
-    public function setScriptUrl(string $url): void
-    {
-        Sprig::$core->components->setScriptUrl($url);
     }
 
     /**

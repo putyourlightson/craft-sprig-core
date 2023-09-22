@@ -29,6 +29,7 @@ use yii\web\Request;
 /**
  * @property-read string $scriptUrl
  * @property-read string $preloadScriptUrl
+ * @property-write bool $addScripts
  */
 class ComponentsService extends BaseComponent
 {
@@ -147,9 +148,9 @@ class ComponentsService extends BaseComponent
     private ?string $_sprigActionUrl = null;
 
     /**
-     * @var string|null
+     * @var bool
      */
-    private ?string $_scriptUrl = null;
+    private bool $_addScripts = true;
 
     /**
      * @var bool
@@ -159,24 +160,12 @@ class ComponentsService extends BaseComponent
     /**
      * Returns the URL to the htmx script.
      */
-    public function getScriptUrl(): string
+    public function getScriptUrl(): ?string
     {
-        if ($this->_scriptUrl !== null) {
-            return $this->_scriptUrl;
-        }
-
         $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/';
         $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
 
         return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
-    }
-
-    /**
-     * Sets the script URL that should be used.
-     */
-    public function setScriptUrl(string $url): void
-    {
-        $this->_scriptUrl = $url;
     }
 
     /**
@@ -187,6 +176,14 @@ class ComponentsService extends BaseComponent
         $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/ext/preload.js';
 
         return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
+    }
+
+    /**
+     * Sets whether scripts should be automatically added to the output.
+     */
+    public function setAddScripts(bool $value): void
+    {
+        $this->_addScripts = $value;
     }
 
     /**
@@ -288,10 +285,12 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        Craft::$app->getView()->registerJsFile($this->getScriptUrl(), [], 'htmx');
+        if ($this->_addScripts === true) {
+            Craft::$app->getView()->registerJsFile($this->getScriptUrl(), [], 'htmx');
 
-        if ($this->_loadPreloadExtension) {
-            Craft::$app->getView()->registerJsFile($this->getPreloadScriptUrl());
+            if ($this->_loadPreloadExtension) {
+                Craft::$app->getView()->registerJsFile($this->getPreloadScriptUrl(), [], 'htmx-preload');
+            }
         }
 
         return Template::raw($event->output);
