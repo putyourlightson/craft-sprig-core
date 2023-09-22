@@ -25,7 +25,7 @@
 ### Deprecated
 
 - Deprecated the `sprig.script` tag. It is no longer required and can be safely removed.
-- Deprecated the `s-on` attribute.
+- Deprecated the `s-on` attribute. Use the `s-on:*` attribute instead.
 
 ## 2.5.2 - 2023-05.01
 
