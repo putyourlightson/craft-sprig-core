@@ -89,6 +89,7 @@ class ComponentsService extends BaseComponent
         'confirm',
         'delete',
         'disable',
+        'disabled-elt',
         'disinherit',
         'encoding',
         'ext',
