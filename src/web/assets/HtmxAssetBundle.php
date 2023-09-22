@@ -11,9 +11,15 @@ class HtmxAssetBundle extends AssetBundle
     {
         $this->sourcePath = '@putyourlightson/sprig/resources/lib/htmx/1.9.5';
 
-        $this->js = [
-            'htmx.js',
-        ];
+        if (Craft::$app->getConfig()->env === 'dev') {
+            $this->js = [
+                'htmx.js'
+            ];
+        } else {
+            $this->js = [
+                'htmx.min.js'
+            ];
+        }
 
         parent::init();
     }
