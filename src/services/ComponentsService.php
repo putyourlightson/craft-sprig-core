@@ -135,7 +135,7 @@ class ComponentsService extends BaseComponent
      * @const string The htmx version to load (must exist in `HTMX_SCRIPT_BASE_PATH`).
      * Downloaded from https://unpkg.com/htmx.org
      */
-    public const HTMX_VERSION = '1.9.5';
+    public const HTMX_VERSION = '1.9.6';
 
     /**
      * @var string|null

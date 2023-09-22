@@ -14,7 +14,7 @@
 ### Changed
 
 - The htmx script is now automatically injected into the end of the page whenever the `sprig()` function is called, meaning that the `sprig.script` tag is no longer required and can be safely removed.
-- Updated htmx to version 1.9.5 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#195---2023-08-25)).
+- Updated htmx to version 1.9.6 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#196---2023-09-22)).
 - Simplified and improved invalid variable error messages.
 
 ### Fixed
