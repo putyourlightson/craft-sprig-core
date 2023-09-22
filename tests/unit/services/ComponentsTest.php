@@ -54,6 +54,15 @@ class ComponentsTest extends Unit
         $this->_testScriptExistsLocally();
     }
 
+    public function testRemoteHtmxScriptUrl()
+    {
+        $url = 'https://unpkg.com/htmx.org';
+        Sprig::$core->components->setScriptUrl($url);
+        $scriptUrl = Sprig::$core->components->getScriptUrl();
+
+        $this->assertEquals($url, $scriptUrl);
+    }
+
     public function testCreate()
     {
         $markup = Sprig::$core->components->create(

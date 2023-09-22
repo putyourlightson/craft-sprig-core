@@ -147,6 +147,11 @@ class ComponentsService extends BaseComponent
     private ?string $_sprigActionUrl = null;
 
     /**
+     * @var string|null
+     */
+    private ?string $_scriptUrl = null;
+
+    /**
      * @var bool
      */
     private bool $_loadPreloadExtension = false;
@@ -156,10 +161,22 @@ class ComponentsService extends BaseComponent
      */
     public function getScriptUrl(): string
     {
+        if ($this->_scriptUrl !== null) {
+            return $this->_scriptUrl;
+        }
+
         $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/';
         $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
 
         return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
+    }
+
+    /**
+     * Sets the script URL that should be used.
+     */
+    public function setScriptUrl(string $url): void
+    {
+        $this->_scriptUrl = $url;
     }
 
     /**
@@ -271,7 +288,7 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        Craft::$app->getView()->registerJsFile($this->getScriptUrl());
+        Craft::$app->getView()->registerJsFile($this->getScriptUrl(), [], 'htmx');
 
         if ($this->_loadPreloadExtension) {
             Craft::$app->getView()->registerJsFile($this->getPreloadScriptUrl());

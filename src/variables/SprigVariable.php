@@ -30,16 +30,6 @@ class SprigVariable
     }
 
     /**
-     * Returns the URL to the script file.
-     *
-     * @since 2.6.0
-     */
-    public function getScriptUrl(): string
-    {
-        return Sprig::$core->components->getScriptUrl();
-    }
-
-    /**
      * Returns the htmx version number.
      *
      * @since 2.6.0
@@ -122,6 +112,14 @@ class SprigVariable
             'name' => 'htmx-config',
             'content' => json_encode($options),
         ], 'htmx-config');
+    }
+
+    /**
+     * Sets the script URL that should be used.
+     */
+    public function setScriptUrl(string $url): void
+    {
+        Sprig::$core->components->setScriptUrl($url);
     }
 
     /**
