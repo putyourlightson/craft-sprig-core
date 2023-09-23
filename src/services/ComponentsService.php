@@ -15,6 +15,7 @@ use craft\helpers\UrlHelper;
 use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\components\RefreshOnLoad;
+use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
@@ -625,15 +626,15 @@ class ComponentsService extends BaseComponent
         ];
 
         if ($value instanceof ElementInterface) {
-            $this->_throwError('element', $variable, $isArray);
+            $this->_throwInvalidVariableError('element', $variable, $isArray);
         }
 
         if ($value instanceof Model) {
-            $this->_throwError('model', $variable, $isArray);
+            $this->_throwInvalidVariableError('model', $variable, $isArray);
         }
 
         if (is_object($value)) {
-            $this->_throwError('object', $variable, $isArray);
+            $this->_throwInvalidVariableError('object', $variable, $isArray);
         }
 
         if (is_array($value)) {
@@ -655,7 +656,7 @@ class ComponentsService extends BaseComponent
         }
 
         if (is_object($value)) {
-            $this->_throwError($name, $value, $isArray);
+            $this->_throwInvalidVariableError($name, $value, $isArray);
         }
     }
 
@@ -672,9 +673,9 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Throws an error from a rendered template.
+     * Throws an invalid variable error.
      */
-    private function _throwError(string $name, mixed $value, bool $isArray = false): void
+    private function _throwInvalidVariableError(string $name, mixed $value, bool $isArray = false): void
     {
         $variables = [
             'name' => $name,
@@ -685,6 +686,14 @@ class ComponentsService extends BaseComponent
             'className' => $value::class,
             'componentName' => $this->_componentName,
         ];
+
+        if (Craft::$app->getConfig()->getGeneral()->devMode === false) {
+            throw new BadRequestHttpException('Invalid variable.');
+        }
+
+        if (Craft::$app->getPlugins()->getPlugin('canary') !== null) {
+            throw new FriendlyInvalidVariableException($variables);
+        }
 
         $content = Craft::$app->getView()->renderPageTemplate('sprig-core/_error', $variables, View::TEMPLATE_MODE_CP);
 

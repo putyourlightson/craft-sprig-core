@@ -11,12 +11,14 @@
 - Added the [s-disabled-elt](https://putyourlightson.com/plugins/sprig#s-disabled-elt) attribute that allows you to specify elements that will have the disabled attribute added to them for the duration of the request.
 - Added the `sprig.htmxVersion` tag.
 - Added the `sprig.setAddScripts()` tag.
+- Added friendly invalid variable exceptions that are shown when the [Canary](https://plugins.craftcms.com/canary) plugin is installed.
 
 ### Changed
 
 - The htmx script is now automatically injected into the end of the page whenever the `sprig()` function is called, meaning that the `sprig.script` tag is no longer required and can be safely removed.
 - Updated htmx to version 1.9.6 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#196---2023-09-22)).
 - Simplified and improved invalid variable error messages.
+- Invalid variable error messages are now only shown when `devMode` is turned on.
 
 ### Fixed
 
