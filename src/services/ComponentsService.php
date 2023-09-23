@@ -15,7 +15,7 @@ use craft\helpers\UrlHelper;
 use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\components\RefreshOnLoad;
-use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
+use putyourlightson\sprig\errors\InvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
@@ -687,12 +687,11 @@ class ComponentsService extends BaseComponent
             'componentName' => $this->_componentName,
         ];
 
-        if (Craft::$app->getConfig()->getGeneral()->devMode === false) {
-            throw new BadRequestHttpException('Invalid variable.');
-        }
-
-        if (Craft::$app->getPlugins()->getPlugin('canary') !== null) {
-            throw new FriendlyInvalidVariableException($variables);
+        // Only thrown an exception if Canary is enabled or devMode is off.
+        if (Craft::$app->getPlugins()->getPlugin('canary') !== null
+            || Craft::$app->getConfig()->getGeneral()->devMode === false
+        ) {
+            throw new InvalidVariableException($variables);
         }
 
         $content = Craft::$app->getView()->renderPageTemplate('sprig-core/_error', $variables, View::TEMPLATE_MODE_CP);

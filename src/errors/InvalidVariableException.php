@@ -7,9 +7,9 @@ namespace putyourlightson\sprig\errors;
 
 use Craft;
 use craft\web\View;
-use yii\web\HttpException;
+use yii\web\BadRequestHttpException;
 
-class FriendlyInvalidVariableException extends HttpException
+class InvalidVariableException extends BadRequestHttpException
 {
     private array $_variables;
 
@@ -19,9 +19,13 @@ class FriendlyInvalidVariableException extends HttpException
     public function __construct(array $variables = [])
     {
         $this->_variables = $variables;
-        $message = 'Invalid variable `' . $variables['name'] . '` passed into `' . $variables['componentName'] . '`.';
+        $message = 'Invalid variable.';
 
-        parent::__construct(400, $message);
+        if (Craft::$app->getConfig()->getGeneral()->devMode === true) {
+            $message = 'Invalid variable `' . $variables['name'] . '` passed into `' . $variables['componentName'] . '`.';
+        }
+
+        parent::__construct($message);
     }
 
     /**
