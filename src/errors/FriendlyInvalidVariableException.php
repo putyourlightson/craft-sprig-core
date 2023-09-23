@@ -9,7 +9,7 @@ use Craft;
 use craft\web\View;
 use yii\web\BadRequestHttpException;
 
-class InvalidVariableException extends BadRequestHttpException
+class FriendlyInvalidVariableException extends BadRequestHttpException
 {
     private array $_variables;
 
