@@ -21,6 +21,7 @@
 ### Fixed
 
 - Fixed the response status code that is sent when required request parameters are not supplied ([#325](https://github.com/putyourlightson/craft-sprig/issues/325)).
+- Fixed a potential security issue.
 
 ### Deprecated
 

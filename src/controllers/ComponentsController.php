@@ -15,6 +15,7 @@ use craft\web\UrlManager;
 use craft\web\UrlRule;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 class ComponentsController extends Controller
@@ -23,6 +24,18 @@ class ComponentsController extends Controller
      * @inheritdoc
      */
     protected int|bool|array $allowAnonymous = true;
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action): bool
+    {
+        if ($this->request->getIsCpRequest() && Craft::$app->getUser()->getIdentity()->can('accessCp') === false) {
+            throw new ForbiddenHttpException();
+        }
+
+        return parent::beforeAction($action);
+    }
 
     /**
      * Renders a component.
