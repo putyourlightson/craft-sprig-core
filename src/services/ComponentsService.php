@@ -29,8 +29,7 @@ use yii\web\Request;
 
 /**
  * @property-read string $scriptUrl
- * @property-read string $preloadScriptUrl
- * @property-write bool $addScripts
+ * @property-write bool $addScript
  */
 class ComponentsService extends BaseComponent
 {
@@ -77,7 +76,6 @@ class ComponentsService extends BaseComponent
         'cache',
         'listen',
         'method',
-        'preload',
         'replace',
         'val',
     ];
@@ -152,12 +150,7 @@ class ComponentsService extends BaseComponent
     /**
      * @var bool
      */
-    private bool $_addScripts = true;
-
-    /**
-     * @var bool
-     */
-    private bool $_loadPreloadExtension = false;
+    private bool $_addScript = true;
 
     /**
      * Returns the URL to the htmx script.
@@ -171,21 +164,11 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Returns the URL to the htmx preload extension script.
+     * Sets whether the script should be automatically added to the output.
      */
-    public function getPreloadScriptUrl(): string
+    public function setAddScript(bool $value): void
     {
-        $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/ext/preload.js';
-
-        return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
-    }
-
-    /**
-     * Sets whether scripts should be automatically added to the output.
-     */
-    public function setAddScripts(bool $value): void
-    {
-        $this->_addScripts = $value;
+        $this->_addScript = $value;
     }
 
     /**
@@ -275,10 +258,6 @@ class ComponentsService extends BaseComponent
             $attributes
         );
 
-        if ($this->_loadPreloadExtension) {
-            $this->_mergeCommaSeperatedAttribute($attributes, 'ext', 'preload');
-        }
-
         $this->_parseAttributes($attributes);
 
         $event->output = Html::tag('div', $content, $attributes);
@@ -287,12 +266,8 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->_addScripts === true) {
+        if ($this->_addScript === true) {
             Craft::$app->getView()->registerJsFile($this->getScriptUrl(), [], 'htmx');
-
-            if ($this->_loadPreloadExtension) {
-                Craft::$app->getView()->registerJsFile($this->getPreloadScriptUrl(), [], 'htmx-preload');
-            }
         }
 
         return Template::raw($event->output);
@@ -489,11 +464,6 @@ class ComponentsService extends BaseComponent
             $cssSelectors = StringHelper::split($value);
             $triggers = array_map(fn($selector) => 'htmx:afterOnLoad from:' . $selector, $cssSelectors);
             $attributes[self::HTMX_PREFIX . 'trigger'] = join(',', $triggers);
-        } elseif ($name == 'preload') {
-            if (Component::getIsInclude()) {
-                $attributes['preload'] = $value === true ? 'preload:init' : $value;
-                $this->_loadPreloadExtension = true;
-            }
         } elseif ($name == 'replace') {
             $attributes[self::HTMX_PREFIX . 'select'] = $value;
             $attributes[self::HTMX_PREFIX . 'target'] = $value;
@@ -527,21 +497,6 @@ class ComponentsService extends BaseComponent
         }
 
         $attributes[$key] = Json::htmlEncode($values);
-    }
-
-    /**
-     * Merges a new value to existing comma seperated attribute values.
-     */
-    private function _mergeCommaSeperatedAttribute(array &$attributes, string $name, string $value): void
-    {
-        $key = self::HTMX_PREFIX . $name;
-        $values = empty($attributes[$key]) ? [] : explode(',', $attributes[$key]);
-
-        if (!in_array($value, $values)) {
-            $values[] = $value;
-        }
-
-        $attributes[$key] = implode(',', $values);
     }
 
     /**

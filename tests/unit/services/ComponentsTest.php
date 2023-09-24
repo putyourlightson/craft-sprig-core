@@ -8,12 +8,12 @@ namespace putyourlightson\sprigcoretests\unit\services;
 use Codeception\Test\Unit;
 use Craft;
 use craft\elements\Entry;
+use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use UnitTester;
 use yii\base\Application;
-use yii\base\ExitException;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
 use yii\web\Request;
@@ -54,18 +54,16 @@ class ComponentsTest extends Unit
         $this->_testScriptExistsLocally();
     }
 
-    public function testScriptsAdded()
+    public function testScriptAdded()
     {
         Craft::$app->getView()->jsFiles = [];
-        Sprig::$core->components->create('_component', [], ['preload' => true]);
-        $this->assertTrue($this->_testJsFileKeyExists('htmx'));
-        $this->assertTrue($this->_testJsFileKeyExists('htmx-preload'));
+        Sprig::$core->components->create('_component');
+        $this->assertTrue($this->_testJsFileKeyExists());
 
         Craft::$app->getView()->jsFiles = [];
-        Sprig::$core->components->setAddScripts(false);
-        Sprig::$core->components->create('_component', [], ['preload' => true]);
-        $this->assertFalse($this->_testJsFileKeyExists('htmx'));
-        $this->assertFalse($this->_testJsFileKeyExists('htmx-preload'));
+        Sprig::$core->components->setAddScript(false);
+        Sprig::$core->components->create('_component');
+        $this->assertFalse($this->_testJsFileKeyExists());
     }
 
     public function testCreate()
@@ -242,17 +240,6 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString('data-hx-headers="{&quot;S-Cache&quot;:&quot;10&quot;}"', $html);
     }
 
-    public function testGetParsedTagAttributesPreload()
-    {
-        $html = '<div s-preload></div>';
-        $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('preload="preload:init"', $html);
-
-        $html = '<div s-preload="mouseover"></div>';
-        $html = Sprig::$core->components->parse($html);
-        $this->assertStringContainsString('preload="mouseover"', $html);
-    }
-
     public function testGetParsedTagAttributesOn()
     {
         $html = '<div s-on:htmx:before-request="a"></div>';
@@ -377,12 +364,12 @@ class ComponentsTest extends Unit
          *
          * @see Application::end()
          */
-        $this->expectException(ExitException::class);
+        $this->expectException(FriendlyInvalidVariableException::class);
 
         Sprig::$core->components->create('_component', $variables);
     }
 
-    private function _testJsFileKeyExists(string $key): bool
+    private function _testJsFileKeyExists(): bool
     {
         foreach (Craft::$app->getView()->jsFiles as $jsFile) {
             if (!empty($jsFile['htmx'])) {

@@ -108,7 +108,7 @@ class SprigVariable
      */
     public function setAddScripts(bool $value): void
     {
-        Sprig::$core->components->setAddScripts($value);
+        Sprig::$core->components->setAddScript($value);
     }
 
     /**
