@@ -6,25 +6,28 @@
 
 - Added the Sprig component generator that scaffolds PHP components via a console command (`php craft make sprig-component --path sprig/components`).
 - Added the [s-cache](https://putyourlightson.com/plugins/sprig#s-cache) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
-- Added the [s-preload](https://putyourlightson.com/plugins/sprig#s-preload) attribute that allows you to specify if and for how long a request should be cached locally in the browser.
 - Added the [s-on:*](https://putyourlightson.com/plugins/sprig#s-on) attribute that allows you to respond to events directly on an element.
+- Added the [s-disabled-elt](https://putyourlightson.com/plugins/sprig#s-disabled-elt) attribute that allows you to specify elements that will have the disabled attribute added to them for the duration of the request.
 - Added the `sprig.htmxVersion` tag.
 - Added the `sprig.setAddScripts()` tag.
+- Added friendly invalid variable exceptions that are shown when the [Canary](https://plugins.craftcms.com/canary) plugin is installed.
 
 ### Changed
 
 - The htmx script is now automatically injected into the end of the page whenever the `sprig()` function is called, meaning that the `sprig.script` tag is no longer required and can be safely removed.
-- Updated htmx to version 1.9.5 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#195---2023-08-25)).
+- Updated htmx to version 1.9.6 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#196---2023-09-22)).
 - Simplified and improved invalid variable error messages.
+- Invalid variable error messages are now only shown when `devMode` is turned on.
 
 ### Fixed
 
 - Fixed the response status code that is sent when required request parameters are not supplied ([#325](https://github.com/putyourlightson/craft-sprig/issues/325)).
+- Fixed a potential security issue.
 
 ### Deprecated
 
 - Deprecated the `sprig.script` tag. It is no longer required and can be safely removed.
-- Deprecated the `s-on` attribute.
+- Deprecated the `s-on` attribute. Use the `s-on:*` attribute instead.
 
 ## 2.5.2 - 2023-05.01
 
