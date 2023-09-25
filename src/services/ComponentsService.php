@@ -20,6 +20,8 @@ use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use putyourlightson\sprig\Sprig;
+use putyourlightson\sprig\web\assets\HtmxAssetBundle;
+use putyourlightson\sprig\web\assets\HtmxPreloadAssetBundle;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
@@ -266,8 +268,8 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->_addScript === true) {
-            Craft::$app->getView()->registerJsFile($this->getScriptUrl(), [], 'htmx');
+        if ($this->_addScripts === true) {
+            Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
         }
 
         return Template::raw($event->output);
