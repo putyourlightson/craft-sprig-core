@@ -13,6 +13,7 @@ use craft\helpers\StringHelper;
 use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\View;
+use putyourlightson\sprig\assets\HtmxAssetBundle;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\components\RefreshOnLoad;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
@@ -20,8 +21,6 @@ use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\web\assets\HtmxAssetBundle;
-use putyourlightson\sprig\web\assets\HtmxPreloadAssetBundle;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
@@ -268,7 +267,7 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->_addScripts === true) {
+        if ($this->_addScript === true) {
             Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
         }
 
