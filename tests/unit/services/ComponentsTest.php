@@ -8,6 +8,7 @@ namespace putyourlightson\sprigcoretests\unit\services;
 use Codeception\Test\Unit;
 use Craft;
 use craft\elements\Entry;
+use putyourlightson\sprig\assets\HtmxAssetBundle;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
@@ -40,30 +41,25 @@ class ComponentsTest extends Unit
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
     }
 
-    public function testScriptExistsForDev()
+    public function testScriptExistsLocally()
     {
-        Craft::$app->getConfig()->env = 'dev';
+        $url = Sprig::$core->components->getScriptUrl();
+        preg_match('/cpresources(.*?)\?v=/', $url, $matches);
+        $path = Craft::getAlias(Craft::$app->config->general->resourceBasePath) . $matches[1];
 
-        $this->_testScriptExistsLocally();
-    }
-
-    public function testScriptExistsForProduction()
-    {
-        Craft::$app->getConfig()->env = 'production';
-
-        $this->_testScriptExistsLocally();
+        $this->assertFileExists($path);
     }
 
     public function testScriptAdded()
     {
-        Craft::$app->getView()->jsFiles = [];
+        Craft::$app->assetManager->bundles = [];
         Sprig::$core->components->create('_component');
-        $this->assertTrue($this->_testJsFileKeyExists());
+        $this->assertTrue($this->_testHtmxAssetBundleIsRegistered());
 
-        Craft::$app->getView()->jsFiles = [];
+        Craft::$app->assetManager->bundles = [];
         Sprig::$core->components->setAddScript(false);
         Sprig::$core->components->create('_component');
-        $this->assertFalse($this->_testJsFileKeyExists());
+        $this->assertFalse($this->_testHtmxAssetBundleIsRegistered());
     }
 
     public function testCreate()
@@ -336,15 +332,6 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString($placeholder, $result);
     }
 
-    private function _testScriptExistsLocally(): void
-    {
-        $url = Sprig::$core->components->getScriptUrl();
-        preg_match('/cpresources(.*?)\?v=/', $url, $matches);
-        $path = Craft::getAlias(Craft::$app->getConfig()->getGeneral()->resourceBasePath) . $matches[1];
-
-        $this->assertFileExists($path);
-    }
-
     private function _testCreateVariable(array $variables): void
     {
         $this->tester->mockCraftMethods('view', ['doesTemplateExist' => true]);
@@ -369,14 +356,8 @@ class ComponentsTest extends Unit
         Sprig::$core->components->create('_component', $variables);
     }
 
-    private function _testJsFileKeyExists(): bool
+    private function _testHtmxAssetBundleIsRegistered(): bool
     {
-        foreach (Craft::$app->getView()->jsFiles as $jsFile) {
-            if (!empty($jsFile['htmx'])) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_key_exists(HtmxAssetBundle::class, Craft::$app->assetManager->bundles);
     }
 }
