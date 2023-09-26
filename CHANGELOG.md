@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.6.0 - Unreleased
+## 2.6.0 - 2023-09-26
 
 ### Added
 
@@ -29,7 +29,7 @@
 - Deprecated the `sprig.script` tag. It is no longer required and can be safely removed.
 - Deprecated the `s-on` attribute. Use the `s-on:*` attribute instead.
 
-## 2.5.2 - 2023-05.01
+## 2.5.2 - 2023-05-01
 
 ### Changed
 
