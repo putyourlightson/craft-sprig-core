@@ -158,8 +158,8 @@ class ComponentsService extends BaseComponent
      */
     public function getScriptUrl(): ?string
     {
-        $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/';
-        $path .= Craft::$app->getConfig()->env == 'dev' ? 'htmx.js' : 'htmx.min.js';
+        Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
+        $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/htmx.min.js';
 
         return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
     }
