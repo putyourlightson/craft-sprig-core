@@ -104,9 +104,9 @@ class SprigVariable
     }
 
     /**
-     * Sets whether scripts should be automatically added to the output.
+     * Sets whether the script should be automatically added to the output.
      */
-    public function setAddScripts(bool $value): void
+    public function setAddScript(bool $value): void
     {
         Sprig::$core->components->setAddScript($value);
     }

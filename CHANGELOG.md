@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.6.1 - 2023-09-26
+
+### Changed
+
+- Renamed the `sprig.setAddScripts()` tag to `sprig.setAddScript()`.
+
 ## 2.6.0 - 2023-09-26
 
 ### Added
