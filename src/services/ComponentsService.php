@@ -128,12 +128,7 @@ class ComponentsService extends BaseComponent
     public const HTMX_PREFIX = 'data-hx-';
 
     /**
-     * @const string
-     */
-    public const HTMX_SCRIPT_BASE_PATH = '@putyourlightson/sprig/resources/lib/htmx/';
-
-    /**
-     * @const string The htmx version to load (must exist in `HTMX_SCRIPT_BASE_PATH`).
+     * @const string The htmx version to load (must exist in `resources/lib/htmx/`).
      * Downloaded from https://unpkg.com/htmx.org
      */
     public const HTMX_VERSION = '1.9.6';
@@ -158,8 +153,8 @@ class ComponentsService extends BaseComponent
      */
     public function getScriptUrl(): ?string
     {
-        Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
-        $path = self::HTMX_SCRIPT_BASE_PATH . self::HTMX_VERSION . '/htmx.min.js';
+        $bundle = Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
+        $path = $bundle->sourcePath . '/htmx.min.js';
 
         return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
     }

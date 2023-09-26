@@ -7,10 +7,10 @@ use putyourlightson\sprig\services\ComponentsService;
 
 class HtmxAssetBundle extends AssetBundle
 {
+    public $sourcePath = '@putyourlightson/sprig/resources/lib/htmx/' . ComponentsService::HTMX_VERSION;
+
     public function init(): void
     {
-        $this->sourcePath = '@putyourlightson/sprig/resources/lib/htmx/' . ComponentsService::HTMX_VERSION;
-
         $this->js = [
             'htmx.min.js',
         ];
