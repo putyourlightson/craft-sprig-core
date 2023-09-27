@@ -40,6 +40,20 @@ Then use the Sprig function and tags as normal in your control panel templates.
 {{ sprig('_components/search') }}
 ```
 
+If your plugin/module registers an asset bundle that depends on htmx being loaded, ensure that you specify the `HtmxAssetBundle` class as a dependency.
+
+```php
+use craft\web\AssetBundle;
+use putyourlightson\sprig\assets\HtmxAssetBundle;
+
+class MyAssetBundle extends AssetBundle
+{
+    public $depends = [
+        HtmxAssetBundle::class,
+    ];
+}
+```
+
 Sprig plugin issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
 
 Sprig plugin changes are documented in https://github.com/putyourlightson/craft-sprig/blob/develop/CHANGELOG.md
