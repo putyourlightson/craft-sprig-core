@@ -157,7 +157,7 @@ class Sprig extends Module
         if (Craft::getLogger()->dispatcher) {
             Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
                 'name' => 'sprig',
-                'categories' => ['sprig'],
+                'categories' => ['putyourlightson\sprig\*'],
                 'level' => LogLevel::INFO,
                 'logContext' => false,
                 'allowLineBreaks' => false,

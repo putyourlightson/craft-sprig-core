@@ -24,7 +24,6 @@ use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
-use yii\log\Logger;
 use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
@@ -335,7 +334,7 @@ class ComponentsService extends BaseComponent
         }
 
         if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR) {
-            Craft::getLogger()->log('Backtrack limit was exhausted!', Logger::LEVEL_ERROR, 'sprig');
+            Craft::error('Backtrack limit was exhausted!', __METHOD__);
         }
 
         return $matches[0] ?? [];
@@ -353,7 +352,7 @@ class ComponentsService extends BaseComponent
 
             $attributes = Html::parseTagAttributes($tag);
         } catch (InvalidArgumentException $exception) {
-            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'sprig');
+            Craft::error($exception->getMessage(), __METHOD__);
 
             return null;
         }
