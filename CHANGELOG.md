@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.6.2 - 2023-09-27
+
+### Changed
+
+- Changed the asset bundle source to use a relative path instead of an alias.
+
 ## 2.6.1 - 2023-09-26
 
 ### Changed

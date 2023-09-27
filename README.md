@@ -38,8 +38,6 @@ Then use the Sprig function and tags as normal in your control panel templates.
 
 ```twig
 {{ sprig('_components/search') }}
-
-{{ sprig.script }}
 ```
 
 Sprig plugin issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
