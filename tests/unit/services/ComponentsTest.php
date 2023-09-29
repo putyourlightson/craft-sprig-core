@@ -59,7 +59,7 @@ class ComponentsTest extends Unit
         $this->assertTrue($this->_testHtmxAssetBundleIsRegistered());
 
         Craft::$app->assetManager->bundles = [];
-        Sprig::$core->components->setAddScript(false);
+        Sprig::$core->components->setRegisterScript(false);
         Sprig::$core->components->create('_component');
         $this->assertFalse($this->_testHtmxAssetBundleIsRegistered());
     }

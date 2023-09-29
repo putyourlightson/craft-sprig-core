@@ -146,7 +146,7 @@ class ComponentsService extends BaseComponent
     /**
      * @var bool
      */
-    private bool $_addScript = true;
+    private bool $_registerScript = true;
 
     /**
      * Registers the script and returns the asset bundle.
@@ -157,11 +157,11 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Sets whether the script should be automatically added to the output.
+     * Sets whether the script should automatically be registered.
      */
-    public function setAddScript(bool $value): void
+    public function setRegisterScript(bool $value): void
     {
-        $this->_addScript = $value;
+        $this->_registerScript = $value;
     }
 
     /**
@@ -259,7 +259,7 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->_addScript === true) {
+        if ($this->_registerScript === true) {
             $this->registerScript();
         }
 

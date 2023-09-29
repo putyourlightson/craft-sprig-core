@@ -6,6 +6,10 @@
 
 - Added the `sprig.registerScript()` function ([#329](https://github.com/putyourlightson/craft-sprig/issues/329)).
 
+### Changed
+
+- Renamed the `sprig.setAddScript()` function to `sprig.setRegisterScript()`.
+
 ## 2.6.2 - 2023-09-27
 
 ### Changed
