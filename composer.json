@@ -1,7 +1,7 @@
 {
   "name": "putyourlightson/craft-sprig-core",
   "description": "A reactive Twig component framework for Craft.",
-  "version": "2.6.2",
+  "version": "2.6.3",
   "type": "craft-module",
   "license": "mit",
   "require": {

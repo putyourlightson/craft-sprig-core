@@ -24,6 +24,7 @@ use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
+use yii\web\AssetBundle;
 use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
@@ -148,14 +149,11 @@ class ComponentsService extends BaseComponent
     private bool $_addScript = true;
 
     /**
-     * Returns the URL to the htmx script.
+     * Registers the script and returns the asset bundle.
      */
-    public function getScriptUrl(): ?string
+    public function registerScript(): AssetBundle
     {
-        $bundle = Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
-        $path = $bundle->sourcePath . '/htmx.min.js';
-
-        return Craft::$app->getAssetManager()->getPublishedUrl($path, true);
+        return Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
     }
 
     /**
@@ -262,7 +260,7 @@ class ComponentsService extends BaseComponent
         }
 
         if ($this->_addScript === true) {
-            Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
+            $this->registerScript();
         }
 
         return Template::raw($event->output);

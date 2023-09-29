@@ -43,7 +43,9 @@ class ComponentsTest extends Unit
 
     public function testScriptExistsLocally()
     {
-        $url = Sprig::$core->components->getScriptUrl();
+        $bundle = Sprig::$core->components->registerScript();
+        $path = $bundle->sourcePath . '/htmx.min.js';
+        $url = Craft::$app->getAssetManager()->getPublishedUrl($path, true);
         preg_match('/cpresources(.*?)\?v=/', $url, $matches);
         $path = Craft::getAlias(Craft::$app->config->general->resourceBasePath) . $matches[1];
 

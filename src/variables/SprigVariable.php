@@ -14,6 +14,7 @@ use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\db\Query;
+use yii\web\AssetBundle;
 
 class SprigVariable
 {
@@ -101,6 +102,14 @@ class SprigVariable
     public function getUrl(): string
     {
         return Component::getUrl();
+    }
+
+    /**
+     *  Registers the script and returns the asset bundle.
+     */
+    public function registerScript(): AssetBundle
+    {
+        return Sprig::$core->components->registerScript();
     }
 
     /**
