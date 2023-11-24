@@ -8,6 +8,8 @@ namespace putyourlightson\sprig\services;
 use Craft;
 use craft\base\Component as BaseComponent;
 use craft\base\ElementInterface;
+use craft\base\Event;
+use craft\events\AssetBundleEvent;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\helpers\Template;
@@ -29,8 +31,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
 /**
- * @property-read string $scriptUrl
- * @property-write bool $addScript
+ * @property-write bool|array $registerScript
  */
 class ComponentsService extends BaseComponent
 {
@@ -144,22 +145,30 @@ class ComponentsService extends BaseComponent
     private ?string $_sprigActionUrl = null;
 
     /**
-     * @var bool
+     * @var bool|array
      */
-    private bool $_registerScript = true;
+    private bool|array $_registerScript = true;
 
     /**
      * Registers the script and returns the asset bundle.
      */
-    public function registerScript(): AssetBundle
+    public function registerScript(array $attributes = []): AssetBundle
     {
+        Event::on(View::class, View::EVENT_AFTER_REGISTER_ASSET_BUNDLE,
+            function(AssetBundleEvent $event) use ($attributes) {
+                if ($event->bundle instanceof HtmxAssetBundle) {
+                    $event->bundle->jsOptions = $attributes;
+                }
+            }
+        );
+
         return Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
     }
 
     /**
      * Sets whether the script should automatically be registered.
      */
-    public function setRegisterScript(bool $value): void
+    public function setRegisterScript(bool|array $value): void
     {
         $this->_registerScript = $value;
     }
@@ -259,8 +268,9 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->_registerScript === true) {
-            $this->registerScript();
+        if ($this->_registerScript !== false) {
+            $attributes = is_array($this->_registerScript) ? $this->_registerScript : [];
+            $this->registerScript($attributes);
         }
 
         return Template::raw($event->output);

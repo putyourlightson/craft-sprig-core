@@ -64,6 +64,17 @@ class ComponentsTest extends Unit
         $this->assertFalse($this->_testHtmxAssetBundleIsRegistered());
     }
 
+    public function testScriptAddedWithAttributes()
+    {
+        Craft::$app->assetManager->bundles = [];
+        Sprig::$core->components->setRegisterScript(['data-x' => 1]);
+        Sprig::$core->components->create('_component');
+        $this->assertTrue($this->_testHtmxAssetBundleIsRegistered());
+
+        $htmxAssetBundle = Craft::$app->assetManager->getBundle(HtmxAssetBundle::class);
+        $this->assertEquals(1, $htmxAssetBundle->jsOptions['data-x'] ?? null);
+    }
+
     public function testCreate()
     {
         $markup = Sprig::$core->components->create(

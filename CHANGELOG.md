@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.6.4 - Unreleased
+
+### Added
+
+- Added the ability to pass script tag attributes via the `sprig.registerScript()` and `sprig.setRegisterScript()` functions ([#338](https://github.com/putyourlightson/craft-sprig/issues/338)).
+
 ## 2.6.3 - 2023-09-29
 
 ### Added

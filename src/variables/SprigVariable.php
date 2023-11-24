@@ -107,15 +107,15 @@ class SprigVariable
     /**
      *  Registers the script and returns the asset bundle.
      */
-    public function registerScript(): AssetBundle
+    public function registerScript(array $attributes = []): AssetBundle
     {
-        return Sprig::$core->components->registerScript();
+        return Sprig::$core->components->registerScript($attributes);
     }
 
     /**
      * Sets whether the script should automatically be registered.
      */
-    public function setRegisterScript(bool $value): void
+    public function setRegisterScript(bool|array $value): void
     {
         Sprig::$core->components->setRegisterScript($value);
     }
