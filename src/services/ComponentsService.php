@@ -131,6 +131,8 @@ class ComponentsService extends BaseComponent
     /**
      * @const string The htmx version to load (must exist in `resources/lib/htmx/`).
      * Downloaded from https://unpkg.com/htmx.org
+     *
+     * @since 2.6.0
      */
     public const HTMX_VERSION = '1.9.6';
 
@@ -151,6 +153,8 @@ class ComponentsService extends BaseComponent
 
     /**
      * Registers the script and returns the asset bundle.
+     *
+     * @since 2.6.3
      */
     public function registerScript(array $attributes = []): AssetBundle
     {
@@ -167,10 +171,25 @@ class ComponentsService extends BaseComponent
 
     /**
      * Sets whether the script should automatically be registered.
+     *
+     * @since 2.6.3
      */
     public function setRegisterScript(bool|array $value): void
     {
         $this->_registerScript = $value;
+    }
+
+    /**
+     * Sets config options and registers them as a meta tag.
+     *
+     * @since 2.6.4
+     */
+    public function setConfig(array $options = []): void
+    {
+        Craft::$app->getView()->registerMetaTag([
+            'name' => 'htmx-config',
+            'content' => json_encode($options),
+        ], 'htmx-config');
     }
 
     /**

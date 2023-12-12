@@ -105,7 +105,9 @@ class SprigVariable
     }
 
     /**
-     *  Registers the script and returns the asset bundle.
+     * Registers the script and returns the asset bundle.
+     *
+     * @since 2.6.3
      */
     public function registerScript(array $attributes = []): AssetBundle
     {
@@ -114,6 +116,8 @@ class SprigVariable
 
     /**
      * Sets whether the script should automatically be registered.
+     *
+     * @since 2.6.3
      */
     public function setRegisterScript(bool|array $value): void
     {
@@ -122,13 +126,12 @@ class SprigVariable
 
     /**
      * Sets config options and registers them as a meta tag.
+     *
+     * @since 2.5.0
      */
     public function setConfig(array $options = []): void
     {
-        Craft::$app->getView()->registerMetaTag([
-            'name' => 'htmx-config',
-            'content' => json_encode($options),
-        ], 'htmx-config');
+        Sprig::$core->components->setConfig($options);
     }
 
     /**
