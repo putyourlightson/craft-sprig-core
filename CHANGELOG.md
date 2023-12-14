@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.6.5 - 2023-12-14
+
+### Fixed
+
+- Fixed a bug in which an event introduced in Craft 4.5.0 was being used without first checking for its existence ([#344](https://github.com/putyourlightson/craft-sprig/issues/344)).
+
 ## 2.6.4 - 2023-12-12
 
 ### Added
