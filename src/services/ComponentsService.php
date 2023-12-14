@@ -160,7 +160,7 @@ class ComponentsService extends BaseComponent
     {
         /**
          * View::EVENT_AFTER_REGISTER_ASSET_BUNDLE was added in Craft 4.5.0.
-         * TODO: Remove the outer condition in Blitz 5.
+         * TODO: Remove the outer condition in Sprig Core 3.
          */
         if (defined(View::EVENT_AFTER_REGISTER_ASSET_BUNDLE)) {
             Event::on(View::class, View::EVENT_AFTER_REGISTER_ASSET_BUNDLE,
