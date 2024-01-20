@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.6.7 - Unreleased
+
+### Fixed
+
+- Fixed a bug with the set user password action ([#348](https://github.com/putyourlightson/craft-sprig/issues/348)).
+
 ## 2.6.6 - 2023-12-15
 
 ### Fixed

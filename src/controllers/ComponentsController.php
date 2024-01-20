@@ -156,17 +156,14 @@ class ComponentsController extends Controller
     {
         Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
 
-        // The set password action requires
-
         $actionResponse = Craft::$app->runAction($action);
 
         $variables = [
             'success' => $actionResponse->getIsOk(),
-            'message' => $actionResponse->data['message'],
+            'message' => $actionResponse->data['message'] ?? '',
         ];
 
         if (!$actionResponse->getIsOk()) {
-            unset($actionResponse->data['message']);
             $variables['errors'] = $actionResponse->data;
         }
 
