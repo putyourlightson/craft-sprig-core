@@ -12,7 +12,15 @@
     "codeception/codeception": "^4.1.29",
     "codeception/module-asserts": "^1.3.1",
     "codeception/module-yii2": "^1.1.5",
+    "craftcms/ecs": "dev-main",
+    "craftcms/phpstan": "dev-main",
     "vlucas/phpdotenv": "^5.4.1"
+  },
+  "scripts": {
+    "phpstan": "phpstan --ansi --memory-limit=1G",
+    "check-cs": "ecs check --ansi",
+    "fix-cs": "ecs check --fix --ansi",
+    "test": "codecept run unit"
   },
   "autoload": {
     "psr-4": {
