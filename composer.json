@@ -13,6 +13,7 @@
     "codeception/module-asserts": "^1.3.1",
     "codeception/module-yii2": "^1.1.5",
     "craftcms/ecs": "dev-main",
+    "craftcms/generator": "^1.0.0",
     "craftcms/phpstan": "dev-main",
     "vlucas/phpdotenv": "^5.4.1"
   },
