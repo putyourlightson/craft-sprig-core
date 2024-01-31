@@ -6,7 +6,8 @@
   "license": "mit",
   "require": {
     "php": "^8.0.2",
-    "craftcms/cms": "^4.0.0"
+    "craftcms/cms": "^4.0.0",
+    "putyourlightson/craft-sprig": "^2.0.0"
   },
   "require-dev": {
     "codeception/codeception": "^4.1.29",
