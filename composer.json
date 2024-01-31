@@ -22,6 +22,14 @@
     "fix-cs": "ecs check --fix --ansi",
     "test": "codecept run unit"
   },
+  "config": {
+    "allow-plugins": {
+      "craftcms/plugin-installer": true,
+      "yiisoft/yii2-composer": true
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
   "autoload": {
     "psr-4": {
       "putyourlightson\\sprig\\": "src/"
