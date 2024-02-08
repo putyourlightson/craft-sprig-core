@@ -311,7 +311,7 @@ class ComponentsService extends BaseComponent
             return new RefreshOnLoad(['variables' => $variables]);
         }
 
-        if ($component == 'SprigPlayground') {
+        if ($component == 'SprigPlayground' && class_exists(SprigPlayground::class)) {
             return new SprigPlayground(['variables' => $variables]);
         }
 
