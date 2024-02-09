@@ -11,7 +11,6 @@ use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\helpers\ArrayHelper;
 use craft\web\Controller;
-use craft\web\UrlRule;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\web\ForbiddenHttpException;
@@ -101,25 +100,12 @@ class ComponentsController extends Controller
         }
 
         $actionResponse = Craft::$app->runAction($action);
-
-        if ($actionResponse->getIsOk()) {
-            $variables = $actionResponse->data;
-        } else {
-            $variables = ['errors' => $actionResponse->data];
-        }
-
+        $variables = $actionResponse->data;
         $variables['success'] = $actionResponse->getIsOk();
 
-        /**
-         * Merge and unset any variable called `variables`
-         * https://github.com/putyourlightson/craft-sprig/issues/94#issuecomment-771489394
-         *
-         * @see UrlRule::parseRequest()
-         */
-        if (isset($variables['variables'])) {
-            $variables = ArrayHelper::merge($variables, $variables['variables']);
-            unset($variables['variables']);
-        }
+        // Special handling for the Guest Entries plugin.
+        // https://github.com/craftcms/guest-entries/blob/main/README.md#submitting-via-ajax
+        $variables['success'] = $actionResponse->data['success'] ?? $variables['success'];
 
         // Override the `currentUser` global variable with a fresh version, in case it was just updated
         // https://github.com/putyourlightson/craft-sprig/issues/81#issuecomment-758619306
