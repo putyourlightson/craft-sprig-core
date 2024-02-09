@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.6.7 - Unreleased
+## 2.6.7 - 2024-02-08
 
 ### Fixed
 
