@@ -115,26 +115,13 @@ class SprigVariable
     }
 
     /**
-     * Sets whether the script should automatically be registered.
-     *
-     * @since 3.0.0
-     */
-    public function setShouldRegisterScript(bool|array $value): void
-    {
-        Sprig::$core->components->setShouldRegisterScript($value);
-    }
-
-    /**
-     * Sets whether the script should automatically be registered.
+     * Sets whether the script should automatically be registered, and optionally how.
      *
      * @since 2.6.3
-     * @deprecated in 3.0.0.
      */
-    public function setRegisterScript(bool|array $value): void
+    public function setRegisterScript(bool|array $value = true): void
     {
-        Craft::$app->getDeprecator()->log(__METHOD__, 'The `sprig.setRegisterScript()` function has been deprecated. Use `sprig.setShouldRegisterScript()` instead.');
-
-        Sprig::$core->components->setShouldRegisterScript($value);
+        Sprig::$core->components->setRegisterScript($value);
     }
 
     /**

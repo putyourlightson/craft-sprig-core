@@ -59,7 +59,7 @@ class ComponentsTest extends Unit
         $this->assertTrue($this->testHtmxAssetBundleIsRegistered());
 
         Craft::$app->assetManager->bundles = [];
-        Sprig::$core->components->setRegisterScript(false);
+        Sprig::$core->components->shouldRegisterScript(false);
         Sprig::$core->components->create('_component');
         $this->assertFalse($this->testHtmxAssetBundleIsRegistered());
     }
@@ -67,7 +67,7 @@ class ComponentsTest extends Unit
     public function testScriptAddedWithAttributes()
     {
         Craft::$app->assetManager->bundles = [];
-        Sprig::$core->components->setRegisterScript(['data-x' => 1]);
+        Sprig::$core->components->shouldRegisterScript(['data-x' => 1]);
         Sprig::$core->components->create('_component');
         $this->assertTrue($this->testHtmxAssetBundleIsRegistered());
 

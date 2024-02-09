@@ -31,7 +31,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
 /**
- * @property-write bool|array $registerScript
  * @property-write array $config
  */
 class ComponentsService extends BaseComponent
@@ -148,9 +147,9 @@ class ComponentsService extends BaseComponent
     private ?string $sprigActionUrl = null;
 
     /**
-     * @var bool|array
+     * @var bool|array Whether the script should be registered, and optionally how.
      */
-    private bool|array $shouldRegisterScript = true;
+    private bool|array $registerScript = true;
 
     /**
      * Registers the script and returns the asset bundle.
@@ -171,26 +170,13 @@ class ComponentsService extends BaseComponent
     }
 
     /**
-     * Sets whether the script should automatically be registered.
-     *
-     * @since 3.0.0
-     */
-    public function setShouldRegisterScript(bool|array $value): void
-    {
-        $this->shouldRegisterScript = $value;
-    }
-
-    /**
-     * Sets whether the script should automatically be registered.
+     * Sets whether the script should automatically be registered, and optionally how.
      *
      * @since 2.6.3
-     * @deprecated in 3.0.0.
      */
-    public function setRegisterScript(bool|array $value): void
+    public function setRegisterScript(bool|array $value = true): void
     {
-        Craft::$app->getDeprecator()->log(__METHOD__, 'The `Sprig::$plugin->components->setRegisterScript()` method has been deprecated. Use `Sprig::$plugin->components->setShouldRegisterScript()` instead.');
-
-        $this->setShouldRegisterScript($value);
+        $this->registerScript = $value;
     }
 
     /**
@@ -301,8 +287,8 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->shouldRegisterScript !== false) {
-            $attributes = is_array($this->shouldRegisterScript) ? $this->shouldRegisterScript : [];
+        if ($this->registerScript !== false) {
+            $attributes = is_array($this->registerScript) ? $this->registerScript : [];
             $this->registerScript($attributes);
         }
 

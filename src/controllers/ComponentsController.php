@@ -100,7 +100,7 @@ class ComponentsController extends Controller
             $this->registerSaveCurrentUserEvent();
         }
 
-        // Add a redirect to the body params, so we can extract the ID on success
+        // Add a redirect to the body params, so we can extract the ID on success.
         $redirectPrefix = 'https://';
         Craft::$app->getRequest()->setBodyParams(ArrayHelper::merge(
             Craft::$app->getRequest()->getBodyParams(),
@@ -109,13 +109,13 @@ class ComponentsController extends Controller
 
         $actionResponse = Craft::$app->runAction($action);
 
-        // Extract the variables from the route params which are generally set when there are errors
+        // Extract the variables from the route params which are generally set when there are errors.
         /** @var UrlManager $urlManager */
         $urlManager = Craft::$app->getUrlManager();
         $variables = $urlManager->getRouteParams() ?: [];
 
         /**
-         * Merge and unset any variable called `variables`
+         * Merge and unset any variable called `variables`.
          * https://github.com/putyourlightson/craft-sprig/issues/94#issuecomment-771489394
          *
          * @see UrlRule::parseRequest()
@@ -125,7 +125,7 @@ class ComponentsController extends Controller
             unset($variables['variables']);
         }
 
-        // Override the `currentUser` global variable with a fresh version, in case it was just updated
+        // Override the `currentUser` global variable with a fresh version, in case it was just updated.
         // https://github.com/putyourlightson/craft-sprig/issues/81#issuecomment-758619306
         $variables['currentUser'] = Craft::$app->getUser()->getIdentity();
 
@@ -170,7 +170,7 @@ class ComponentsController extends Controller
     }
 
     /**
-     * Registers an event when saving the current user
+     * Registers an event when saving the current user.
      */
     private function registerSaveCurrentUserEvent(): void
     {
@@ -186,7 +186,7 @@ class ComponentsController extends Controller
                 /** @var User $user */
                 $user = $event->sender;
 
-                // Update the user identity and regenerate the CSRF token in case the password was changed
+                // Update the user identity and regenerate the CSRF token, in case the password was changed.
                 // https://github.com/putyourlightson/craft-sprig/issues/136
                 Craft::$app->getUser()->setIdentity($user);
                 Craft::$app->getRequest()->regenCsrfToken();
