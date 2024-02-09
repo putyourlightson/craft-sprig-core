@@ -132,7 +132,7 @@ class SprigVariable
      */
     public function setRegisterScript(bool|array $value): void
     {
-        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.setRegisterScript()` has been deprecated. Use `sprig.setShouldRegisterScript()` instead.');
+        Craft::$app->getDeprecator()->log(__METHOD__, 'The `sprig.setRegisterScript()` function has been deprecated. Use `sprig.setShouldRegisterScript()` instead.');
 
         Sprig::$core->components->setShouldRegisterScript($value);
     }

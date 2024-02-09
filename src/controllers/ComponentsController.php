@@ -11,6 +11,7 @@ use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\helpers\ArrayHelper;
 use craft\web\Controller;
+use craft\web\UrlManager;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\web\ForbiddenHttpException;
@@ -91,31 +92,79 @@ class ComponentsController extends Controller
      */
     private function runActionInternal(string $action): array
     {
-        // Use a request that accepts JSON, so we can get all the data back.
-        // https://github.com/putyourlightson/craft-sprig/issues/301
-        Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
+        if ($action == 'users/set-password') {
+            return $this->runActionWithJsonRequest($action);
+        }
 
         if ($action == 'users/save-user') {
             $this->registerSaveCurrentUserEvent();
         }
 
-        $actionResponse = Craft::$app->runAction($action);
-        $variables = $actionResponse->data;
-        $variables['success'] = $actionResponse->getIsOk();
+        // Add a redirect to the body params, so we can extract the ID on success
+        $redirectPrefix = 'https://';
+        Craft::$app->getRequest()->setBodyParams(ArrayHelper::merge(
+            Craft::$app->getRequest()->getBodyParams(),
+            ['redirect' => Craft::$app->getSecurity()->hashData($redirectPrefix . '{id}')]
+        ));
 
-        // Special handling for the Guest Entries plugin.
-        // https://github.com/craftcms/guest-entries/blob/main/README.md#submitting-via-ajax
-        $variables['success'] = $actionResponse->data['success'] ?? $variables['success'];
+        $actionResponse = Craft::$app->runAction($action);
+
+        // Extract the variables from the route params which are generally set when there are errors
+        /** @var UrlManager $urlManager */
+        $urlManager = Craft::$app->getUrlManager();
+        $variables = $urlManager->getRouteParams() ?: [];
+
+        /**
+         * Merge and unset any variable called `variables`
+         * https://github.com/putyourlightson/craft-sprig/issues/94#issuecomment-771489394
+         *
+         * @see UrlRule::parseRequest()
+         */
+        if (isset($variables['variables'])) {
+            $variables = ArrayHelper::merge($variables, $variables['variables']);
+            unset($variables['variables']);
+        }
 
         // Override the `currentUser` global variable with a fresh version, in case it was just updated
         // https://github.com/putyourlightson/craft-sprig/issues/81#issuecomment-758619306
         $variables['currentUser'] = Craft::$app->getUser()->getIdentity();
 
-        // TODO: remove in v4
-        $variables['flashes'] = [
-            'notice' => $variables['message'] ?? '',
-            'error' => $variables['message'] ?? '',
+        $success = $actionResponse !== null;
+        $variables['success'] = $success;
+
+        if ($success) {
+            $response = Craft::$app->getResponse();
+
+            $variables['id'] = str_replace($redirectPrefix, '', $response->getHeaders()->get('location'));
+
+            // Remove the redirect header
+            $response->getHeaders()->remove('location');
+        }
+
+        // Set flash messages variable and delete them
+        $variables['flashes'] = Craft::$app->getSession()->getAllFlashes(true);
+
+        return $variables;
+    }
+
+    /**
+     * Runs the action with a JSON request for special case handling.
+     * https://github.com/putyourlightson/craft-sprig/issues/300
+     */
+    private function runActionWithJsonRequest(string $action): array
+    {
+        Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
+
+        $actionResponse = Craft::$app->runAction($action);
+
+        $variables = [
+            'success' => $actionResponse->getIsOk(),
+            'message' => $actionResponse->data['message'] ?? '',
         ];
+
+        if (!$actionResponse->getIsOk()) {
+            $variables['errors'] = $actionResponse->data;
+        }
 
         return $variables;
     }

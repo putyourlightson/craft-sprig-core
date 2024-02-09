@@ -188,7 +188,7 @@ class ComponentsService extends BaseComponent
      */
     public function setRegisterScript(bool|array $value): void
     {
-        Craft::$app->getDeprecator()->log(__METHOD__, '`Sprig::$plugin->components->setRegisterScript()` has been deprecated. Use `Sprig::$plugin->components->setShouldRegisterScript()` instead.');
+        Craft::$app->getDeprecator()->log(__METHOD__, 'The `Sprig::$plugin->components->setRegisterScript()` method has been deprecated. Use `Sprig::$plugin->components->setShouldRegisterScript()` instead.');
 
         $this->setShouldRegisterScript($value);
     }
