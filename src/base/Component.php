@@ -13,7 +13,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * @var string|null The path to the template that the `render` method should render.
      */
-    protected ?string $_template;
+    protected ?string $template;
 
     /**
      * Set all attributes to be safe by default.
@@ -28,8 +28,8 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public function render(): string
     {
-        if ($this->_template !== null) {
-            return Craft::$app->getView()->renderTemplate($this->_template, $this->getAttributes());
+        if ($this->template !== null) {
+            return Craft::$app->getView()->renderTemplate($this->template, $this->getAttributes());
         }
 
         return '';

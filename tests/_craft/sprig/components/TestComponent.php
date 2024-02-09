@@ -9,7 +9,7 @@ use putyourlightson\sprig\base\Component;
 
 class TestComponent extends Component
 {
-    protected ?string $_template = '_component';
+    protected ?string $template = '_component';
 
     public $number = 0;
 }

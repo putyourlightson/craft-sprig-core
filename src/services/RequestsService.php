@@ -41,7 +41,7 @@ class RequestsService extends Component
         );
 
         foreach ($requestParams as $name => $value) {
-            if ($this->_getIsVariableAllowed($name)) {
+            if ($this->getIsVariableAllowed($name)) {
                 $variables[$name] = $value;
             }
         }
@@ -138,7 +138,7 @@ class RequestsService extends Component
     /**
      * Returns whether a variable name is allowed.
      */
-    private function _getIsVariableAllowed(string $name): bool
+    private function getIsVariableAllowed(string $name): bool
     {
         if ($name == Craft::$app->getConfig()->getGeneral()->getPageTrigger()) {
             return false;

@@ -56,12 +56,12 @@ class ComponentsTest extends Unit
     {
         Craft::$app->assetManager->bundles = [];
         Sprig::$core->components->create('_component');
-        $this->assertTrue($this->_testHtmxAssetBundleIsRegistered());
+        $this->assertTrue($this->testHtmxAssetBundleIsRegistered());
 
         Craft::$app->assetManager->bundles = [];
         Sprig::$core->components->setRegisterScript(false);
         Sprig::$core->components->create('_component');
-        $this->assertFalse($this->_testHtmxAssetBundleIsRegistered());
+        $this->assertFalse($this->testHtmxAssetBundleIsRegistered());
     }
 
     public function testScriptAddedWithAttributes()
@@ -69,7 +69,7 @@ class ComponentsTest extends Unit
         Craft::$app->assetManager->bundles = [];
         Sprig::$core->components->setRegisterScript(['data-x' => 1]);
         Sprig::$core->components->create('_component');
-        $this->assertTrue($this->_testHtmxAssetBundleIsRegistered());
+        $this->assertTrue($this->testHtmxAssetBundleIsRegistered());
 
         $htmxAssetBundle = Craft::$app->assetManager->getBundle(HtmxAssetBundle::class);
         $this->assertEquals(1, $htmxAssetBundle->jsOptions['data-x'] ?? null);
@@ -162,27 +162,27 @@ class ComponentsTest extends Unit
 
     public function testCreateInvalidVariableEntry()
     {
-        $this->_testCreateInvalidVariable(['number' => '', 'entry' => new Entry()]);
+        $this->testCreateInvalidVariable(['number' => '', 'entry' => new Entry()]);
     }
 
     public function testCreateInvalidVariableModel()
     {
-        $this->_testCreateInvalidVariable(['number' => '', 'model' => new Model()]);
+        $this->testCreateInvalidVariable(['number' => '', 'model' => new Model()]);
     }
 
     public function testCreateInvalidVariableObject()
     {
-        $this->_testCreateInvalidVariable(['number' => '', 'model' => (object)[]]);
+        $this->testCreateInvalidVariable(['number' => '', 'model' => (object)[]]);
     }
 
     public function testCreateInvalidVariableArray()
     {
-        $this->_testCreateInvalidVariable(['number' => '', 'array' => [new Model()]]);
+        $this->testCreateInvalidVariable(['number' => '', 'array' => [new Model()]]);
     }
 
     public function testCreateValidVariableNestedArray()
     {
-        $this->_testCreateVariable(['number' => '', 'array' => [[[1, 2], 2]]]);
+        $this->testCreateVariable(['number' => '', 'array' => [[[1, 2], 2]]]);
     }
 
     public function testGetParsedTagAttributes()
@@ -345,7 +345,7 @@ class ComponentsTest extends Unit
         $this->assertStringContainsString($placeholder, $result);
     }
 
-    private function _testCreateVariable(array $variables): void
+    private function testCreateVariable(array $variables): void
     {
         $this->tester->mockCraftMethods('view', ['doesTemplateExist' => true]);
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
@@ -354,7 +354,7 @@ class ComponentsTest extends Unit
         $this->assertInstanceOf(Markup::class, $markup);
     }
 
-    private function _testCreateInvalidVariable(array $variables): void
+    private function testCreateInvalidVariable(array $variables): void
     {
         $this->tester->mockCraftMethods('view', ['doesTemplateExist' => true]);
         Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@templates'));
@@ -369,7 +369,7 @@ class ComponentsTest extends Unit
         Sprig::$core->components->create('_component', $variables);
     }
 
-    private function _testHtmxAssetBundleIsRegistered(): bool
+    private function testHtmxAssetBundleIsRegistered(): bool
     {
         return array_key_exists(HtmxAssetBundle::class, Craft::$app->assetManager->bundles);
     }

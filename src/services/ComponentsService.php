@@ -140,17 +140,17 @@ class ComponentsService extends BaseComponent
     /**
      * @var string|null
      */
-    private ?string $_componentName = null;
+    private ?string $componentName = null;
 
     /**
      * @var string|null
      */
-    private ?string $_sprigActionUrl = null;
+    private ?string $sprigActionUrl = null;
 
     /**
      * @var bool|array
      */
-    private bool|array $_registerScript = true;
+    private bool|array $shouldRegisterScript = true;
 
     /**
      * Registers the script and returns the asset bundle.
@@ -173,11 +173,24 @@ class ComponentsService extends BaseComponent
     /**
      * Sets whether the script should automatically be registered.
      *
+     * @since 3.0.0
+     */
+    public function setShouldRegisterScript(bool|array $value): void
+    {
+        $this->shouldRegisterScript = $value;
+    }
+
+    /**
+     * Sets whether the script should automatically be registered.
+     *
      * @since 2.6.3
+     * @deprecated in 3.0.0.
      */
     public function setRegisterScript(bool|array $value): void
     {
-        $this->_registerScript = $value;
+        Craft::$app->getDeprecator()->log(__METHOD__, '`Sprig::$plugin->components->setRegisterScript()` has been deprecated. Use `Sprig::$plugin->components->setShouldRegisterScript()` instead.');
+
+        $this->setShouldRegisterScript($value);
     }
 
     /**
@@ -198,7 +211,7 @@ class ComponentsService extends BaseComponent
      */
     public function create(string $value, array $variables = [], array $attributes = []): Markup
     {
-        $this->_componentName = $value;
+        $this->componentName = $value;
         $values = [];
 
         $siteId = Craft::$app->getSites()->getCurrentSite()->id;
@@ -245,9 +258,9 @@ class ComponentsService extends BaseComponent
         $values['sprig:' . $type] = Craft::$app->getSecurity()->hashData($value);
 
         foreach ($variables as $name => $variable) {
-            $this->_validateVariable($name, $variable);
-            $val = $this->_normalizeVariable($variable);
-            $values['sprig:variables[' . $name . ']'] = $this->_hashVariable($name, $val);
+            $this->validateVariable($name, $variable);
+            $val = $this->normalizeVariable($variable);
+            $values['sprig:variables[' . $name . ']'] = $this->hashVariable($name, $val);
         }
 
         // Add token to values if this is a preview request.
@@ -274,13 +287,13 @@ class ComponentsService extends BaseComponent
                 self::HTMX_PREFIX . 'target' => 'this',
                 self::HTMX_PREFIX . 'include' => 'this',
                 self::HTMX_PREFIX . 'trigger' => 'refresh',
-                self::HTMX_PREFIX . 'get' => $this->_getSprigActionUrl(),
+                self::HTMX_PREFIX . 'get' => $this->getSprigActionUrl(),
                 self::HTMX_PREFIX . 'vals' => Json::htmlEncode($values),
             ],
             $attributes
         );
 
-        $this->_parseAttributes($attributes);
+        $this->parseAttributes($attributes);
 
         $event->output = Html::tag('div', $content, $attributes);
 
@@ -288,8 +301,8 @@ class ComponentsService extends BaseComponent
             $this->trigger(self::EVENT_AFTER_CREATE_COMPONENT, $event);
         }
 
-        if ($this->_registerScript !== false) {
-            $attributes = is_array($this->_registerScript) ? $this->_registerScript : [];
+        if ($this->shouldRegisterScript !== false) {
+            $attributes = is_array($this->shouldRegisterScript) ? $this->shouldRegisterScript : [];
             $this->registerScript($attributes);
         }
 
@@ -330,10 +343,10 @@ class ComponentsService extends BaseComponent
      */
     public function parse(string $content): string
     {
-        $parseableTags = $this->_getParseableTags($content);
+        $parseableTags = $this->getParseableTags($content);
 
         foreach ($parseableTags as $tag) {
-            if ($newTag = $this->_getParsedTag($tag)) {
+            if ($newTag = $this->getParsedTag($tag)) {
                 $content = str_replace($tag, $newTag, $content);
             }
         }
@@ -344,7 +357,7 @@ class ComponentsService extends BaseComponent
     /**
      * Returns parseable tags.
      */
-    private function _getParseableTags(string $content): array
+    private function getParseableTags(string $content): array
     {
         // Look for all possible Sprig attributes, with reasonable backtick limits.
         $attributes = array_merge(self::SPRIG_ATTRIBUTES, self::HTMX_ATTRIBUTES);
@@ -371,7 +384,7 @@ class ComponentsService extends BaseComponent
     /**
      * Returns a parsed tag.
      */
-    private function _getParsedTag(string $tag): ?string
+    private function getParsedTag(string $tag): ?string
     {
         try {
             // Replace new lines with spaces, to ensure parsing works.
@@ -389,8 +402,8 @@ class ComponentsService extends BaseComponent
             return $tag;
         }
 
-        $name = $this->_getTagName($tag);
-        $this->_parseAttributes($attributes);
+        $name = $this->getTagName($tag);
+        $this->parseAttributes($attributes);
         $attributes['data'][self::SPRIG_PARSED_ATTRIBUTE] = true;
 
         return Html::beginTag($name, $attributes);
@@ -399,7 +412,7 @@ class ComponentsService extends BaseComponent
     /**
      * Returns the name of a given tag.
      */
-    private function _getTagName(string $tag): string
+    private function getTagName(string $tag): string
     {
         preg_match('/<([\w\-]+)/', $tag, $match);
 
@@ -409,57 +422,57 @@ class ComponentsService extends BaseComponent
     /**
      * Parses an array of attributes.
      */
-    private function _parseAttributes(array &$attributes): void
+    private function parseAttributes(array &$attributes): void
     {
         foreach ($attributes as $key => &$value) {
-            $this->_parseAttribute($attributes, $key, $value);
+            $this->parseAttribute($attributes, $key, $value);
         }
     }
 
     /**
      * Parses the Sprig attribute on an array of attributes.
      */
-    private function _parseSprigAttribute(array &$attributes): void
+    private function parseSprigAttribute(array &$attributes): void
     {
         $verb = 'get';
         $params = [];
 
-        $method = $this->_getSprigAttributeValue($attributes, 'method');
+        $method = $this->getSprigAttributeValue($attributes, 'method');
         if (strtolower($method) == 'post') {
             $verb = 'post';
-            $this->_mergeJsonAttributes($attributes, 'headers', [
+            $this->mergeJsonAttributes($attributes, 'headers', [
                 Request::CSRF_HEADER => Craft::$app->getRequest()->getCsrfToken(),
             ]);
         }
 
-        $action = $this->_getSprigAttributeValue($attributes, 'action');
+        $action = $this->getSprigAttributeValue($attributes, 'action');
         if ($action) {
             $params['sprig:action'] = Craft::$app->getSecurity()->hashData($action);
         }
 
-        $attributes[self::HTMX_PREFIX . $verb] = $this->_getSprigActionUrl($params);
+        $attributes[self::HTMX_PREFIX . $verb] = $this->getSprigActionUrl($params);
     }
 
     /**
      * Parses an attribute in an array of attributes.
      */
-    private function _parseAttribute(array &$attributes, string $key, array|string|bool $value): void
+    private function parseAttribute(array &$attributes, string $key, array|string|bool $value): void
     {
         if ($key == 'data' && is_array($value)) {
             foreach ($value as $dataKey => $dataValue) {
-                $this->_parseAttribute($attributes, $dataKey, $dataValue);
+                $this->parseAttribute($attributes, $dataKey, $dataValue);
             }
 
             return;
         }
 
         if ($key == 'sprig' || $key == 'data-sprig') {
-            $this->_parseSprigAttribute($attributes);
+            $this->parseSprigAttribute($attributes);
 
             return;
         }
 
-        $name = $this->_getSprigAttributeName($key);
+        $name = $this->getSprigAttributeName($key);
 
         if (!$name) {
             return;
@@ -478,11 +491,11 @@ class ComponentsService extends BaseComponent
              */
             $value = $value === true ? '' : $value;
 
-            $this->_mergeJsonAttributes($attributes, 'vals', [$name => $value]);
+            $this->mergeJsonAttributes($attributes, 'vals', [$name => $value]);
         } elseif ($name == 'headers' || $name == 'vals') {
-            $this->_mergeJsonAttributes($attributes, $name, $value);
+            $this->mergeJsonAttributes($attributes, $name, $value);
         } elseif ($name == 'cache') {
-            $this->_mergeJsonAttributes($attributes, 'headers', ['S-Cache' => $value]);
+            $this->mergeJsonAttributes($attributes, 'headers', ['S-Cache' => $value]);
         } elseif ($name == 'listen') {
             $cssSelectors = StringHelper::split($value);
             $triggers = array_map(fn($selector) => 'htmx:afterOnLoad from:' . $selector, $cssSelectors);
@@ -503,7 +516,7 @@ class ComponentsService extends BaseComponent
     /**
      * Merges new values to existing JSON attribute values.
      */
-    private function _mergeJsonAttributes(array &$attributes, string $name, array|string $values): void
+    private function mergeJsonAttributes(array &$attributes, string $name, array|string $values): void
     {
         if (is_string($values)) {
             if (str_starts_with($values, 'javascript:')) {
@@ -525,31 +538,31 @@ class ComponentsService extends BaseComponent
     /**
      * Returns a Sprig action URL with optional params.
      */
-    private function _getSprigActionUrl(array $params = []): string
+    private function getSprigActionUrl(array $params = []): string
     {
-        if ($this->_sprigActionUrl === null) {
-            $this->_sprigActionUrl = UrlHelper::actionUrl(self::RENDER_CONTROLLER_ACTION);
+        if ($this->sprigActionUrl === null) {
+            $this->sprigActionUrl = UrlHelper::actionUrl(self::RENDER_CONTROLLER_ACTION);
         }
 
         if (empty($params)) {
-            return $this->_sprigActionUrl;
+            return $this->sprigActionUrl;
         }
 
         $query = UrlHelper::buildQuery($params);
 
         if ($query !== '') {
-            $joinSymbol = !str_contains($this->_sprigActionUrl, '?') ? '?' : '&';
+            $joinSymbol = !str_contains($this->sprigActionUrl, '?') ? '?' : '&';
 
-            return $this->_sprigActionUrl . $joinSymbol . $query;
+            return $this->sprigActionUrl . $joinSymbol . $query;
         }
 
-        return $this->_sprigActionUrl;
+        return $this->sprigActionUrl;
     }
 
     /**
      * Returns a Sprig attribute name if it exists.
      */
-    private function _getSprigAttributeName(string $key): string
+    private function getSprigAttributeName(string $key): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
             if (str_starts_with($key, $prefix)) {
@@ -563,7 +576,7 @@ class ComponentsService extends BaseComponent
     /**
      * Returns a Sprig attribute value if it exists.
      */
-    private function _getSprigAttributeValue(array $attributes, string $name): string
+    private function getSprigAttributeValue(array $attributes, string $name): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
             if (!empty($attributes[$prefix . $name])) {
@@ -581,9 +594,9 @@ class ComponentsService extends BaseComponent
     /**
      * Hashes a variable, possibly throwing an exception.
      */
-    private function _hashVariable(string $name, mixed $value): string
+    private function hashVariable(string $name, mixed $value): string
     {
-        $this->_validateVariableType($name, $value);
+        $this->validateVariableType($name, $value);
 
         if (is_array($value)) {
             $value = Json::encode($value);
@@ -595,7 +608,7 @@ class ComponentsService extends BaseComponent
     /**
      * Validates a variable type.
      */
-    private function _validateVariableType(string $name, $value, $isArray = false): void
+    private function validateVariableType(string $name, $value, $isArray = false): void
     {
         $variable = [
             'name' => $name,
@@ -604,20 +617,20 @@ class ComponentsService extends BaseComponent
         ];
 
         if ($value instanceof ElementInterface) {
-            $this->_throwInvalidVariableError('element', $variable, $isArray);
+            $this->throwInvalidVariableError('element', $variable, $isArray);
         }
 
         if ($value instanceof Model) {
-            $this->_throwInvalidVariableError('model', $variable, $isArray);
+            $this->throwInvalidVariableError('model', $variable, $isArray);
         }
 
         if (is_object($value)) {
-            $this->_throwInvalidVariableError('object', $variable, $isArray);
+            $this->throwInvalidVariableError('object', $variable, $isArray);
         }
 
         if (is_array($value)) {
             foreach ($value as $arrayValue) {
-                $this->_validateVariableType($name, $arrayValue, true);
+                $this->validateVariableType($name, $arrayValue, true);
             }
         }
     }
@@ -625,23 +638,23 @@ class ComponentsService extends BaseComponent
     /**
      * Validates a variable.
      */
-    private function _validateVariable(string $name, mixed $value, bool $isArray = false): void
+    private function validateVariable(string $name, mixed $value, bool $isArray = false): void
     {
         if (is_array($value)) {
             foreach ($value as $variable) {
-                $this->_validateVariable($name, $variable, true);
+                $this->validateVariable($name, $variable, true);
             }
         }
 
         if (is_object($value)) {
-            $this->_throwInvalidVariableError($name, $value, $isArray);
+            $this->throwInvalidVariableError($name, $value, $isArray);
         }
     }
 
     /**
      * Normalizes a variable.
      */
-    private function _normalizeVariable(mixed $value): ?string
+    private function normalizeVariable(mixed $value): ?string
     {
         if (is_array($value)) {
             $value = Json::encode($value);
@@ -653,7 +666,7 @@ class ComponentsService extends BaseComponent
     /**
      * Throws an invalid variable error.
      */
-    private function _throwInvalidVariableError(string $name, mixed $value, bool $isArray = false): void
+    private function throwInvalidVariableError(string $name, mixed $value, bool $isArray = false): void
     {
         $variables = [
             'name' => $name,
@@ -662,7 +675,7 @@ class ComponentsService extends BaseComponent
             'isElement' => $value instanceof ElementInterface,
             'isCraftElement' => str_starts_with($value::class, 'craft\\'),
             'className' => $value::class,
-            'componentName' => $this->_componentName,
+            'componentName' => $this->componentName,
         ];
 
         // Only thrown an exception if Canary is enabled or devMode is off.

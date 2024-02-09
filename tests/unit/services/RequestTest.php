@@ -30,7 +30,7 @@ class RequestTest extends TestCase
 
     public function testGetVariables()
     {
-        $this->_mockRequestMethods([
+        $this->mockRequestMethods([
             'getQueryParams' => [
                 'page' => 1,
                 '_secret' => 'xyz',
@@ -45,7 +45,7 @@ class RequestTest extends TestCase
 
     public function testGetValidatedParam()
     {
-        $this->_mockRequestMethods([
+        $this->mockRequestMethods([
             'getParam' => [
                 Craft::$app->getSecurity()->hashData('xyz'),
             ],
@@ -63,7 +63,7 @@ class RequestTest extends TestCase
 
     public function testGetValidatedParamValues()
     {
-        $this->_mockRequestMethods([
+        $this->mockRequestMethods([
             'getParam' => [
                 Craft::$app->getSecurity()->hashData('abc'),
                 Craft::$app->getSecurity()->hashData('xyz'),
@@ -102,7 +102,7 @@ class RequestTest extends TestCase
         Sprig::$core->requests->validateData($data);
     }
 
-    private function _mockRequestMethods(array $methods): void
+    private function mockRequestMethods(array $methods): void
     {
         $this->tester->mockCraftMethods('request',
             array_merge(['getFullPath' => ['']], $methods)

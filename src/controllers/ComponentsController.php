@@ -28,7 +28,7 @@ class ComponentsController extends Controller
      */
     public function beforeAction($action): bool
     {
-        if ($this->request->getIsCpRequest() && Craft::$app->getUser()->getIdentity()->can('accessCp') === false) {
+        if ($this->request->getIsCpRequest() && !Craft::$app->getUser()->getIdentity()->can('accessCp')) {
             throw new ForbiddenHttpException();
         }
 
@@ -65,7 +65,7 @@ class ComponentsController extends Controller
             }
         } else {
             if ($action) {
-                $actionVariables = $this->_runActionInternal($action);
+                $actionVariables = $this->runActionInternal($action);
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
@@ -89,14 +89,14 @@ class ComponentsController extends Controller
     /**
      * Runs an action and returns variables from the response.
      */
-    private function _runActionInternal(string $action): array
+    private function runActionInternal(string $action): array
     {
         // Use a request that accepts JSON, so we can get all the data back.
         // https://github.com/putyourlightson/craft-sprig/issues/301
         Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
 
         if ($action == 'users/save-user') {
-            $this->_registerSaveCurrentUserEvent();
+            $this->registerSaveCurrentUserEvent();
         }
 
         $actionResponse = Craft::$app->runAction($action);
@@ -123,7 +123,7 @@ class ComponentsController extends Controller
     /**
      * Registers an event when saving the current user
      */
-    private function _registerSaveCurrentUserEvent(): void
+    private function registerSaveCurrentUserEvent(): void
     {
         $currentUserId = Craft::$app->getUser()->getId();
         $userId = Craft::$app->getRequest()->getBodyParam('userId');
