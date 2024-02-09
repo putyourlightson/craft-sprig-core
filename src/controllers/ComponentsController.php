@@ -111,6 +111,12 @@ class ComponentsController extends Controller
         // https://github.com/putyourlightson/craft-sprig/issues/81#issuecomment-758619306
         $variables['currentUser'] = Craft::$app->getUser()->getIdentity();
 
+        // TODO: remove in v4
+        $variables['flashes'] = [
+            'notice' => $variables['message'] ?? '',
+            'error' => $variables['message'] ?? '',
+        ];
+
         return $variables;
     }
 

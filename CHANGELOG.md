@@ -2,7 +2,7 @@
 
 ## 3.0.0 - Unreleased
 
-> {warning} Flash messages are no longer returned when calling controller actions. The `message` variable should be used instead.
+> {warning} Flash messages have been deprecated when calling controller actions. The `message` variable should be used instead of `flashes.notice` and `flashes.error`.
 
 ### Added
 
@@ -10,5 +10,5 @@
 
 ### Changed
 
-- Flash messages are no longer returned when calling controller actions. The `message` variable should be used instead.
+- Flash messages have been deprecated when calling controller actions. The `message` variable should be used instead of `flashes.notice` and `flashes.error`.
 - Requests that accept JSON responses are now used when running controller actions ([#301](https://github.com/putyourlightson/craft-sprig/issues/301)).
