@@ -159,19 +159,13 @@ class ComponentsService extends BaseComponent
      */
     public function registerScript(array $attributes = []): AssetBundle
     {
-        /**
-         * View::EVENT_AFTER_REGISTER_ASSET_BUNDLE was only added in Craft 4.5.0.
-         * TODO: Remove the outer condition in Sprig Core 3.
-         */
-        if (class_exists(AssetBundleEvent::class)) {
-            Event::on(View::class, View::EVENT_AFTER_REGISTER_ASSET_BUNDLE,
-                function(AssetBundleEvent $event) use ($attributes) {
-                    if ($event->bundle instanceof HtmxAssetBundle) {
-                        $event->bundle->jsOptions = $attributes;
-                    }
+        Event::on(View::class, View::EVENT_AFTER_REGISTER_ASSET_BUNDLE,
+            function(AssetBundleEvent $event) use ($attributes) {
+                if ($event->bundle instanceof HtmxAssetBundle) {
+                    $event->bundle->jsOptions = $attributes;
                 }
-            );
-        }
+            }
+        );
 
         return Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
     }
