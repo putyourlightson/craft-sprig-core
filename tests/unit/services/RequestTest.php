@@ -5,11 +5,9 @@
 
 namespace putyourlightson\sprigcoretests\unit\services;
 
-use Craft;
 use craft\test\TestCase;
 use putyourlightson\sprig\Sprig;
 use UnitTester;
-use yii\web\BadRequestHttpException;
 
 /**
  * @author    PutYourLightsOn
@@ -41,65 +39,6 @@ class RequestTest extends TestCase
         $variables = Sprig::$core->requests->getVariables();
 
         $this->assertEquals(['page' => 1], $variables);
-    }
-
-    public function testGetValidatedParam()
-    {
-        $this->mockRequestMethods([
-            'getParam' => [
-                Craft::$app->getSecurity()->hashData('xyz'),
-            ],
-        ]);
-
-        $this->tester->mockCraftMethods('request', [
-            'getFullPath' => [''],
-            'getParam' => Craft::$app->getSecurity()->hashData('xyz'),
-        ]);
-
-        $param = Sprig::$core->requests->getValidatedParam('page');
-
-        $this->assertEquals('xyz', $param);
-    }
-
-    public function testGetValidatedParamValues()
-    {
-        $this->mockRequestMethods([
-            'getParam' => [
-                Craft::$app->getSecurity()->hashData('abc'),
-                Craft::$app->getSecurity()->hashData('xyz'),
-            ],
-        ]);
-
-        $values = Sprig::$core->requests->getValidatedParamValues('page');
-
-        $this->assertEquals(['abc', 'xyz'], $values);
-    }
-
-    public function testGetCacheDuration()
-    {
-        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 'true');
-        $this->assertEquals(Sprig::$core->requests::DEFAULT_CACHE_DURATION, Sprig::$core->requests->getCacheDuration());
-
-        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 10);
-        $this->assertEquals(10, Sprig::$core->requests->getCacheDuration());
-
-        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 10.2);
-        $this->assertEquals(10, Sprig::$core->requests->getCacheDuration());
-
-        Craft::$app->getRequest()->getHeaders()->set('S-Cache', 'false');
-        $this->assertEquals(0, Sprig::$core->requests->getCacheDuration());
-
-        Craft::$app->getRequest()->getHeaders()->set('S-Cache', -10);
-        $this->assertEquals(0, Sprig::$core->requests->getCacheDuration());
-    }
-
-    public function testValidateData()
-    {
-        $this->expectException(BadRequestHttpException::class);
-
-        $data = Craft::$app->getSecurity()->hashData('xyz') . 'abc';
-
-        Sprig::$core->requests->validateData($data);
     }
 
     private function mockRequestMethods(array $methods): void

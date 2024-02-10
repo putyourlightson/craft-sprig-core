@@ -8,6 +8,7 @@ namespace putyourlightson\sprigcoretests\unit\controllers;
 use Codeception\Test\Unit;
 use Craft;
 use craft\web\View;
+use putyourlightson\sprig\models\ConfigModel;
 use putyourlightson\sprig\Sprig;
 use putyourlightson\sprig\test\mockclasses\controllers\TestController;
 use UnitTester;
@@ -39,8 +40,10 @@ class ComponentsControllerTest extends Unit
 
     public function testRender()
     {
+        $config = new ConfigModel();
+        $config->template = '_empty';
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->security->hashData('_empty'),
+            'sprig:config' => $config->getHashed(),
         ]);
 
         /** @var Response $response */
@@ -51,9 +54,12 @@ class ComponentsControllerTest extends Unit
 
     public function testRenderNull()
     {
+        $config = new ConfigModel();
+        $config->template = '_action';
+        $config->action = 'sprig-core/test/get-null';
+
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->security->hashData('_action'),
-            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-null'),
+            'sprig:config' => $config->getHashed(),
         ]);
 
         /** @var Response $response */
@@ -64,9 +70,11 @@ class ComponentsControllerTest extends Unit
 
     public function testRenderArray()
     {
+        $config = new ConfigModel();
+        $config->template = '_action';
+        $config->action = 'sprig-core/test/get-array';
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->security->hashData('_action'),
-            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-array'),
+            'sprig:config' => $config->getHashed(),
         ]);
 
         /** @var Response $response */
@@ -77,9 +85,11 @@ class ComponentsControllerTest extends Unit
 
     public function testRenderModel()
     {
+        $config = new ConfigModel();
+        $config->template = '_action';
+        $config->action = 'sprig-core/test/get-model';
         Craft::$app->getRequest()->setQueryParams([
-            'sprig:template' => Craft::$app->security->hashData('_action'),
-            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-model'),
+            'sprig:config' => $config->getHashed(),
         ]);
 
         /** @var Response $response */
@@ -90,9 +100,11 @@ class ComponentsControllerTest extends Unit
 
     public function testControllerActionSuccess()
     {
-        Craft::$app->getRequest()->setBodyParams([
-            'sprig:template' => Craft::$app->security->hashData('_action'),
-            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-success'),
+        $config = new ConfigModel();
+        $config->template = '_action';
+        $config->action = 'sprig-core/test/save-success';
+        Craft::$app->getRequest()->setQueryParams([
+            'sprig:config' => $config->getHashed(),
         ]);
 
         /** @var Response $response */
@@ -105,9 +117,11 @@ class ComponentsControllerTest extends Unit
 
     public function testControllerActionError()
     {
-        Craft::$app->getRequest()->setBodyParams([
-            'sprig:template' => Craft::$app->security->hashData('_action'),
-            'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-error'),
+        $config = new ConfigModel();
+        $config->template = '_action';
+        $config->action = 'sprig-core/test/save-error';
+        Craft::$app->getRequest()->setQueryParams([
+            'sprig:config' => $config->getHashed(),
         ]);
 
         /** @var Response $response */

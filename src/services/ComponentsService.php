@@ -21,11 +21,11 @@ use putyourlightson\sprig\components\RefreshOnLoad;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
+use putyourlightson\sprig\models\ConfigModel;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\base\InvalidArgumentException;
-use yii\base\Model;
 use yii\web\AssetBundle;
 use yii\web\BadRequestHttpException;
 use yii\web\Request;
@@ -199,9 +199,8 @@ class ComponentsService extends BaseComponent
     {
         $this->componentName = $value;
         $values = [];
-
-        $siteId = Craft::$app->getSites()->getCurrentSite()->id;
-        $values['sprig:siteId'] = Craft::$app->getSecurity()->hashData((string)$siteId);
+        $config = new ConfigModel();
+        $config->siteId = Craft::$app->getSites()->getCurrentSite()->id;
 
         $mergedVariables = array_merge(
             $variables,
@@ -223,10 +222,10 @@ class ComponentsService extends BaseComponent
         $componentObject = $this->createObject($value, $mergedVariables);
 
         if ($componentObject) {
-            $type = 'component';
+            $config->component = $value;
             $renderedContent = $componentObject->render();
         } else {
-            $type = 'template';
+            $config->template = $value;
 
             if (!Craft::$app->getView()->doesTemplateExist($value)) {
                 throw new BadRequestHttpException('Unable to find the component or template “' . $value . '”.');
@@ -234,19 +233,16 @@ class ComponentsService extends BaseComponent
 
             // Unset the component type, so that nested components will work.
             // https://github.com/putyourlightson/craft-sprig/issues/243
-            $values['sprig:component'] = Craft::$app->getSecurity()->hashData('');
+            $config->component = '';
 
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
         }
 
         $content = $this->parse($renderedContent);
 
-        $values['sprig:' . $type] = Craft::$app->getSecurity()->hashData($value);
-
         foreach ($variables as $name => $variable) {
             $this->validateVariable($name, $variable);
-            $val = $this->normalizeVariable($variable);
-            $values['sprig:variables[' . $name . ']'] = $this->hashVariable($name, $val);
+            $config->variables[$name] = $this->normalizeVariable($variable);
         }
 
         // Add token to values if this is a preview request.
@@ -264,6 +260,11 @@ class ComponentsService extends BaseComponent
 
         // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
         $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
+
+        $values = array_merge(
+            ['sprig:config' => $config->getHashed()],
+            $values,
+        );
 
         // Merge base attributes with provided attributes first, to ensure that `hx-vals` is included in the attributes when they are parsed.
         $attributes = array_merge(
@@ -433,7 +434,9 @@ class ComponentsService extends BaseComponent
 
         $action = $this->getSprigAttributeValue($attributes, 'action');
         if ($action) {
-            $params['sprig:action'] = Craft::$app->getSecurity()->hashData($action);
+            $this->mergeJsonAttributes($attributes, 'vals', [
+                'sprig:action' => Craft::$app->getSecurity()->hashData($action),
+            ]);
         }
 
         $attributes[self::HTMX_PREFIX . $verb] = $this->getSprigActionUrl($params);
@@ -575,50 +578,6 @@ class ComponentsService extends BaseComponent
         }
 
         return '';
-    }
-
-    /**
-     * Hashes a variable, possibly throwing an exception.
-     */
-    private function hashVariable(string $name, mixed $value): string
-    {
-        $this->validateVariableType($name, $value);
-
-        if (is_array($value)) {
-            $value = Json::encode($value);
-        }
-
-        return Craft::$app->getSecurity()->hashData($value);
-    }
-
-    /**
-     * Validates a variable type.
-     */
-    private function validateVariableType(string $name, $value, $isArray = false): void
-    {
-        $variable = [
-            'name' => $name,
-            'value' => $value,
-            'isArray' => $isArray,
-        ];
-
-        if ($value instanceof ElementInterface) {
-            $this->throwInvalidVariableError('element', $variable, $isArray);
-        }
-
-        if ($value instanceof Model) {
-            $this->throwInvalidVariableError('model', $variable, $isArray);
-        }
-
-        if (is_object($value)) {
-            $this->throwInvalidVariableError('object', $variable, $isArray);
-        }
-
-        if (is_array($value)) {
-            foreach ($value as $arrayValue) {
-                $this->validateVariableType($name, $arrayValue, true);
-            }
-        }
     }
 
     /**

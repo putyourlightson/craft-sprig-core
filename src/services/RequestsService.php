@@ -8,10 +8,12 @@ namespace putyourlightson\sprig\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\Json;
+use putyourlightson\sprig\models\ConfigModel;
 use yii\web\BadRequestHttpException;
 
 /**
  * @property-read array $variables
+ * @property-read ConfigModel $validatedConfig
  * @property-read int $cacheDuration
  */
 class RequestsService extends Component
@@ -32,12 +34,10 @@ class RequestsService extends Component
     public function getVariables(): array
     {
         $variables = [];
-
         $request = Craft::$app->getRequest();
-
         $requestParams = array_merge(
             $request->getQueryParams(),
-            $request->getBodyParams()
+            $request->getBodyParams(),
         );
 
         foreach ($requestParams as $name => $value) {
@@ -50,51 +50,27 @@ class RequestsService extends Component
     }
 
     /**
-     * Returns a required validated request parameter.
+     * Returns a validated config request.
      */
-    public function getRequiredValidatedParam(string $name): string|null
+    public function getValidatedConfig(): ConfigModel
     {
-        $value = $this->getValidatedParam($name);
+        $configParam = Craft::$app->getRequest()->getParam('sprig:config');
+        $configParam = $this->validateData($configParam);
+        $configValues = Json::decode($configParam);
 
-        if (empty($value)) {
-            throw new BadRequestHttpException('Request missing required param.');
+        $config = new ConfigModel();
+        $config->setAttributes($configValues, false);
+
+        foreach ($config->variables as $name => $value) {
+            $config->variables[$name] = $value;
         }
 
-        return $value;
-    }
-
-    /**
-     * Returns a validated request parameter.
-     */
-    public function getValidatedParam(string $name): string|null
-    {
-        $value = Craft::$app->getRequest()->getParam($name);
-
-        if ($value !== null) {
-            $value = self::validateData($value);
+        $actionParam = Craft::$app->getRequest()->getParam('sprig:action');
+        if ($actionParam) {
+            $config->action = Craft::$app->getSecurity()->validateData($actionParam);
         }
 
-        return $value;
-    }
-
-    /**
-     * Returns an array of validated request parameter values.
-     *
-     * @return string[]
-     */
-    public function getValidatedParamValues(string $name): array
-    {
-        $values = [];
-
-        $param = Craft::$app->getRequest()->getParam($name, []);
-
-        foreach ($param as $name => $value) {
-            $value = self::validateData($value);
-            $value = Json::decodeIfJson($value);
-            $values[$name] = $value;
-        }
-
-        return $values;
+        return $config;
     }
 
     /**

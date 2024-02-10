@@ -41,37 +41,29 @@ class ComponentsController extends Controller
      */
     public function actionRender(): Response
     {
-        $siteId = Sprig::$core->requests->getValidatedParam('sprig:siteId');
-        Craft::$app->getSites()->setCurrentSite($siteId);
-
-        $component = Sprig::$core->requests->getValidatedParam('sprig:component');
-        $action = Sprig::$core->requests->getValidatedParam('sprig:action');
-
-        $variables = ArrayHelper::merge(
-            Sprig::$core->requests->getValidatedParamValues('sprig:variables'),
-            Sprig::$core->requests->getVariables()
-        );
+        $config = Sprig::$core->requests->getValidatedConfig();
+        Craft::$app->getSites()->setCurrentSite($config->siteId);
+        $variables = ArrayHelper::merge($config->variables, Sprig::$core->requests->getVariables());
 
         $content = '';
 
-        if ($component) {
-            $componentObject = Sprig::$core->components->createObject($component, $variables);
+        if ($config->component) {
+            $componentObject = Sprig::$core->components->createObject($config->component, $variables);
 
             if ($componentObject) {
-                if ($action && method_exists($componentObject, $action)) {
-                    call_user_func([$componentObject, $action]);
+                if ($config->action && method_exists($componentObject, $config->action)) {
+                    call_user_func([$componentObject, $config->action]);
                 }
 
                 $content = $componentObject->render();
             }
         } else {
-            if ($action) {
-                $actionVariables = $this->runActionInternal($action);
+            if ($config->action) {
+                $actionVariables = $this->runActionInternal($config->action);
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
-            $template = Sprig::$core->requests->getRequiredValidatedParam('sprig:template');
-            $content = Craft::$app->getView()->renderTemplate($template, $variables);
+            $content = Craft::$app->getView()->renderTemplate($config->template, $variables);
         }
 
         $response = Craft::$app->getResponse();
