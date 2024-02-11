@@ -18,7 +18,6 @@ use yii\web\Response;
  * @package   Sprig
  * @since     1.0.0
  */
-
 class TestController extends Controller
 {
     /**
@@ -63,7 +62,7 @@ class TestController extends Controller
     /**
      * Mocks a save error response.
      */
-    public function actionSaveError()
+    public function actionSaveError(): null
     {
         Craft::$app->getSession()->setError('the_error_message');
 

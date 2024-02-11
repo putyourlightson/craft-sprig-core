@@ -1,7 +1,7 @@
 [![Stable Version](https://img.shields.io/packagist/v/putyourlightson/craft-sprig-core?label=stable)]((https://packagist.org/packages/putyourlightson/craft-sprig-core))
 [![Total Downloads](https://img.shields.io/packagist/dt/putyourlightson/craft-sprig-core)](https://packagist.org/packages/putyourlightson/craft-sprig-core)
 
-<p align="center"><img width="150" src="https://raw.githubusercontent.com/putyourlightson/craft-sprig-core/v1/src/icon.svg"></p>
+<p align="center"><img width="150" src="https://raw.githubusercontent.com/putyourlightson/craft-sprig-core/v3/src/icon.svg"></p>
 
 # Sprig Core Module for Craft CMS
 
