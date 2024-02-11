@@ -71,7 +71,7 @@ class RequestsService extends Component
         $value = Craft::$app->getRequest()->getParam($name);
 
         if ($value !== null) {
-            $value = self::validateData($value);
+            $value = $this->validateData($value);
         }
 
         return $value;
@@ -89,7 +89,7 @@ class RequestsService extends Component
         $param = Craft::$app->getRequest()->getParam($name, []);
 
         foreach ($param as $name => $value) {
-            $value = self::validateData($value);
+            $value = $this->validateData($value);
             $value = Json::decodeIfJson($value);
             $values[$name] = $value;
         }

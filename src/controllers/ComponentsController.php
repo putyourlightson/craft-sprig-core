@@ -136,7 +136,8 @@ class ComponentsController extends Controller
         if ($success) {
             $response = Craft::$app->getResponse();
 
-            $variables['id'] = str_replace($redirectPrefix, '', $response->getHeaders()->get('location'));
+            $location = $response->getHeaders()->get('location', '');
+            $variables['id'] = str_replace($redirectPrefix, '', $location);
 
             // Remove the redirect header
             $response->getHeaders()->remove('location');

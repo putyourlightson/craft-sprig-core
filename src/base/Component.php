@@ -13,7 +13,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * @var string|null The path to the template that the `render` method should render.
      */
-    protected ?string $_template;
+    protected ?string $_template = null;
 
     /**
      * Set all attributes to be safe by default.

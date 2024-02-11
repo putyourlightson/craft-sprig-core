@@ -181,7 +181,7 @@ class ComponentsService extends BaseComponent
      *
      * @since 2.6.3
      */
-    public function setRegisterScript(bool|array $value): void
+    public function setRegisterScript(bool|array $value = true): void
     {
         $this->_registerScript = $value;
     }
