@@ -11,5 +11,5 @@ class TestComponent extends Component
 {
     protected ?string $_template = '_component';
 
-    public $number = 0;
+    public int $number = 0;
 }
