@@ -39,7 +39,7 @@ test('Get validated config values in query param', function() {
 });
 
 test('Get validated config action value in body param', function() {
-    Craft::$app->request->setBodyParams([
+    Craft::$app->request->setQueryParams([
         'sprig:config' => Craft::$app->getSecurity()->hashData('{}'),
         'sprig:action' => Craft::$app->getSecurity()->hashData('x/y/x'),
     ]);

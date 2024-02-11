@@ -197,7 +197,7 @@ class SprigVariable
      *
      * @see https://github.com/putyourlightson/craft-sprig/issues/279
      */
-    public function triggerRefreshOnLoad(string $selector = null): Markup
+    public function triggerRefreshOnLoad(string $selector = ''): Markup
     {
         return Sprig::$core->components->create(
             'RefreshOnLoad',
