@@ -119,7 +119,7 @@ class SprigVariable
      *
      * @since 2.6.3
      */
-    public function setRegisterScript(bool|array $value): void
+    public function setRegisterScript(bool|array $value = true): void
     {
         Sprig::$core->components->setRegisterScript($value);
     }
@@ -197,7 +197,7 @@ class SprigVariable
      *
      * @see https://github.com/putyourlightson/craft-sprig/issues/279
      */
-    public function triggerRefreshOnLoad(string $selector = null): Markup
+    public function triggerRefreshOnLoad(string $selector = ''): Markup
     {
         return Sprig::$core->components->create(
             'RefreshOnLoad',
