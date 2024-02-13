@@ -143,7 +143,7 @@ class ComponentsController extends Controller
         }
 
         // TODO: Remove the `flashes` variable in Sprig 4, in favour of `sprig.message`, but continue deleting them.
-        $variables['flashes'] = Craft::$app->getSession()->getAllFlashes(true);
+        $variables['flashes'] = Craft::$app->getSession()->getAllFlashes();
 
         $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
         $this->setSessionValues($success, $message, $modelId);
@@ -179,11 +179,12 @@ class ComponentsController extends Controller
     }
 
     /**
-     * Sets success, error and message values for the current session.
+     * Sets values for the current session, so we can retrieve them in the same request.
      *
      * @used-by Component::getIsSuccess()
      * @used-by Component::getIsError()
      * @used-by Component::getMessage()
+     * @used-by Component::getFlashes()
      * @used-by Component::getModelId()
      */
     private function setSessionValues(bool $success, string $message, ?int $modelId = null): void
@@ -201,6 +202,10 @@ class ComponentsController extends Controller
         if ($modelId !== null) {
             $session->set('sprig:modelId', $modelId);
         }
+
+        // Get and delete flashes, so they don’t appear on subsequent requests.
+        $flashes = $session->getAllFlashes(true);
+        $session->set('sprig:flashes', $flashes);
     }
 
     /**

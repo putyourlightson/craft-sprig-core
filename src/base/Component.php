@@ -60,11 +60,19 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Returns the flash messages resulting from a request.
+     */
+    public static function getFlashes(): array
+    {
+        return Craft::$app->getSession()->get('sprig:flashes', []);
+    }
+
+    /**
      * Returns the model ID resulting from a request.
      */
     public static function getModelId(): ?int
     {
-        return Craft::$app->getSession()->get('sprig:modelId', null);
+        return Craft::$app->getSession()->get('sprig:modelId');
     }
 
     /**
