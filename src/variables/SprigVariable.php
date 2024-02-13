@@ -5,9 +5,7 @@
 
 namespace putyourlightson\sprig\variables;
 
-use Craft;
 use craft\db\Paginator;
-use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\services\ComponentsService;
@@ -18,28 +16,6 @@ use yii\web\AssetBundle;
 
 class SprigVariable
 {
-    /**
-     * Returns the script tag with the given attributes.
-     *
-     * @deprecated in 2.6.0
-     */
-    public function getScript(array $attributes = []): Markup
-    {
-        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.script` has been deprecated. It is no longer required and can be safely removed.');
-
-        return Template::raw('');
-    }
-
-    /**
-     * Returns the htmx version number.
-     *
-     * @since 2.6.0
-     */
-    public function getHtmxVersion(): string
-    {
-        return ComponentsService::HTMX_VERSION;
-    }
-
     /**
      * Returns whether this is a Sprig request.
      */
@@ -54,6 +30,38 @@ class SprigVariable
     public function getIsInclude(): bool
     {
         return Component::getIsInclude();
+    }
+
+    /**
+     * Returns whether this is a success request.
+     */
+    public function getIsSuccess(): bool
+    {
+        return Component::getIsSuccess();
+    }
+
+    /**
+     * Returns whether this is an error request.
+     */
+    public function getIsError(): bool
+    {
+        return Component::getIsError();
+    }
+
+    /**
+     * Returns the message resulting from a request.
+     */
+    public static function getMessage(): string
+    {
+        return Component::getMessage();
+    }
+
+    /**
+     * Returns the model ID resulting from a request.
+     */
+    public static function getModelId(): ?int
+    {
+        return Component::getModelId();
     }
 
     /**
@@ -102,6 +110,16 @@ class SprigVariable
     public function getUrl(): string
     {
         return Component::getUrl();
+    }
+
+    /**
+     * Returns the htmx version number.
+     *
+     * @since 2.6.0
+     */
+    public function getHtmxVersion(): string
+    {
+        return ComponentsService::HTMX_VERSION;
     }
 
     /**

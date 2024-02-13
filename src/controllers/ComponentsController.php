@@ -12,6 +12,7 @@ use craft\events\ModelEvent;
 use craft\helpers\ArrayHelper;
 use craft\web\Controller;
 use craft\web\UrlManager;
+use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\web\ForbiddenHttpException;
@@ -81,6 +82,8 @@ class ComponentsController extends Controller
 
     /**
      * Runs an action and returns variables from the response.
+     *
+     * We intentionally treat this as an action request that does not accept JSON, as otherwise the model would be returned as an array by `Controller::asModelFailure()`.
      */
     private function runActionInternal(string $action): array
     {
@@ -122,20 +125,28 @@ class ComponentsController extends Controller
         $variables['currentUser'] = Craft::$app->getUser()->getIdentity();
 
         $success = $actionResponse !== null;
+        $modelId = null;
+
+        // TODO: Remove the `success` variable in Sprig 4, in favour of `sprig.isSuccess`.
         $variables['success'] = $success;
 
         if ($success) {
             $response = Craft::$app->getResponse();
-
             $location = $response->getHeaders()->get('location', '');
-            $variables['id'] = str_replace($redirectPrefix, '', $location);
+            $modelId = str_replace($redirectPrefix, '', $location);
+
+            // TODO: Remove the `id` variable in Sprig 4, in favour of `sprig.modelId`.
+            $variables['id'] = $modelId;
 
             // Remove the redirect header
             $response->getHeaders()->remove('location');
         }
 
-        // Set flash messages variable and delete them
+        // TODO: Remove the `flashes` variable in Sprig 4, in favour of `sprig.message`, but continue deleting them.
         $variables['flashes'] = Craft::$app->getSession()->getAllFlashes(true);
+
+        $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
+        $this->setSessionValues($success, $message, $modelId);
 
         return $variables;
     }
@@ -149,17 +160,47 @@ class ComponentsController extends Controller
         Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
 
         $actionResponse = Craft::$app->runAction($action);
+        $success = $actionResponse->getIsOk();
+        $message = $actionResponse->data['message'] ?? '';
 
+        // TODO: Remove the `success` and `message` variables in Sprig 4.
         $variables = [
-            'success' => $actionResponse->getIsOk(),
-            'message' => $actionResponse->data['message'] ?? '',
+            'success' => $success,
+            'message' => $message,
         ];
 
         if (!$actionResponse->getIsOk()) {
             $variables['errors'] = $actionResponse->data;
         }
 
+        $this->setSessionValues($success, $message);
+
         return $variables;
+    }
+
+    /**
+     * Sets success, error and message values for the current session.
+     *
+     * @used-by Component::getIsSuccess()
+     * @used-by Component::getIsError()
+     * @used-by Component::getMessage()
+     * @used-by Component::getModelId()
+     */
+    private function setSessionValues(bool $success, string $message, ?int $modelId = null): void
+    {
+        $session = Craft::$app->getSession();
+
+        if ($success) {
+            $session->set('sprig:isSuccess', true);
+        } else {
+            $session->set('sprig:isError', true);
+        }
+
+        $session->set('sprig:message', $message);
+
+        if ($modelId !== null) {
+            $session->set('sprig:modelId', $modelId);
+        }
     }
 
     /**

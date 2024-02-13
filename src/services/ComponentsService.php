@@ -100,7 +100,7 @@ class ComponentsService extends BaseComponent
         'history-elt',
         'include',
         'indicator',
-        'on',
+        'on:',
         'params',
         'patch',
         'post',
@@ -495,10 +495,6 @@ class ComponentsService extends BaseComponent
             $attributes[self::HTMX_PREFIX . 'swap'] = 'outerHTML';
         } elseif (in_array($name, self::HTMX_ATTRIBUTES)) {
             $attributes[self::HTMX_PREFIX . $name] = $value;
-        }
-
-        if ($name == 'on') {
-            Craft::$app->getDeprecator()->log(__METHOD__, '`s-on` has been deprecated. Use `s-on:*` instead.');
         }
     }
 
