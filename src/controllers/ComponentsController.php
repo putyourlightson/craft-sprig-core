@@ -20,6 +20,8 @@ use yii\web\Response;
 
 class ComponentsController extends Controller
 {
+    private const REDIRECT_PREFIX = 'https://';
+
     /**
      * @inheritdoc
      */
@@ -98,12 +100,7 @@ class ComponentsController extends Controller
             $this->registerSaveCurrentUserEvent();
         }
 
-        // Add a redirect to the body params, so we can extract the ID on success.
-        $redirectPrefix = 'https://';
-        Craft::$app->getRequest()->setBodyParams(ArrayHelper::merge(
-            Craft::$app->getRequest()->getBodyParams(),
-            ['redirect' => Craft::$app->getSecurity()->hashData($redirectPrefix . '{id}')]
-        ));
+        $this->addRedirectToRequest();
 
         $actionResponse = Craft::$app->runAction($action);
 
@@ -134,15 +131,10 @@ class ComponentsController extends Controller
         $variables['success'] = $success;
 
         if ($success) {
-            $response = Craft::$app->getResponse();
-            $location = $response->getHeaders()->get('location', '');
-            $modelId = str_replace($redirectPrefix, '', $location);
+            $modelId = $this->getModelId();
 
             // TODO: Remove the `id` variable in Sprig 4, in favour of `sprig.modelId`.
             $variables['id'] = $modelId;
-
-            // Remove the redirect header
-            $response->getHeaders()->remove('location');
         }
 
         // TODO: Remove the `flashes` variable in Sprig 4, in favour of `Session::getFlash()`.
@@ -179,6 +171,35 @@ class ComponentsController extends Controller
         $this->setSessionValues($success, $message);
 
         return $variables;
+    }
+
+    /**
+     * Adds a redirect to request, so we can extract the ID on success.
+     */
+    private function addRedirectToRequest(): void
+    {
+        Craft::$app->getRequest()->setBodyParams(ArrayHelper::merge(
+            Craft::$app->getRequest()->getBodyParams(),
+            ['redirect' => Craft::$app->getSecurity()->hashData(self::REDIRECT_PREFIX . '{id}')]
+        ));
+    }
+
+    /**
+     * Returns the model ID resulting from a request.
+     */
+    private function getModelId(): ?int
+    {
+        $location = Craft::$app->getResponse()->getHeaders()->get('location', '');
+        $modelId = str_replace(self::REDIRECT_PREFIX, '', $location);
+
+        // Remove the redirect header
+        Craft::$app->getResponse()->getHeaders()->remove('location');
+
+        if (!is_numeric($modelId)) {
+            return null;
+        }
+
+        return (int)$modelId;
     }
 
     /**
