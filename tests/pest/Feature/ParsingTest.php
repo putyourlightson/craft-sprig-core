@@ -35,25 +35,25 @@ test('Parsing tag attributes with spaces', function(string $html) {
     expect(Sprig::$core->components->parse($html))
         ->toContain('data-hx-target="#id"');
 })->with([
-    '<div s-target = "#id" ></div>',
-    '<div s-target = \'#id\' ></div>',
-    '<div s-target = #id ></div>',
-    '<div s-target = #id' . PHP_EOL . '></div>',
+    'div s-target = "#id" ' => '<div s-target = "#id" ></div>',
+    'div s-target = \'#id\' ' => '<div s-target = \'#id\' ></div>',
+    'div s-target = #id ' => '<div s-target = #id ></div>',
+    'div s-target = #id \n ' => '<div s-target = #id ' . PHP_EOL . ' ></div>',
 ]);
 
 test('Parsing tag attributes with tabs', function(string $html) {
     expect(Sprig::$core->components->parse($html))
         ->toContain('data-hx-target="#id"');
 })->with([
-    '<div    s-target = "#id"></div>',
-    '<div    s-target = "#id"    ></div>',
+    '<div    s-target = "#id"' => '<div    s-target = "#id"></div>',
+    'div    s-target = "#id"    ' => '<div    s-target = "#id"    ></div>',
 ]);
 
 test('Parsing tag attributes with line breaks', function(string $html) {
     expect(Sprig::$core->components->parse($html))
         ->toContain('data-hx-get=');
 })->with([
-    '<div sprig class="a' . PHP_EOL . 'b"></div>',
+    'div sprig class="a\nb"' => '<div sprig class="a' . PHP_EOL . 'b"></div>',
 ]);
 
 test('Parsing tag attribute values', function() {

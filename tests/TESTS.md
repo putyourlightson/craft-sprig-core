@@ -47,13 +47,13 @@ _Tests the component controller._
 
 _Tests the parsing of HTML in components._
 
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = "#id" ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = '#id' ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = #id ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = #id></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with tabs with data set "('<div    s-target = "#id"></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with tabs with data set "('<div    s-target = "#id"    ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with line breaks with data set "('<div sprig class="ab"></div>')".  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set `div s-target = "#id" `.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set `div s-target = '#id' `.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set `div s-target = #id `.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set `div s-target = #id \n `.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with tabs with data set `<div    s-target = "#id`".  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with tabs with data set `div    s-target = "#id"    `.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with line breaks with data set `div sprig class="a\nb`".  
 
 ### [Requests](pest/Feature/RequestsTest.php)
 
