@@ -67,6 +67,9 @@ class ComponentsController extends Controller
             $content = Craft::$app->getView()->renderTemplate($config->template, $variables);
         }
 
+        // Remove flashes after rendering, so they don’t appear on subsequent requests.
+        Craft::$app->getSession()->removeAllFlashes();
+
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
         $response->format = Response::FORMAT_HTML;
@@ -142,7 +145,7 @@ class ComponentsController extends Controller
             $response->getHeaders()->remove('location');
         }
 
-        // TODO: Remove the `flashes` variable in Sprig 4, in favour of `sprig.message`, but continue deleting them.
+        // TODO: Remove the `flashes` variable in Sprig 4, in favour of `Session::getFlash()`.
         $variables['flashes'] = Craft::$app->getSession()->getAllFlashes();
 
         $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
@@ -184,7 +187,6 @@ class ComponentsController extends Controller
      * @used-by Component::getIsSuccess()
      * @used-by Component::getIsError()
      * @used-by Component::getMessage()
-     * @used-by Component::getFlashes()
      * @used-by Component::getModelId()
      */
     private function setSessionValues(bool $success, string $message, ?int $modelId = null): void
@@ -202,10 +204,6 @@ class ComponentsController extends Controller
         if ($modelId !== null) {
             $session->set('sprig:modelId', $modelId);
         }
-
-        // Get and delete flashes, so they don’t appear on subsequent requests.
-        $flashes = $session->getAllFlashes(true);
-        $session->set('sprig:flashes', $flashes);
     }
 
     /**

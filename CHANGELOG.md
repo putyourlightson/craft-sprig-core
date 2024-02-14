@@ -10,7 +10,6 @@
 - Added the `sprig.isSuccess` variable.
 - Added the `sprig.isError` variable.
 - Added the `sprig.message` variable.
-- Added the `sprig.flashes` variable.
 - Added the `sprig.modelId` variable.
 
 ### Changed
@@ -25,5 +24,5 @@
 ### Deprecated
 
 - Deprecated the `success` variable. Use `sprig.isSuccess` or `sprig.isError` instead.
-- Deprecated the `flashes` variable. Use `sprig.message` or `sprig.flashes` instead.
+- Deprecated the `flashes` variable. Use `sprig.message` or `craft.app.session.flash()` instead.
 - Deprecated the `id` variable. Use `sprig.modelId` instead.

@@ -57,14 +57,6 @@ class SprigVariable
     }
 
     /**
-     * Returns the flash messages resulting from a request.
-     */
-    public static function getFlashes(): array
-    {
-        return Component::getFlashes();
-    }
-
-    /**
      * Returns the model ID resulting from a request.
      */
     public static function getModelId(): ?int
