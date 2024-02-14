@@ -10,7 +10,7 @@
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
-    "craftcms/generator": "^1.0.0",
+    "craftcms/generator": "2.0.x-dev",
     "craftcms/phpstan": "dev-main",
     "markhuot/craft-pest-core": "v3.x-dev",
     "putyourlightson/craft-generate-test-spec": "v2.x-dev",
