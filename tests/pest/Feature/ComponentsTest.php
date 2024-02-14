@@ -15,7 +15,7 @@ use yii\web\BadRequestHttpException;
 beforeEach(function() {
     Sprig::bootstrap();
     Craft::$app->getConfig()->getGeneral()->devMode = false;
-    Craft::$app->getView()->setTemplatesPath(CRAFT_TEST_PATH . '/templates');
+    Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
 test('Creating a component with variables and options', function() {
@@ -78,7 +78,7 @@ test('Creating a component that refreshes on load with a selector', function() {
 });
 
 test('Creating an object from a component', function() {
-    require CRAFT_TEST_PATH . '/components/TestComponent.php';
+    require Craft::getAlias('@putyourlightson/sprig/test/components/TestComponent.php');
 
     $object = Sprig::$core->components->createObject(
         'TestComponent',

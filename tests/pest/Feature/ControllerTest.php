@@ -7,14 +7,14 @@
 use craft\web\Response;
 use craft\web\View;
 use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\test\mockclasses\controllers\TestController;
+use putyourlightson\sprig\test\controllers\TestController;
 use yii\web\BadRequestHttpException;
 
 beforeEach(function() {
     Sprig::bootstrap();
     Sprig::$core->controllerMap['test'] = TestController::class;
     Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-    Craft::$app->getView()->setTemplatesPath(CRAFT_TEST_PATH . '/templates');
+    Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
 test('Render', function() {
@@ -39,7 +39,17 @@ test('Render null', function() {
     $response = Sprig::$core->runAction('components/render');
 
     expect($response->data)
-        ->toContain('success:false');
+        ->toContain(
+            'sprig.isSuccess:false',
+            'sprig.isError:true',
+            'sprig.message:empty',
+            'sprig.modelId:null',
+            'model:null',
+        )
+        // TODO: remove in Sprig 4.
+        ->toContain(
+            'success:false',
+        );
 });
 
 test('Render array', function() {
@@ -52,7 +62,17 @@ test('Render array', function() {
     $response = Sprig::$core->runAction('components/render');
 
     expect($response->data)
-        ->toContain('success:true');
+        ->toContain(
+            'sprig.isSuccess:true',
+            'sprig.isError:false',
+            'sprig.message:empty',
+            'sprig.modelId:null',
+            'model:null',
+        )
+        // TODO: remove in Sprig 4.
+        ->toContain(
+            'success:true',
+        );
 });
 
 test('Render model', function() {
@@ -65,7 +85,17 @@ test('Render model', function() {
     $response = Sprig::$core->runAction('components/render');
 
     expect($response->data)
-        ->toContain('success:true');
+        ->toContain(
+            'sprig.isSuccess:true',
+            'sprig.isError:false',
+            'sprig.message:empty',
+            'sprig.modelId:null',
+            'model:null',
+        )
+        // TODO: remove in Sprig 4.
+        ->toContain(
+            'success:true',
+        );
 });
 
 test('Controller action success', function() {
@@ -78,7 +108,19 @@ test('Controller action success', function() {
     $response = Sprig::$core->runAction('components/render');
 
     expect($response->data)
-        ->toContain('success:true', 'id:1', 'flashes[notice]:Success');
+        ->toContain(
+            'sprig.isSuccess:true',
+            'sprig.isError:false',
+            'sprig.message:Success',
+            'sprig.modelId:1',
+            'model:null',
+        )
+        // TODO: remove in Sprig 4.
+        ->toContain(
+            'success:true',
+            'id:1',
+            'flashes[success]:Success',
+        );
 });
 
 test('Controller action error', function() {
@@ -91,7 +133,19 @@ test('Controller action error', function() {
     $response = Sprig::$core->runAction('components/render');
 
     expect($response->data)
-        ->toContain('success:false', 'flashes[error]:the_error_message', 'model');
+        ->toContain(
+            'sprig.isSuccess:false',
+            'sprig.isError:true',
+            'sprig.message:Error',
+            'sprig.modelId:null',
+            'model:model',
+        )
+        // TODO: remove in Sprig 4.
+        ->toContain(
+            'success:false',
+            'flashes[error]:Error',
+            'model',
+        );
 });
 
 test('Render without params', function() {

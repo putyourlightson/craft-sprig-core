@@ -1,0 +1,13 @@
+sprig.isSuccess:{{ sprig.isSuccess ? 'true' : 'false' }}
+sprig.isError:{{ sprig.isError ? 'true' : 'false' }}
+sprig.message:{{ sprig.message ?: 'empty' }}
+sprig.modelId:{{ sprig.modelId ?: 'null' }}
+model:{{ model is defined ? 'model' : 'null' }}
+--
+{# TODO: remove in Sprig 4. #}
+{{ success is defined ? 'success:' ~ (success ? 'true' : 'false') }}
+{{ id is defined ? 'id:' ~ id }}
+{{ flashes.success is defined ? 'flashes[success]:' ~ flashes.success }}
+{{ flashes.error is defined ? 'flashes[error]:' ~ flashes.error }}
+{{ model is defined ? 'model' }}
+{{ errors is defined ? 'errors' }}
