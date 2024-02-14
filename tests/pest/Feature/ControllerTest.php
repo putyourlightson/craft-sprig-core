@@ -17,7 +17,7 @@ beforeEach(function() {
     Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
-test('Render', function() {
+test('Rendering an empty template', function() {
     Craft::$app->getRequest()->setQueryParams([
         'sprig:config' => Craft::$app->security->hashData('{"template":"_empty"}'),
     ]);
@@ -29,7 +29,12 @@ test('Render', function() {
         ->toBe('');
 });
 
-test('Render null', function() {
+test('Rendering component without params throws an exception', function() {
+    Craft::$app->getRequest()->setQueryParams([]);
+    Sprig::$core->runAction('components/render');
+})->throws(BadRequestHttpException::class);
+
+test('Running an action that returns `null`', function() {
     Craft::$app->getRequest()->setQueryParams([
         'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
         'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-null'),
@@ -52,7 +57,7 @@ test('Render null', function() {
         );
 });
 
-test('Render array', function() {
+test('Running an action that returns an array', function() {
     Craft::$app->getRequest()->setQueryParams([
         'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
         'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-array'),
@@ -75,7 +80,7 @@ test('Render array', function() {
         );
 });
 
-test('Render model', function() {
+test('Running an action that returns a model', function() {
     Craft::$app->getRequest()->setQueryParams([
         'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
         'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-model'),
@@ -98,7 +103,7 @@ test('Render model', function() {
         );
 });
 
-test('Controller action success', function() {
+test('Running a save action that results in a success', function() {
     Craft::$app->getRequest()->setQueryParams([
         'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
         'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-success'),
@@ -123,7 +128,7 @@ test('Controller action success', function() {
         );
 });
 
-test('Controller action error', function() {
+test('Running a save action that results in an error', function() {
     Craft::$app->getRequest()->setQueryParams([
         'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
         'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-error'),
@@ -147,9 +152,3 @@ test('Controller action error', function() {
             'model',
         );
 });
-
-test('Render without params', function() {
-    Craft::$app->getRequest()->setQueryParams([]);
-    Sprig::$core->runAction('components/render');
-})->throws(BadRequestHttpException::class);
-
