@@ -23,6 +23,11 @@
       "url": "https://github.com/bencroker/craft-pest-core"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "putyourlightson\\sprig\\": "src/"
+    }
+  },
   "scripts": {
     "phpstan": "phpstan --ansi --memory-limit=1G",
     "check-cs": "ecs check --ansi",
@@ -36,11 +41,6 @@
     },
     "optimize-autoloader": true,
     "sort-packages": true
-  },
-  "autoload": {
-    "psr-4": {
-      "putyourlightson\\sprig\\": "src/"
-    }
   },
   "support": {
     "docs": "https://github.com/putyourlightson/craft-sprig-core",
