@@ -21,6 +21,7 @@ use putyourlightson\sprig\twigextensions\SprigTwigExtension;
 use putyourlightson\sprig\variables\SprigVariable;
 use yii\base\Event;
 use yii\base\Module;
+use yii\log\Dispatcher;
 
 /**
  * @property-read ComponentsService $components
@@ -151,10 +152,7 @@ class Sprig extends Module
      */
     private function _registerLogTarget(): void
     {
-        // Check that dispatcher exists, to avoid error when testing, since this is a bootstrapped module.
-        // https://github.com/verbb/verbb-base/pull/1/files
-        /** @phpstan-ignore-next-line */
-        if (Craft::getLogger()->dispatcher) {
+        if (Craft::getLogger()->dispatcher instanceof Dispatcher) {
             Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
                 'name' => 'sprig',
                 'categories' => ['putyourlightson\sprig\*'],
