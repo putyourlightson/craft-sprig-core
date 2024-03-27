@@ -47,13 +47,24 @@ _Tests the component controller._
 
 _Tests the parsing of HTML in components._
 
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = "#id" ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = '#id' ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = #id ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with spaces with data set "('<div s-target = #id></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with tabs with data set "('<div    s-target = "#id"></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with tabs with data set "('<div    s-target = "#id"    ></div>')".  
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with line breaks with data set "('<div sprig class="ab"></div>')".  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attributes with a `data` prefix.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attribute values.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attribute values when empty.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attribute values when encoded.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing tag attribute values with square brackets.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsed tag attribute values are encoded and sanitized.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing an `s-cache` tag attribute.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing an `s-cache` tag attribute with a value.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing an `s-on` tag attribute.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing an `s-on` shorthand tag attribute.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing an `s-listen` tag attribute.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing empty HTML.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing non-empty HTML.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing HTML with duplicate IDs.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing HTML with a comment.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing HTML with a script tag.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing HTML with UTF encoded characters.  
 
 ### [Requests](pest/Feature/RequestsTest.php)
 
