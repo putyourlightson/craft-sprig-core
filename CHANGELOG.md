@@ -1,5 +1,15 @@
 # Release Notes for Sprig Core
 
+## 3.0.0-beta.2 - Unreleased
+
+### Removed
+
+- Removed the `sprig.script` variable.
+- Removed the `s-on` attribute.
+- Removed the `success` variable. Use `sprig.isSuccess` or `sprig.isError` instead.
+- Removed the `flashes` variable. Use `sprig.message` or `craft.app.session.flash()` instead.
+- Removed the `id` variable. Use `sprig.modelId` instead.
+
 ## 3.0.0-beta.1 - 2024-02-14
 
 > {warning} Template caches and static page caches should be cleared after performing this update.
