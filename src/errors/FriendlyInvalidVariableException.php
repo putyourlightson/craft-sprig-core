@@ -11,14 +11,14 @@ use yii\web\BadRequestHttpException;
 
 class FriendlyInvalidVariableException extends BadRequestHttpException
 {
-    private array $_variables;
+    private array $variables;
 
     /**
      * @inheritdoc
      */
     public function __construct(array $variables = [])
     {
-        $this->_variables = $variables;
+        $this->variables = $variables;
         $message = 'Invalid variable.';
 
         if (Craft::$app->getConfig()->getGeneral()->devMode === true) {
@@ -38,6 +38,6 @@ class FriendlyInvalidVariableException extends BadRequestHttpException
 
     public function getSolution(): string
     {
-        return Craft::$app->getView()->renderTemplate('sprig-core/_error/content', $this->_variables, View::TEMPLATE_MODE_CP);
+        return Craft::$app->getView()->renderTemplate('sprig-core/_error/content', $this->variables, View::TEMPLATE_MODE_CP);
     }
 }

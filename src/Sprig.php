@@ -79,18 +79,18 @@ class Sprig extends Module
         self::$core = $this;
         self::$sprigVariable = new SprigVariable();
 
-        $this->_registerComponents();
-        $this->_registerTemplateRoots();
-        $this->_registerTwigExtensions();
-        $this->_registerVariables();
-        $this->_registerGeneratorTypes();
-        $this->_registerLogTarget();
+        $this->registerComponents();
+        $this->registerTemplateRoots();
+        $this->registerTwigExtensions();
+        $this->registerVariables();
+        $this->registerGeneratorTypes();
+        $this->registerLogTarget();
     }
 
     /**
      * Registers components.
      */
-    private function _registerComponents(): void
+    private function registerComponents(): void
     {
         $this->setComponents([
             'components' => ComponentsService::class,
@@ -101,7 +101,7 @@ class Sprig extends Module
     /**
      * Registers template roots.
      */
-    private function _registerTemplateRoots(): void
+    private function registerTemplateRoots(): void
     {
         Event::on(
             View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
@@ -114,7 +114,7 @@ class Sprig extends Module
     /**
      * Registers Twig extensions.
      */
-    private function _registerTwigExtensions(): void
+    private function registerTwigExtensions(): void
     {
         Craft::$app->view->registerTwigExtension(new SprigTwigExtension());
     }
@@ -122,7 +122,7 @@ class Sprig extends Module
     /**
      * Registers variables.
      */
-    private function _registerVariables(): void
+    private function registerVariables(): void
     {
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT,
             function(Event $event) {
@@ -136,7 +136,7 @@ class Sprig extends Module
     /**
      * Registers generator types.
      */
-    private function _registerGeneratorTypes(): void
+    private function registerGeneratorTypes(): void
     {
         if (class_exists(Command::class)) {
             Event::on(Command::class, Command::EVENT_REGISTER_GENERATOR_TYPES, function(RegisterComponentTypesEvent $event) {
@@ -150,7 +150,7 @@ class Sprig extends Module
      *
      * @see LineFormatter::SIMPLE_FORMAT
      */
-    private function _registerLogTarget(): void
+    private function registerLogTarget(): void
     {
         if (Craft::getLogger()->dispatcher instanceof Dispatcher) {
             Craft::getLogger()->dispatcher->targets[] = new MonologTarget([

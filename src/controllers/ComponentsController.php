@@ -69,7 +69,7 @@ class ComponentsController extends Controller
             }
         } else {
             if ($action) {
-                $actionVariables = $this->_runActionInternal($action);
+                $actionVariables = $this->runActionInternal($action);
                 $variables = ArrayHelper::merge($variables, $actionVariables);
             }
 
@@ -93,14 +93,14 @@ class ComponentsController extends Controller
     /**
      * Runs an action and returns the variables from the response
      */
-    private function _runActionInternal(string $action): array
+    private function runActionInternal(string $action): array
     {
         if ($action == 'users/set-password') {
-            return $this->_runActionWithJsonRequest($action);
+            return $this->runActionWithJsonRequest($action);
         }
 
         if ($action == 'users/save-user') {
-            $this->_registerSaveCurrentUserEvent();
+            $this->registerSaveCurrentUserEvent();
         }
 
         // Add a redirect to the body params, so we can extract the ID on success
@@ -156,7 +156,7 @@ class ComponentsController extends Controller
      * Runs the action with a JSON request for special case handling.
      * https://github.com/putyourlightson/craft-sprig/issues/300
      */
-    private function _runActionWithJsonRequest(string $action): array
+    private function runActionWithJsonRequest(string $action): array
     {
         Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
 
@@ -216,7 +216,7 @@ class ComponentsController extends Controller
     /**
      * Registers an event when saving the current user
      */
-    private function _registerSaveCurrentUserEvent(): void
+    private function registerSaveCurrentUserEvent(): void
     {
         $currentUserId = Craft::$app->getUser()->getId();
         $userId = Craft::$app->getRequest()->getBodyParam('userId');
