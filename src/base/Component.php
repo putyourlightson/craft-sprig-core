@@ -36,6 +36,22 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Returns whether this is a Sprig request.
+     */
+    public static function getIsRequest(): bool
+    {
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false) == 'true';
+    }
+
+    /**
+     * Returns whether this is a Sprig include.
+     */
+    public static function getIsInclude(): bool
+    {
+        return !self::getIsRequest();
+    }
+
+    /**
      * Returns whether this is a success request.
      */
     public static function getIsSuccess(): bool
@@ -65,22 +81,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     public static function getModelId(): ?int
     {
         return Craft::$app->getSession()->get('sprig:modelId');
-    }
-
-    /**
-     * Returns whether this is a Sprig request.
-     */
-    public static function getIsRequest(): bool
-    {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false) == 'true';
-    }
-
-    /**
-     * Returns whether this is a Sprig include.
-     */
-    public static function getIsInclude(): bool
-    {
-        return !self::getIsRequest();
     }
 
     /**

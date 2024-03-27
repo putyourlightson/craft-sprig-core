@@ -127,18 +127,9 @@ class ComponentsController extends Controller
         $success = $actionResponse !== null;
         $modelId = null;
 
-        // TODO: Remove the `success` variable in Sprig 4, in favour of `sprig.isSuccess`.
-        $variables['success'] = $success;
-
         if ($success) {
             $modelId = $this->getModelId();
-
-            // TODO: Remove the `id` variable in Sprig 4, in favour of `sprig.modelId`.
-            $variables['id'] = $modelId;
         }
-
-        // TODO: Remove the `flashes` variable in Sprig 4, in favour of `Session::getFlash()`.
-        $variables['flashes'] = Craft::$app->getSession()->getAllFlashes();
 
         $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
         $this->setSessionValues($success, $message, $modelId);
@@ -158,13 +149,8 @@ class ComponentsController extends Controller
         $success = $actionResponse->getIsOk();
         $message = $actionResponse->data['message'] ?? '';
 
-        // TODO: Remove the `success` and `message` variables in Sprig 4.
-        $variables = [
-            'success' => $success,
-            'message' => $message,
-        ];
-
-        if (!$actionResponse->getIsOk()) {
+        $variables = [];
+        if (!$success) {
             $variables['errors'] = $actionResponse->data;
         }
 

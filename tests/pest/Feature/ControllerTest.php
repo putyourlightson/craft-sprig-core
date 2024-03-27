@@ -50,10 +50,6 @@ test('Running an action that returns `null`', function() {
             'sprig.message:empty',
             'sprig.modelId:null',
             'model:null',
-        )
-        // TODO: remove in Sprig 4.
-        ->toContain(
-            'success:false',
         );
 });
 
@@ -73,10 +69,6 @@ test('Running an action that returns an array', function() {
             'sprig.message:empty',
             'sprig.modelId:null',
             'model:null',
-        )
-        // TODO: remove in Sprig 4.
-        ->toContain(
-            'success:true',
         );
 });
 
@@ -96,10 +88,6 @@ test('Running an action that returns a model', function() {
             'sprig.message:empty',
             'sprig.modelId:null',
             'model:null',
-        )
-        // TODO: remove in Sprig 4.
-        ->toContain(
-            'success:true',
         );
 });
 
@@ -119,12 +107,6 @@ test('Running a save action that results in a success', function() {
             'sprig.message:Success',
             'sprig.modelId:1',
             'model:null',
-        )
-        // TODO: remove in Sprig 4.
-        ->toContain(
-            'success:true',
-            'id:1',
-            'flashes[success]:Success',
         );
 });
 
@@ -144,11 +126,5 @@ test('Running a save action that results in an error', function() {
             'sprig.message:Error',
             'sprig.modelId:null',
             'model:model',
-        )
-        // TODO: remove in Sprig 4.
-        ->toContain(
-            'success:false',
-            'flashes[error]:Error',
-            'model',
         );
 });
