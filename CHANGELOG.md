@@ -4,8 +4,6 @@
 
 ### Removed
 
-- Removed the `sprig.script` variable.
-- Removed the `s-on` attribute.
 - Removed the `success` variable. Use `sprig.isSuccess` or `sprig.isError` instead.
 - Removed the `flashes` variable. Use `sprig.message` or `craft.app.session.flash()` instead.
 - Removed the `id` variable. Use `sprig.modelId` instead.
