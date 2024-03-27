@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 3.0.0-beta.2 - Unreleased
+## 3.0.0-beta.2 - 2024-03-26
 
 ### Removed
 
