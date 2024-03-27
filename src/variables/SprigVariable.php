@@ -57,6 +57,38 @@ class SprigVariable
     }
 
     /**
+     * Returns whether this is a success request.
+     */
+    public function getIsSuccess(): bool
+    {
+        return Component::getIsSuccess();
+    }
+
+    /**
+     * Returns whether this is an error request.
+     */
+    public function getIsError(): bool
+    {
+        return Component::getIsError();
+    }
+
+    /**
+     * Returns the message resulting from a request.
+     */
+    public static function getMessage(): string
+    {
+        return Component::getMessage();
+    }
+
+    /**
+     * Returns the model ID resulting from a request.
+     */
+    public static function getModelId(): ?int
+    {
+        return Component::getModelId();
+    }
+
+    /**
      * Returns whether this is a boosted request.
      */
     public static function getIsBoosted(): bool

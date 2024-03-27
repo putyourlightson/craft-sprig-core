@@ -52,6 +52,38 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Returns whether this is a success request.
+     */
+    public static function getIsSuccess(): bool
+    {
+        return Craft::$app->getSession()->get('sprig:isSuccess', false);
+    }
+
+    /**
+     * Returns whether this is an error request.
+     */
+    public static function getIsError(): bool
+    {
+        return Craft::$app->getSession()->get('sprig:isError', false);
+    }
+
+    /**
+     * Returns the message resulting from a request.
+     */
+    public static function getMessage(): string
+    {
+        return Craft::$app->getSession()->get('sprig:message', '');
+    }
+
+    /**
+     * Returns the model ID resulting from a request.
+     */
+    public static function getModelId(): ?int
+    {
+        return Craft::$app->getSession()->get('sprig:modelId');
+    }
+
+    /**
      * Returns whether this is a boosted request.
      */
     public static function getIsBoosted(): bool

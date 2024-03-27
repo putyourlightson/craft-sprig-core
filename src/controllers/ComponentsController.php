@@ -20,6 +20,8 @@ use yii\web\Response;
 
 class ComponentsController extends Controller
 {
+    private const REDIRECT_PREFIX = 'https://';
+
     /**
      * @inheritdoc
      */
@@ -131,20 +133,21 @@ class ComponentsController extends Controller
         $variables['currentUser'] = Craft::$app->getUser()->getIdentity();
 
         $success = $actionResponse !== null;
+        $modelId = null;
+
         $variables['success'] = $success;
 
         if ($success) {
-            $response = Craft::$app->getResponse();
+            $modelId = $this->getModelId();
 
-            $location = $response->getHeaders()->get('location', '');
-            $variables['id'] = str_replace($redirectPrefix, '', $location);
-
-            // Remove the redirect header
-            $response->getHeaders()->remove('location');
+            $variables['id'] = $modelId;
         }
 
         // Set flash messages variable and delete them
         $variables['flashes'] = Craft::$app->getSession()->getAllFlashes(true);
+
+        $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
+        $this->setSessionValues($success, $message, $modelId);
 
         return $variables;
     }
@@ -158,17 +161,56 @@ class ComponentsController extends Controller
         Craft::$app->getRequest()->getHeaders()->set('Accept', 'application/json');
 
         $actionResponse = Craft::$app->runAction($action);
+        $success = $actionResponse->getIsOk();
+        $message = $actionResponse->data['message'] ?? '';
 
         $variables = [
-            'success' => $actionResponse->getIsOk(),
-            'message' => $actionResponse->data['message'] ?? '',
+            'success' => $success,
+            'message' => $message,
         ];
 
         if (!$actionResponse->getIsOk()) {
             $variables['errors'] = $actionResponse->data;
         }
 
+        $this->setSessionValues($success, $message);
+
         return $variables;
+    }
+
+    /**
+     * Returns the model ID resulting from a request.
+     */
+    private function getModelId(): ?int
+    {
+        $location = Craft::$app->getResponse()->getHeaders()->get('location', '');
+        $modelId = str_replace(self::REDIRECT_PREFIX, '', $location);
+
+        // Remove the redirect header
+        Craft::$app->getResponse()->getHeaders()->remove('location');
+
+        if (!is_numeric($modelId)) {
+            return null;
+        }
+
+        return (int)$modelId;
+    }
+
+    /**
+     * Sets values for the current session, so we can retrieve them in the same request.
+     *
+     * @used-by Component::getIsSuccess()
+     * @used-by Component::getIsError()
+     * @used-by Component::getMessage()
+     * @used-by Component::getModelId()
+     */
+    private function setSessionValues(bool $success, string $message, ?int $modelId = null): void
+    {
+        $session = Craft::$app->getSession();
+        $session->set('sprig:isSuccess', $success);
+        $session->set('sprig:isError', $success === false);
+        $session->set('sprig:message', $message);
+        $session->set('sprig:modelId', $modelId);
     }
 
     /**
