@@ -131,7 +131,7 @@ class ComponentsController extends Controller
             $modelId = $this->getModelId();
         }
 
-        $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
+        $message = ($success ? Craft::$app->getSession()->getSuccess() : Craft::$app->getSession()->getError()) ?: '';
         $this->setSessionValues($success, $message, $modelId);
 
         return $variables;
