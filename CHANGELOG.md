@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.7.1 - Unreleased
+
+### Fixed
+
+- Fixed a bug in which some `sprig` variables were incorrectly persisting across requests ([#363](https://github.com/putyourlightson/craft-sprig/issues/363)).
+
 ## 2.7.0 - 2024-03-26
 
 ### Added
