@@ -199,10 +199,10 @@ class ComponentsController extends Controller
     private function setSessionValues(bool $success, string $message, ?int $modelId = null): void
     {
         $session = Craft::$app->getSession();
-        $session->set('sprig:isSuccess', $success);
-        $session->set('sprig:isError', $success === false);
-        $session->set('sprig:message', $message);
-        $session->set('sprig:modelId', $modelId);
+        $session->setFlash('sprig:isSuccess', $success);
+        $session->setFlash('sprig:isError', $success === false);
+        $session->setFlash('sprig:message', $message);
+        $session->setFlash('sprig:modelId', $modelId);
     }
 
     /**

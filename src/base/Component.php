@@ -56,7 +56,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getIsSuccess(): bool
     {
-        return Craft::$app->getSession()->get('sprig:isSuccess', false);
+        return Craft::$app->getSession()->getFlash('sprig:isSuccess', false);
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getIsError(): bool
     {
-        return Craft::$app->getSession()->get('sprig:isError', false);
+        return Craft::$app->getSession()->getFlash('sprig:isError', false);
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getMessage(): string
     {
-        return Craft::$app->getSession()->get('sprig:message', '');
+        return Craft::$app->getSession()->getFlash('sprig:message', '');
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getModelId(): ?int
     {
-        return Craft::$app->getSession()->get('sprig:modelId');
+        return Craft::$app->getSession()->getFlash('sprig:modelId');
     }
 
     /**
