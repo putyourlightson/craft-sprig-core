@@ -143,10 +143,11 @@ class ComponentsController extends Controller
             $variables['id'] = $modelId;
         }
 
+        $message = ($success ? Craft::$app->getSession()->getSuccess() : Craft::$app->getSession()->getError()) ?: '';
+
         // Set flash messages variable and delete them
         $variables['flashes'] = Craft::$app->getSession()->getAllFlashes(true);
 
-        $message = $success ? $variables['flashes']['success'] ?? '' : $variables['flashes']['error'] ?? '';
         $this->setSessionValues($success, $message, $modelId);
 
         return $variables;

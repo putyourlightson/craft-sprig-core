@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.7.3 - 2024-04-30
+
+### Fixed
+
+- Fixed a bug in which control panel messages were not being correctly set.
+
 ## 2.7.2 - 2024-04-26
 
 ### Changed
