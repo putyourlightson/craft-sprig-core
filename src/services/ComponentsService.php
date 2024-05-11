@@ -309,6 +309,10 @@ class ComponentsService extends BaseComponent
             return new SprigPlayground(['variables' => $variables]);
         }
 
+        if (class_exists($component)) {
+            return new $component(['variables' => $variables]);
+        }
+
         $componentClass = self::COMPONENT_NAMESPACE . $component;
 
         if (!class_exists($componentClass)) {
