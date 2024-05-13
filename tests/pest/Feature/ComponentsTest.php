@@ -89,6 +89,17 @@ test('Creating an object from a component', function() {
         ->toContain('xyz 15');
 });
 
+test('Creating an object from a namespaced component class', function() {
+    require CRAFT_TEST_PATH . '/components/TestNamespacedComponent.php';
+
+    $object = Sprig::$core->components->createObject(
+        'custom\\sprig\\components\\TestNamespacedComponent',
+    );
+
+    expect($object)
+        ->not()->toBeNull();
+});
+
 test('Creating an object from no component returns `null`', function() {
     $object = Sprig::$core->components->createObject('NoComponent');
 

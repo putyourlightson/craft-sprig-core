@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.7.4 - Unreleased
+
+### Changed
+
+- Made it possible to pass a fully namespaced component class into the `sprig()` function ([#14](https://github.com/putyourlightson/craft-sprig-core/issues/14)).
+
 ## 2.7.3 - 2024-04-30
 
 ### Fixed
