@@ -312,7 +312,11 @@ class ComponentsService extends BaseComponent
         $componentClass = self::COMPONENT_NAMESPACE . $component;
 
         if (!class_exists($componentClass)) {
-            return null;
+            if (!class_exists($component)) {
+                return null;
+            }
+
+            $componentClass = $component;
         }
 
         if (!is_subclass_of($componentClass, Component::class)) {
