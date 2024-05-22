@@ -25,7 +25,6 @@ test('Creating a component with variables and options', function() {
         [
             'id' => 'abc',
             's-trigger' => 'load',
-            's-vars' => 'limit:1',
             's-push-url' => 'new-url',
             's-cache' => 10,
         ]
@@ -33,10 +32,10 @@ test('Creating a component with variables and options', function() {
 
     expect((string)$markup)
         ->toContain(
+            '\u0022variables\u0022:{\u0022number\u0022:15}',
             'id="abc"',
             'data-hx-include="this"',
             'data-hx-trigger="load"',
-            'limit:1',
             'data-hx-push-url="new-url"',
             'data-hx-headers="{&quot;S-Cache&quot;:&quot;10&quot;}"',
             'xyz 15',
@@ -90,7 +89,7 @@ test('Creating an object from a component', function() {
 });
 
 test('Creating an object from a namespaced component class', function() {
-    require CRAFT_TEST_PATH . '/components/TestNamespacedComponent.php';
+    require Craft::getAlias('@putyourlightson/sprig/test/components/TestNamespacedComponent.php');
 
     $object = Sprig::$core->components->createObject(
         'custom\\sprig\\components\\TestNamespacedComponent',

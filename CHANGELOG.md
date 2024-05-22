@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 3.0.4 - 2024-05-22
+
+### Fixed
+
+- Fixed a bug in which variables passed into a component were being converted to strings ([#369](https://github.com/putyourlightson/craft-sprig-core/issues/369)).
+
 ## 3.0.3 - 2024-05-15
 
 ### Changed

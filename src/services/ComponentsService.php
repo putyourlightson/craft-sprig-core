@@ -239,11 +239,8 @@ class ComponentsService extends BaseComponent
         }
 
         $content = $this->parse($renderedContent);
-
-        foreach ($variables as $name => $variable) {
-            $this->validateVariable($name, $variable);
-            $config->variables[$name] = $this->normalizeVariable($variable);
-        }
+        $this->validateVariables($variables);
+        $config->variables = $variables;
 
         // Add token to values if this is a preview request.
         // https://github.com/putyourlightson/craft-sprig/issues/162
@@ -581,6 +578,16 @@ class ComponentsService extends BaseComponent
     }
 
     /**
+     * Validates variables.
+     */
+    private function validateVariables(array $variables): void
+    {
+        foreach ($variables as $name => $variable) {
+            $this->validateVariable($name, $variable);
+        }
+    }
+
+    /**
      * Validates a variable.
      */
     private function validateVariable(string $name, mixed $value, bool $isArray = false): void
@@ -594,18 +601,6 @@ class ComponentsService extends BaseComponent
         if (is_object($value)) {
             $this->throwInvalidVariableError($name, $value, $isArray);
         }
-    }
-
-    /**
-     * Normalizes a variable.
-     */
-    private function normalizeVariable(mixed $value): ?string
-    {
-        if (is_array($value)) {
-            $value = Json::encode($value);
-        }
-
-        return $value;
     }
 
     /**
