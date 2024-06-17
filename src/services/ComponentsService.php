@@ -113,7 +113,6 @@ class ComponentsService extends BaseComponent
         'request',
         'select',
         'select-oob',
-        'sse',
         'swap',
         'swap-oob',
         'sync',
@@ -121,7 +120,6 @@ class ComponentsService extends BaseComponent
         'trigger',
         'validate',
         'vals',
-        'ws',
     ];
 
     /**
