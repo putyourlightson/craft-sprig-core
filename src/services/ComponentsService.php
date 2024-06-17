@@ -100,6 +100,7 @@ class ComponentsService extends BaseComponent
         'history-elt',
         'include',
         'indicator',
+        'inherit',
         'on',
         'params',
         'patch',
@@ -134,7 +135,7 @@ class ComponentsService extends BaseComponent
      *
      * @since 2.6.0
      */
-    public const HTMX_VERSION = '1.9.12';
+    public const HTMX_VERSION = '2.0.0';
 
     /**
      * @var string|null
