@@ -171,7 +171,13 @@ class ComponentsService extends BaseComponent
             );
         }
 
-        return Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
+        $bundle = Craft::$app->getView()->registerAssetBundle(HtmxAssetBundle::class);
+
+        // Register the JS file explicitly so that it will be output when using template caching.
+        $url = Craft::$app->getView()->getAssetManager()->getAssetUrl($bundle, $bundle->js[0]);
+        Craft::$app->getView()->registerJsFile($url, $attributes);
+
+        return $bundle;
     }
 
     /**

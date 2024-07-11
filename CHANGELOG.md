@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.8.0-beta.1 - 2024-06-17
+## 2.8.0 - Unreleased
 
 ### Added
 
@@ -9,6 +9,7 @@
 ### Changed
 
 - Updated htmx to version 2.0.0 ([release notes](https://htmx.org/posts/2024-06-17-htmx-2-0-0-is-released/)).
+- The htmx file is now output even when Sprig components are used inside of `{% cache %}` tags ([#329](https://github.com/putyourlightson/craft-sprig/issues/329)).
 
 ### Removed
 
