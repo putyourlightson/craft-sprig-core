@@ -1,6 +1,9 @@
 # Release Notes for Sprig Core
 
-## 2.8.0 - Unreleased
+## 2.8.0 - 2024-07-15
+
+> [!IMPORTANT]
+> This update introduces htmx 2. [Read about the changes →]()
 
 ### Added
 
