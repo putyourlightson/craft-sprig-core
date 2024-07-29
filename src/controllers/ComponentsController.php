@@ -77,6 +77,9 @@ class ComponentsController extends Controller
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
         }
 
+        // Append queued HTML to the content.
+        $content .= Craft::$app->getView()->getBodyHtml();
+
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
         $response->format = Response::FORMAT_HTML;

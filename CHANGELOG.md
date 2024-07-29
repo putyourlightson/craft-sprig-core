@@ -1,5 +1,17 @@
 # Release Notes for Sprig Core
 
+## 2.9.0 - Unreleased
+
+### Added
+
+- Added the `sprig.swapOob()` function that swaps a template out-of-band.
+- Added the `sprig.triggerRefresh()` function that triggers a refresh on a Sprig component.
+
+### Changed
+
+- Updated htmx to a pre-release version 2.0.2.
+- The `sprig.triggerRefreshOnLoad()` function now appends output to the end of the body and should be called using `{% do sprig.triggerRefreshOnLoad() %}`.
+
 ## 2.8.0 - 2024-07-15
 
 > [!IMPORTANT]

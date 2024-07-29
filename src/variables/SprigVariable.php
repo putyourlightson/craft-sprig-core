@@ -7,8 +7,10 @@ namespace putyourlightson\sprig\variables;
 
 use Craft;
 use craft\db\Paginator;
+use craft\helpers\Html;
 use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
+use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
@@ -18,6 +20,16 @@ use yii\web\AssetBundle;
 
 class SprigVariable
 {
+    /**
+     * The templates that initiated out-of-band swaps in the current request.
+     */
+    private array $oobSwapTemplates = [];
+
+    /**
+     * The selectors that were triggered for a refresh in the current request.
+     */
+    private array $refreshTriggerSelectors = [];
+
     /**
      * Returns the script tag with the given attributes.
      *
@@ -225,17 +237,63 @@ class SprigVariable
     }
 
     /**
-     * Returns a [[RefreshOnLoad]] component.
+     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of any template multiple times in the current request.
+     * https://htmx.org/attributes/hx-swap-oob/
      *
-     * @see https://github.com/putyourlightson/craft-sprig/issues/279
+     * @since 2.9.0
      */
-    public function triggerRefreshOnLoad(string $selector = ''): Markup
+    public function swapOob(string $selector, string $template, array $variables = []): void
     {
-        return Sprig::$core->components->create(
-            'RefreshOnLoad',
-            ['selector' => $selector],
-            ['s-trigger' => 'load']
+        if (in_array($template, $this->oobSwapTemplates)) {
+            return;
+        }
+
+        $this->oobSwapTemplates[] = $template;
+
+        $html = Html::tag(
+            'div',
+            Craft::$app->getView()->renderTemplate($template, $variables),
+            ['s-swap-oob' => 'innerHTML:' . $selector],
         );
+
+        Craft::$app->getView()->registerHtml($html);
+    }
+
+    /**
+     * Triggers a refresh event on the provided selector. Each unique selector is refreshed at most once per request.
+     * https://htmx.org/headers/hx-trigger/
+     *
+     * @since 2.9.0
+     */
+    public function triggerRefresh(string $selector): void
+    {
+        if (in_array($selector, $this->refreshTriggerSelectors)) {
+            return;
+        }
+
+        $this->refreshTriggerSelectors[] = $selector;
+
+        Component::triggerRefresh($selector);
+    }
+
+    /**
+     * Triggers a refresh event on all components on load.
+     * https://github.com/putyourlightson/craft-sprig/issues/279
+     *
+     * @since 2.3.0
+     */
+    public function triggerRefreshOnLoad(string $selector = ''): void
+    {
+        $selector = $selector ?: '.' . ComponentsService::SPRIG_CSS_CLASS;
+        $js = <<<JS
+            fetch('/actions/users/session-info', {headers: {'Accept': 'application/json'}}).then(() => {
+                for (const component of htmx.findAll('$selector')) {
+                    htmx.trigger(component, 'refresh');
+                }
+            });
+        JS;
+
+        Craft::$app->getView()->registerJs($js, View::POS_END);
     }
 
     /**
