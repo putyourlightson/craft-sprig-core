@@ -36,12 +36,10 @@ test('Trigger events as arrays with key-value pairs', function() {
         ->toEqual('{"a":"a","b":"b","c":"c"}');
 });
 
-test('Trigger multiple events', function() {
-    getVariable()->triggerEvents('a');
-    getVariable()->triggerEvents(['b']);
-    getVariable()->triggerEvents(['c' => 'c']);
+test('Trigger events after swap', function() {
+    getVariable()->triggerEvents('a,b,c', 'swap');
 
-    expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger'))
+    expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger-After-Swap'))
         ->toEqual('{"a":"a","b":"b","c":"c"}');
 });
 
@@ -69,25 +67,18 @@ describe('Sprig request', function() {
     test('Trigger refresh', function() {
         getVariable()->triggerRefresh('#test1');
 
-        expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger-After-Swap'))
-            ->toEqual('{"refresh":{"target":"#test1"}}');
-    });
-
-    test('Trigger refresh and other events', function() {
-        getVariable()->triggerRefresh('#test2');
-        getVariable()->triggerEvents('a', 'swap');
-
-        expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger-After-Swap'))
-            ->toEqual('{"refresh":{"target":"#test2"},"a":"a"}');
+        expect(Craft::$app->getView()->getBodyHtml())
+            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'beforeend:#test1']))
+            ->toContain('htmx.trigger(\'#test1\', \'refresh\')');
     });
 
     test('Trigger refresh with variables', function() {
-        getVariable()->triggerRefresh('#test3', ['a' => 'b']);
+        getVariable()->triggerRefresh('#test2', ['a' => 'b']);
 
         expect(Craft::$app->getView()->getBodyHtml())
+            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'beforeend:#test2']))
             ->toContain(Html::hiddenInput('a', 'b'))
-            ->and(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger-After-Swap'))
-            ->toEqual('{"refresh":{"target":"#test3"}}');
+            ->toContain('htmx.trigger(\'#test2\', \'refresh\')');
     });
 });
 
