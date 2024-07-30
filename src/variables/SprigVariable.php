@@ -23,12 +23,7 @@ class SprigVariable
     /**
      * The templates that initiated out-of-band swaps in the current request.
      */
-    private array $oobSwapTemplates = [];
-
-    /**
-     * The selectors that were triggered for a refresh in the current request.
-     */
-    private array $refreshTriggerSelectors = [];
+    private ?array $oobSwapTemplates = null;
 
     /**
      * Returns the script tag with the given attributes.
@@ -237,17 +232,27 @@ class SprigVariable
     }
 
     /**
-     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of any template multiple times in the current request.
+     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of any template multiple times in the current request, including the initiating template.
      * https://htmx.org/attributes/hx-swap-oob/
      *
      * @since 2.9.0
      */
     public function swapOob(string $selector, string $template, array $variables = []): void
     {
-        if (Component::getIsInclude() || in_array($template, $this->oobSwapTemplates)) {
+        if (Component::getIsInclude()) {
             return;
         }
 
+        if ($this->oobSwapTemplates === null) {
+            $this->oobSwapTemplates = [];
+            $template = Sprig::$core->requests->getValidatedParam('sprig:template');
+            if ($template) {
+                $this->oobSwapTemplates[] = $template;
+            }
+        }
+        if (in_array($template, $this->oobSwapTemplates)) {
+            return;
+        }
         $this->oobSwapTemplates[] = $template;
 
         $html = Html::tag(
@@ -260,17 +265,15 @@ class SprigVariable
     }
 
     /**
-     * Triggers a refresh event on the provided selector. Each unique selector is refreshed at most once per request. If variables are provided then they are appended to the component as hidden input fields.
+     * Triggers a refresh event on the provided selector. If variables are provided then they are appended to the component as hidden input fields.
      *
      * @since 2.9.0
      */
     public function triggerRefresh(string $selector, array $variables = []): void
     {
-        if (Component::getIsInclude() || in_array($selector, $this->refreshTriggerSelectors)) {
+        if (Component::getIsInclude()) {
             return;
         }
-
-        $this->refreshTriggerSelectors[] = $selector;
 
         $html = '';
 
@@ -292,18 +295,16 @@ class SprigVariable
     }
 
     /**
-     * Triggers a refresh event on all components on load. Each unique selector is refreshed at most once per request.
+     * Triggers a refresh event on all components on load.
      * https://github.com/putyourlightson/craft-sprig/issues/279
      *
      * @since 2.3.0
      */
     public function triggerRefreshOnLoad(string $selector = ''): void
     {
-        if (Component::getIsRequest() || in_array($selector, $this->refreshTriggerSelectors)) {
+        if (Component::getIsRequest()) {
             return;
         }
-
-        $this->refreshTriggerSelectors[] = $selector;
 
         $selector = $selector ?: '.' . ComponentsService::SPRIG_CSS_CLASS;
         $js = <<<JS
