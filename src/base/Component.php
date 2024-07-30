@@ -235,7 +235,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function triggerRefresh(string $selector): void
     {
-        self::addTriggerHeaderEvents('HX-Trigger', [
+        self::addTriggerHeaderEvents('HX-Trigger-After-Swap', [
             'refresh' => [
                 'target' => $selector,
             ],

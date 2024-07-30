@@ -244,7 +244,7 @@ class SprigVariable
      */
     public function swapOob(string $selector, string $template, array $variables = []): void
     {
-        if (in_array($template, $this->oobSwapTemplates)) {
+        if (Component::getIsInclude() || in_array($template, $this->oobSwapTemplates)) {
             return;
         }
 
@@ -260,30 +260,50 @@ class SprigVariable
     }
 
     /**
-     * Triggers a refresh event on the provided selector. Each unique selector is refreshed at most once per request.
-     * https://htmx.org/headers/hx-trigger/
+     * Triggers a refresh event on the provided selector. Each unique selector is refreshed at most once per request. If variables are provided then they are appended to the component as hidden input fields.
      *
      * @since 2.9.0
      */
-    public function triggerRefresh(string $selector): void
+    public function triggerRefresh(string $selector, array $variables = []): void
     {
-        if (in_array($selector, $this->refreshTriggerSelectors)) {
+        if (Component::getIsInclude() || in_array($selector, $this->refreshTriggerSelectors)) {
             return;
         }
 
         $this->refreshTriggerSelectors[] = $selector;
 
+        if (!empty($variables)) {
+            $html = '';
+            foreach ($variables as $name => $value) {
+                $html .= Html::hiddenInput($name, $value);
+            }
+
+            $html = Html::tag(
+                'div',
+                $html,
+                ['s-swap-oob' => 'beforeend:' . $selector],
+            );
+
+            Craft::$app->getView()->registerHtml($html);
+        }
+
         Component::triggerRefresh($selector);
     }
 
     /**
-     * Triggers a refresh event on all components on load.
+     * Triggers a refresh event on all components on load. Each unique selector is refreshed at most once per request.
      * https://github.com/putyourlightson/craft-sprig/issues/279
      *
      * @since 2.3.0
      */
     public function triggerRefreshOnLoad(string $selector = ''): void
     {
+        if (Component::getIsRequest() || in_array($selector, $this->refreshTriggerSelectors)) {
+            return;
+        }
+
+        $this->refreshTriggerSelectors[] = $selector;
+
         $selector = $selector ?: '.' . ComponentsService::SPRIG_CSS_CLASS;
         $js = <<<JS
             fetch('/actions/users/session-info', {headers: {'Accept': 'application/json'}}).then(() => {

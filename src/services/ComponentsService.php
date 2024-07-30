@@ -17,7 +17,6 @@ use craft\helpers\UrlHelper;
 use craft\web\View;
 use putyourlightson\sprig\assets\HtmxAssetBundle;
 use putyourlightson\sprig\base\Component;
-use putyourlightson\sprig\components\RefreshOnLoad;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
@@ -311,10 +310,6 @@ class ComponentsService extends BaseComponent
      */
     public function createObject(string $component, array $variables = []): ?Component
     {
-        if ($component == 'RefreshOnLoad') {
-            return new RefreshOnLoad(['variables' => $variables]);
-        }
-
         if ($component == 'SprigPlayground' && class_exists(SprigPlayground::class)) {
             return new SprigPlayground(['variables' => $variables]);
         }
