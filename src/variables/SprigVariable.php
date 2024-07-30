@@ -272,22 +272,23 @@ class SprigVariable
 
         $this->refreshTriggerSelectors[] = $selector;
 
+        $html = '';
+
         if (!empty($variables)) {
-            $html = '';
             foreach ($variables as $name => $value) {
                 $html .= Html::hiddenInput($name, $value);
             }
-
-            $html = Html::tag(
-                'div',
-                $html,
-                ['s-swap-oob' => 'beforeend:' . $selector],
-            );
-
-            Craft::$app->getView()->registerHtml($html);
         }
 
-        Component::triggerRefresh($selector);
+        $html .= Html::tag('script', 'htmx.trigger(\'' . $selector . '\', \'refresh\')');
+
+        $html = Html::tag(
+            'div',
+            $html,
+            ['s-swap-oob' => 'beforeend:' . $selector],
+        );
+
+        Craft::$app->getView()->registerHtml($html);
     }
 
     /**

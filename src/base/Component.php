@@ -7,7 +7,6 @@ namespace putyourlightson\sprig\base;
 
 use Craft;
 use craft\base\Component as BaseComponent;
-use craft\helpers\Json;
 use craft\helpers\StringHelper;
 
 abstract class Component extends BaseComponent implements ComponentInterface
@@ -225,37 +224,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
         $header = $headerMap[$on] ?? null;
 
         if ($header) {
-            self::addTriggerHeaderEvents($header, $events);
+            Craft::$app->getResponse()->getHeaders()->set($header, $events);
         }
-    }
-
-    /**
-     * Triggers a refresh event on the provided selector.
-     * https://htmx.org/headers/hx-trigger/
-     */
-    public static function triggerRefresh(string $selector): void
-    {
-        self::addTriggerHeaderEvents('HX-Trigger-After-Swap', [
-            'refresh' => [
-                'target' => $selector,
-            ],
-        ]);
-    }
-
-    /**
-     * Adds events to a provided trigger header.
-     */
-    private static function addTriggerHeaderEvents(string $header, array $events): void
-    {
-        $headerValue = Craft::$app->getResponse()->getHeaders()->get($header);
-
-        if ($headerValue !== null) {
-            $currentEvents = Json::decode($headerValue);
-            if (is_array($currentEvents)) {
-                $events = $currentEvents + $events;
-            }
-        }
-
-        Craft::$app->getResponse()->getHeaders()->set($header, Json::encode($events));
     }
 }

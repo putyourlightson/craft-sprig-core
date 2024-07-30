@@ -9,7 +9,6 @@
 
 ### Changed
 
-- Updated htmx to a pre-release version 2.0.2.
 - The `sprig.triggerRefreshOnLoad(selector)` function now appends output to the end of the body and should be called using `{% do sprig.triggerRefreshOnLoad(selector) %}`.
 
 ## 2.8.0 - 2024-07-15

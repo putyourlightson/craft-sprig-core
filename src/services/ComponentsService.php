@@ -132,7 +132,7 @@ class ComponentsService extends BaseComponent
      *
      * @since 2.6.0
      */
-    public const HTMX_VERSION = '2.0.2-pre';
+    public const HTMX_VERSION = '2.0.1';
 
     /**
      * @var string|null
