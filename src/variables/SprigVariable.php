@@ -5,8 +5,11 @@
 
 namespace putyourlightson\sprig\variables;
 
+use Craft;
 use craft\db\Paginator;
+use craft\helpers\Html;
 use craft\web\twig\variables\Paginate;
+use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
@@ -16,6 +19,11 @@ use yii\web\AssetBundle;
 
 class SprigVariable
 {
+    /**
+     * The templates that initiated out-of-band swaps in the current request.
+     */
+    private ?array $oobSwapTemplates = null;
+
     /**
      * Returns whether this is a Sprig request.
      */
@@ -211,17 +219,80 @@ class SprigVariable
     }
 
     /**
-     * Returns a [[RefreshOnLoad]] component.
+     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of any template multiple times in the current request, including the initiating template.
+     * https://htmx.org/attributes/hx-swap-oob/
      *
-     * @see https://github.com/putyourlightson/craft-sprig/issues/279
+     * @since 2.9.0
      */
-    public function triggerRefreshOnLoad(string $selector = ''): Markup
+    public function swapOob(string $selector, string $template, array $variables = []): void
     {
-        return Sprig::$core->components->create(
-            'RefreshOnLoad',
-            ['selector' => $selector],
-            ['s-trigger' => 'load']
+        if (Component::getIsInclude() || in_array($template, $this->getOobSwapTemplates())) {
+            return;
+        }
+
+        $this->oobSwapTemplates[] = $template;
+
+        $html = Html::tag(
+            'div',
+            Craft::$app->getView()->renderTemplate($template, $variables),
+            ['s-swap-oob' => 'innerHTML:' . $selector],
         );
+
+        Craft::$app->getView()->registerHtml($html);
+    }
+
+    /**
+     * Triggers a refresh event on the provided selector. If variables are provided then they are appended to the component as hidden input fields.
+     *
+     * @since 2.9.0
+     */
+    public function triggerRefresh(string $selector, array $variables = []): void
+    {
+        if (Component::getIsInclude()) {
+            return;
+        }
+
+        $html = '';
+
+        if (!empty($variables)) {
+            foreach ($variables as $name => $value) {
+                $html .= Html::hiddenInput($name, $value);
+            }
+        }
+
+        $html .= Html::tag('script', 'htmx.trigger(\'' . $selector . '\', \'refresh\')');
+
+        $html = Html::tag(
+            'div',
+            $html,
+            ['s-swap-oob' => 'beforeend:' . $selector],
+        );
+
+        Craft::$app->getView()->registerHtml($html);
+    }
+
+    /**
+     * Triggers a refresh event on all components on load.
+     * https://github.com/putyourlightson/craft-sprig/issues/279
+     *
+     * @since 2.3.0
+     */
+    public function triggerRefreshOnLoad(string $selector = ''): void
+    {
+        if (Component::getIsRequest()) {
+            return;
+        }
+
+        $selector = $selector ?: '.' . ComponentsService::SPRIG_CSS_CLASS;
+        $js = <<<JS
+            fetch('/actions/users/session-info', {headers: {'Accept': 'application/json'}}).then(() => {
+                for (const component of htmx.findAll('$selector')) {
+                    htmx.trigger(component, 'refresh');
+                }
+            });
+        JS;
+
+        Craft::$app->getView()->registerJs($js, View::POS_END);
     }
 
     /**
@@ -230,5 +301,21 @@ class SprigVariable
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
         return Sprig::$core->components->create($value, $variables, $attributes);
+    }
+
+    /**
+     * Returns the templates that initiated out-of-band swaps in the current request, including the original component template.
+     */
+    private function getOobSwapTemplates(): array
+    {
+        if ($this->oobSwapTemplates === null) {
+            $this->oobSwapTemplates = [];
+            $config = Sprig::$core->requests->getValidatedConfig();
+            if ($config->template) {
+                $this->oobSwapTemplates[] = $config->template;
+            }
+        }
+
+        return $this->oobSwapTemplates;
     }
 }

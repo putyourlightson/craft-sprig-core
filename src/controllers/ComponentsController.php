@@ -72,6 +72,9 @@ class ComponentsController extends Controller
         // Remove flashes after rendering, so they don’t appear on subsequent requests.
         Craft::$app->getSession()->removeAllFlashes();
 
+        // Append queued HTML to the content.
+        $content .= Craft::$app->getView()->getBodyHtml();
+
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
         $response->format = Response::FORMAT_HTML;

@@ -7,6 +7,8 @@ namespace putyourlightson\sprig\base;
 
 use Craft;
 use craft\base\Component as BaseComponent;
+use craft\helpers\Json;
+use craft\helpers\StringHelper;
 
 abstract class Component extends BaseComponent implements ComponentInterface
 {
@@ -208,9 +210,11 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function triggerEvents(array|string $events, string $on = 'load'): void
     {
-        if (is_array($events)) {
-            $events = json_encode(array_combine($events, $events));
+        if (is_string($events)) {
+            $events = StringHelper::split($events);
         }
+
+        $events = Json::encode(array_combine($events, $events));
 
         $headerMap = [
             'load' => 'HX-Trigger',

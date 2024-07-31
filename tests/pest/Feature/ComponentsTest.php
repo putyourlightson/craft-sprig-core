@@ -6,7 +6,6 @@
 
 use craft\elements\Entry;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
-use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use Twig\Markup;
 use yii\base\Model;
@@ -52,29 +51,6 @@ test('Creating an empty component', function() {
 test('Creating an invalid component throws an exception', function() {
     Sprig::$core->components->create('_no-component');
 })->throws(BadRequestHttpException::class);
-
-test('Creating a component that refreshes on load', function() {
-    $selector = ComponentsService::SPRIG_CSS_CLASS;
-    $object = Sprig::$core->components->createObject('RefreshOnLoad');
-
-    Craft::$app->getRequest()->getHeaders()->set('HX-Request', 'true');
-
-    expect($object->render())
-        ->toContain("htmx.findAll('.$selector'))");
-});
-
-test('Creating a component that refreshes on load with a selector', function() {
-    $selector = '.test-class';
-    $object = Sprig::$core->components->createObject(
-        'RefreshOnLoad',
-        ['selector' => $selector]
-    );
-
-    Craft::$app->getRequest()->getHeaders()->set('HX-Request', 'true');
-
-    expect($object->render())
-        ->toContain('htmx.findAll(\'' . $selector . '\'))');
-});
 
 test('Creating an object from a component', function() {
     require Craft::getAlias('@putyourlightson/sprig/test/components/TestComponent.php');

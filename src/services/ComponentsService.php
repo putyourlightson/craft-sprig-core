@@ -303,10 +303,6 @@ class ComponentsService extends BaseComponent
      */
     public function createObject(string $component, array $variables = []): ?Component
     {
-        if ($component === 'RefreshOnLoad') {
-            return new RefreshOnLoad(['variables' => $variables]);
-        }
-
         if ($component === 'SprigPlayground' && class_exists(SprigPlayground::class)) {
             return new SprigPlayground(['variables' => $variables]);
         }

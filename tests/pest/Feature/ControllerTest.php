@@ -15,11 +15,12 @@ beforeEach(function() {
     Sprig::$core->controllerMap['test'] = TestController::class;
     Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
     Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
+    Craft::$app->getView()->clear();
 });
 
 test('Rendering an empty template', function() {
     Craft::$app->getRequest()->setQueryParams([
-        'sprig:config' => Craft::$app->security->hashData('{"template":"_empty"}'),
+        'sprig:config' => Craft::$app->getSecurity()->hashData('{"template":"_empty"}'),
     ]);
 
     /** @var Response $response */
@@ -36,8 +37,8 @@ test('Rendering component without params throws an exception', function() {
 
 test('Running an action that returns `null`', function() {
     Craft::$app->getRequest()->setQueryParams([
-        'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
-        'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-null'),
+        'sprig:config' => Craft::$app->getSecurity()->hashData('{"template":"_action"}'),
+        'sprig:action' => Craft::$app->getSecurity()->hashData('sprig-core/test/get-null'),
     ]);
 
     /** @var Response $response */
@@ -55,8 +56,8 @@ test('Running an action that returns `null`', function() {
 
 test('Running an action that returns an array', function() {
     Craft::$app->getRequest()->setQueryParams([
-        'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
-        'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-array'),
+        'sprig:config' => Craft::$app->getSecurity()->hashData('{"template":"_action"}'),
+        'sprig:action' => Craft::$app->getSecurity()->hashData('sprig-core/test/get-array'),
     ]);
 
     /** @var Response $response */
@@ -74,8 +75,8 @@ test('Running an action that returns an array', function() {
 
 test('Running an action that returns a model', function() {
     Craft::$app->getRequest()->setQueryParams([
-        'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
-        'sprig:action' => Craft::$app->security->hashData('sprig-core/test/get-model'),
+        'sprig:config' => Craft::$app->getSecurity()->hashData('{"template":"_action"}'),
+        'sprig:action' => Craft::$app->getSecurity()->hashData('sprig-core/test/get-model'),
     ]);
 
     /** @var Response $response */
@@ -93,8 +94,8 @@ test('Running an action that returns a model', function() {
 
 test('Running a save action that results in a success', function() {
     Craft::$app->getRequest()->setQueryParams([
-        'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
-        'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-success'),
+        'sprig:config' => Craft::$app->getSecurity()->hashData('{"template":"_action"}'),
+        'sprig:action' => Craft::$app->getSecurity()->hashData('sprig-core/test/save-success'),
     ]);
 
     /** @var Response $response */
@@ -112,8 +113,8 @@ test('Running a save action that results in a success', function() {
 
 test('Running a save action that results in an error', function() {
     Craft::$app->getRequest()->setQueryParams([
-        'sprig:config' => Craft::$app->security->hashData('{"template":"_action"}'),
-        'sprig:action' => Craft::$app->security->hashData('sprig-core/test/save-error'),
+        'sprig:config' => Craft::$app->getSecurity()->hashData('{"template":"_action"}'),
+        'sprig:action' => Craft::$app->getSecurity()->hashData('sprig-core/test/save-error'),
     ]);
 
     /** @var Response $response */
