@@ -239,20 +239,10 @@ class SprigVariable
      */
     public function swapOob(string $selector, string $template, array $variables = []): void
     {
-        if (Component::getIsInclude()) {
+        if (Component::getIsInclude() || in_array($template, $this->getOobSwapTemplates())) {
             return;
         }
 
-        if ($this->oobSwapTemplates === null) {
-            $this->oobSwapTemplates = [];
-            $template = Sprig::$core->requests->getValidatedParam('sprig:template');
-            if ($template) {
-                $this->oobSwapTemplates[] = $template;
-            }
-        }
-        if (in_array($template, $this->oobSwapTemplates)) {
-            return;
-        }
         $this->oobSwapTemplates[] = $template;
 
         $html = Html::tag(
@@ -324,5 +314,21 @@ class SprigVariable
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
         return Sprig::$core->components->create($value, $variables, $attributes);
+    }
+
+    /**
+     * Returns the templates that initiated out-of-band swaps in the current request, including the original component template.
+     */
+    private function getOobSwapTemplates(): array
+    {
+        if ($this->oobSwapTemplates === null) {
+            $this->oobSwapTemplates = [];
+            $template = Sprig::$core->requests->getValidatedParam('sprig:template');
+            if ($template) {
+                $this->oobSwapTemplates[] = $template;
+            }
+        }
+
+        return $this->oobSwapTemplates;
     }
 }
