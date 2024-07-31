@@ -3,13 +3,13 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\test\mockclasses\controllers;
+namespace putyourlightson\sprig\test\controllers;
 
 use Craft;
 use craft\models\Section;
 use craft\web\Controller;
 use craft\web\UrlManager;
-use putyourlightson\sprig\test\mockclasses\models\TestModel;
+use putyourlightson\sprig\test\models\TestModel;
 use yii\base\Model;
 use yii\web\Response;
 
@@ -18,7 +18,6 @@ use yii\web\Response;
  * @package   Sprig
  * @since     1.0.0
  */
-
 class TestController extends Controller
 {
     /**

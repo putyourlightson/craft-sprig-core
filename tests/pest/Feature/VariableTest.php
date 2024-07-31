@@ -46,6 +46,7 @@ test('Trigger events after swap', function() {
 
 describe('Sprig request', function() {
     beforeEach(function() {
+        Craft::$app->getRequest()->setQueryParams(['sprig:template' => Craft::$app->getSecurity()->hashData('test')]);
         Craft::$app->getRequest()->getHeaders()->set('HX-Request', true);
         Craft::$app->getView()->clear();
     });

@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\test\mockclasses\models;
+namespace putyourlightson\sprig\test\models;
 
 use craft\base\Model;
 
@@ -12,7 +12,6 @@ use craft\base\Model;
  * @package   Sprig
  * @since     1.0.0
  */
-
 class TestModel extends Model
 {
     /**

@@ -7,7 +7,7 @@
 use craft\web\Response;
 use craft\web\View;
 use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\test\mockclasses\controllers\TestController;
+use putyourlightson\sprig\test\controllers\TestController;
 use yii\web\BadRequestHttpException;
 
 beforeEach(function() {
