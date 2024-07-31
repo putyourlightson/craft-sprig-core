@@ -10,7 +10,7 @@
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
-    "craftcms/generator": "2.0.x-dev",
+    "craftcms/generator": "^2.1",
     "craftcms/phpstan": "dev-main",
     "putyourlightson/craft-sprig": "^3.0",
     "vlucas/phpdotenv": "^5.4.1"
