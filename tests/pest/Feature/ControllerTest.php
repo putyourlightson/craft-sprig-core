@@ -14,7 +14,7 @@ beforeEach(function() {
     Sprig::bootstrap();
     Sprig::$core->controllerMap['test'] = TestController::class;
     Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-    Craft::$app->getView()->setTemplatesPath(CRAFT_TEST_PATH . '/templates');
+    Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
     Craft::$app->getView()->clear();
 });
 

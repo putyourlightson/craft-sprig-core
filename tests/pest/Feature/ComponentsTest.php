@@ -14,7 +14,7 @@ use yii\web\BadRequestHttpException;
 beforeEach(function() {
     Sprig::bootstrap();
     Craft::$app->getConfig()->getGeneral()->devMode = false;
-    Craft::$app->getView()->setTemplatesPath(CRAFT_TEST_PATH . '/templates');
+    Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
 test('Creating a component with variables and options', function() {
@@ -54,7 +54,7 @@ test('Creating an invalid component throws an exception', function() {
 })->throws(BadRequestHttpException::class);
 
 test('Creating an object from a component', function() {
-    require CRAFT_TEST_PATH . '/components/TestComponent.php';
+    require Craft::getAlias('@putyourlightson/sprig/test/components/TestComponent.php');
 
     $object = Sprig::$core->components->createObject(
         'TestComponent',
@@ -66,10 +66,10 @@ test('Creating an object from a component', function() {
 });
 
 test('Creating an object from a namespaced component class', function() {
-    require CRAFT_TEST_PATH . '/components/TestNamespacedComponent.php';
+    require Craft::getAlias('@putyourlightson/sprig/test/components/TestNamespacedComponent.php');
 
     $object = Sprig::$core->components->createObject(
-        'custom\\sprig\\components\\TestNamespacedComponent',
+        'putyourlightson\\sprig\\test\\components\\TestNamespacedComponent',
     );
 
     expect($object)

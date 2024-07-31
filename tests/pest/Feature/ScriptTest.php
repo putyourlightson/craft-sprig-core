@@ -11,7 +11,7 @@ beforeEach(function() {
     Sprig::bootstrap();
     Craft::$app->getAssetManager()->bundles = [];
     Craft::$app->getView()->assetBundles = [];
-    Craft::$app->getView()->setTemplatesPath(CRAFT_TEST_PATH . '/templates');
+    Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
 test('Script exists locally', function() {

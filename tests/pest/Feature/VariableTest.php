@@ -13,6 +13,7 @@ beforeEach(function() {
     Sprig::bootstrap();
     Craft::$app->getResponse()->getHeaders()->removeAll();
     Craft::$app->getView()->clear();
+    Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
 test('Trigger events as strings', function() {
