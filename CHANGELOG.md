@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.9.0 - 2024-07-31
+## 2.9.0 - 2024-08-01
 
 ### Added
 
