@@ -58,7 +58,7 @@ test('Creating an object from a component', function() {
     require Craft::getAlias('@putyourlightson/sprig/test/components/TestComponent.php');
 
     $object = Sprig::$core->components->createObject(
-        TestComponent::class,
+        'TestComponent',
         ['number' => 15]
     );
 

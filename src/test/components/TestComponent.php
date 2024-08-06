@@ -3,7 +3,7 @@
  * @copyright Copyright (c) PutYourLightsOn
  */
 
-namespace putyourlightson\sprig\test\components;
+namespace sprig\components;
 
 use putyourlightson\sprig\base\Component;
 
