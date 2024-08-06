@@ -70,7 +70,7 @@ test('Creating an object from a namespaced component class', function() {
     require Craft::getAlias('@putyourlightson/sprig/test/components/TestNamespacedComponent.php');
 
     $object = Sprig::$core->components->createObject(
-        'putyourlightson\\sprig\\test\\components\\TestNamespacedComponent',
+        'custom\\sprig\\components\\TestNamespacedComponent',
     );
 
     expect($object)
