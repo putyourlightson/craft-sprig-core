@@ -7,6 +7,8 @@
 use craft\elements\Entry;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\Sprig;
+use putyourlightson\sprig\test\components\TestComponent;
+use putyourlightson\sprig\test\components\TestNamespacedComponent;
 use Twig\Markup;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;

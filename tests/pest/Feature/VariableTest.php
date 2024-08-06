@@ -68,6 +68,14 @@ describe('Sprig request', function() {
             ->toContain(12345);
     });
 
+    test('Swap OOB with string', function() {
+        getVariable()->swapOob('#test1', '{{ name }}', ['name' => 'xyz']);
+
+        expect(Craft::$app->getView()->getBodyHtml())
+            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'innerHTML:#test1']))
+            ->toContain('xyz');
+    });
+
     test('Trigger refresh', function() {
         getVariable()->triggerRefresh('#test1');
 
