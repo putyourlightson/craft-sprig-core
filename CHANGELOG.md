@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.9.1 - 2024-08-06
+
+### Changed
+
+- The `sprig.swapOob()` function now accepts a string in addition to a template to be rendered, in the second argument.
+
 ## 2.9.0 - 2024-08-01
 
 ### Added

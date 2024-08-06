@@ -7,6 +7,7 @@
 use craft\elements\Entry;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\Sprig;
+use putyourlightson\sprig\test\components\TestComponent;
 use Twig\Markup;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -57,7 +58,7 @@ test('Creating an object from a component', function() {
     require Craft::getAlias('@putyourlightson/sprig/test/components/TestComponent.php');
 
     $object = Sprig::$core->components->createObject(
-        'TestComponent',
+        TestComponent::class,
         ['number' => 15]
     );
 

@@ -239,17 +239,16 @@ class SprigVariable
      */
     public function swapOob(string $selector, string $template, array $variables = []): void
     {
-        if (Component::getIsInclude() || in_array($template, $this->getOobSwapTemplates())) {
+        if (Component::getIsInclude()) {
             return;
         }
 
-        $this->oobSwapTemplates[] = $template;
+        $value = $this->getOobSwapValue($template, $variables);
+        if ($value === null) {
+            return;
+        }
 
-        $html = Html::tag(
-            'div',
-            Craft::$app->getView()->renderTemplate($template, $variables),
-            ['s-swap-oob' => 'innerHTML:' . $selector],
-        );
+        $html = Html::tag('div', $value, ['s-swap-oob' => 'innerHTML:' . $selector]);
 
         Craft::$app->getView()->registerHtml($html);
     }
@@ -314,6 +313,24 @@ class SprigVariable
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup
     {
         return Sprig::$core->components->create($value, $variables, $attributes);
+    }
+
+    /**
+     * Returns the value for the out-of-band swap from a rendered template if it exists, otherwise a rendered string
+     */
+    private function getOobSwapValue(string $template, array $variables = []): ?string
+    {
+        if (Craft::$app->getView()->resolveTemplate($template) === false) {
+            return Craft::$app->getView()->renderString($template, $variables);
+        }
+
+        if (in_array($template, $this->getOobSwapTemplates())) {
+            return null;
+        }
+
+        $this->oobSwapTemplates[] = $template;
+
+        return Craft::$app->getView()->renderTemplate($template, $variables);
     }
 
     /**

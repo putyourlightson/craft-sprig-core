@@ -4,14 +4,6 @@ This document outlines the test specification for the Sprig Core module.
 
 ---
 
-## Architecture Tests
-
-### [Architecture](pest/Architecture/ArchitectureTest.php)
-
-_Tests the architecture of the plugin._
-
-![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Source code does not contain any “dump or die” statements.  
-
 ## Feature Tests
 
 ### [Components](pest/Feature/ComponentsTest.php)
@@ -98,6 +90,7 @@ _Tests the Sprig variable methods._
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Trigger events after swap.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) `Sprig request` → Swap OOB.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) `Sprig request` → Swap OOB with variables.  
+![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) `Sprig request` → Swap OOB with string.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) `Sprig request` → Trigger refresh.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) `Sprig request` → Trigger refresh with variables.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) `Sprig include` → Trigger refresh on load.  
