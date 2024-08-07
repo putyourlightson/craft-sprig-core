@@ -19,6 +19,7 @@ use putyourlightson\sprig\assets\HtmxAssetBundle;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
+use putyourlightson\sprig\helpers\Console;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
 use putyourlightson\sprig\Sprig;
@@ -230,6 +231,10 @@ class ComponentsService extends BaseComponent
         $mergedVariables = $event->variables;
         $attributes = $event->attributes;
 
+        // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
+        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
+        $values['sprig:id'] = Craft::$app->getSecurity()->hashData($id);
+
         $componentObject = $this->createObject($value, $mergedVariables);
 
         if ($componentObject) {
@@ -248,6 +253,18 @@ class ComponentsService extends BaseComponent
 
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
         }
+
+        $config = [
+            'id' => $id,
+            'siteId' => $siteId,
+            'component' => null,
+            'template' => null,
+            'variables' => $variables,
+            'action' => null,
+            'triggerRefreshSources' => [],
+        ];
+        $config[$type] = $value;
+        Console::addComponent($config);
 
         $content = $this->parse($renderedContent);
 
@@ -271,9 +288,6 @@ class ComponentsService extends BaseComponent
                 $values[$tokenParam] = $token;
             }
         }
-
-        // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
-        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
 
         // Merge base attributes with provided attributes first, to ensure that `hx-vals` is included in the attributes when they are parsed.
         $attributes = array_merge(

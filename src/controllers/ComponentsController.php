@@ -13,6 +13,7 @@ use craft\helpers\ArrayHelper;
 use craft\web\Controller;
 use craft\web\UrlManager;
 use craft\web\UrlRule;
+use putyourlightson\sprig\helpers\Console;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\web\ForbiddenHttpException;
@@ -55,6 +56,16 @@ class ComponentsController extends Controller
             Sprig::$core->requests->getVariables()
         );
 
+        $config = [
+            'id' => Sprig::$core->requests->getValidatedParam('sprig:id'),
+            'siteId' => $siteId,
+            'component' => null,
+            'template' => null,
+            'variables' => $variables,
+            'action' => $action,
+            'triggerRefreshSources' => Sprig::$core->requests->getValidatedParam('sprig:triggerRefreshSources') ?? [],
+        ];
+
         $content = '';
 
         if ($component) {
@@ -66,6 +77,7 @@ class ComponentsController extends Controller
                 }
 
                 $content = $componentObject->render();
+                $config['component'] = $component;
             }
         } else {
             if ($action) {
@@ -75,7 +87,10 @@ class ComponentsController extends Controller
 
             $template = Sprig::$core->requests->getRequiredValidatedParam('sprig:template');
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
+            $config['template'] = $template;
         }
+
+        Console::addComponent($config);
 
         // Append queued HTML to the content.
         $content .= Craft::$app->getView()->getBodyHtml();

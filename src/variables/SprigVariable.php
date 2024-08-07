@@ -8,9 +8,9 @@ namespace putyourlightson\sprig\variables;
 use Craft;
 use craft\db\Paginator;
 use craft\helpers\Html;
+use craft\helpers\Json;
 use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
-use craft\web\View;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
@@ -21,9 +21,9 @@ use yii\web\AssetBundle;
 class SprigVariable
 {
     /**
-     * The templates that initiated out-of-band swaps in the current request.
+     * The components that initiated out-of-band swaps in the current request.
      */
-    private ?array $oobSwapTemplates = null;
+    private ?array $oobSwapSources = null;
 
     /**
      * Returns the script tag with the given attributes.
@@ -232,8 +232,8 @@ class SprigVariable
     }
 
     /**
-     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of any template multiple times in the current request, including the initiating template.
-     * https://htmx.org/attributes/hx-swap-oob/
+     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of unique components multiple times in the current request, including the initiating component.
+     *  https://htmx.org/attributes/hx-swap-oob/
      *
      * @since 2.9.0
      */
@@ -243,7 +243,7 @@ class SprigVariable
             return;
         }
 
-        $value = $this->getOobSwapValue($template, $variables);
+        $value = $this->getOobSwapValue($selector, $template, $variables);
         if ($value === null) {
             return;
         }
@@ -254,7 +254,7 @@ class SprigVariable
     }
 
     /**
-     * Triggers a refresh event on the provided selector. If variables are provided then they are appended to the component as hidden input fields.
+     * Triggers a refresh event on the provided selector. If variables are provided then they are appended to the component as hidden input fields. Cyclical requests are mitigated by prevented the triggering of unique components multiple times, including the initiating component.
      *
      * @since 2.9.0
      */
@@ -264,23 +264,23 @@ class SprigVariable
             return;
         }
 
-        $html = '';
-
-        if (!empty($variables)) {
-            foreach ($variables as $name => $value) {
-                $html .= Html::hiddenInput($name, $value);
-            }
+        $triggerRefreshSources = Sprig::$core->requests->getValidatedParam('sprig:triggerRefreshSources') ?? [];
+        if (in_array($selector, $triggerRefreshSources)) {
+            return;
         }
 
-        $html .= Html::tag('script', 'htmx.trigger(\'' . $selector . '\', \'refresh\')');
+        $id = Sprig::$core->requests->getValidatedParam('sprig:id');
+        $triggerRefreshSources[] = '#' . $id;
+        $variables['sprig:triggerRefreshSources'] = Craft::$app->getSecurity()->hashData(Json::encode($triggerRefreshSources));
 
-        $html = Html::tag(
-            'div',
-            $html,
-            ['s-swap-oob' => 'beforeend:' . $selector],
-        );
+        foreach ($variables as $name => $value) {
+            $values[] = Html::hiddenInput($name, $value);
+        }
 
+        $html = Html::tag('div', implode('', $values), ['s-swap-oob' => 'beforeend:' . $selector]);
         Craft::$app->getView()->registerHtml($html);
+
+        Component::registerJs('htmx.trigger(\'' . $selector . '\', \'refresh\')');
     }
 
     /**
@@ -304,7 +304,17 @@ class SprigVariable
             });
         JS;
 
-        Craft::$app->getView()->registerJs($js, View::POS_END);
+        Component::registerJs($js);
+    }
+
+    /**
+     * Registers JavaScript code to be executed. This method takes care of registering the code depending on whether it is part of an include or a request.
+     *
+     * @since 2.10.0
+     */
+    public function registerJs(string $js): void
+    {
+        Component::registerJs($js);
     }
 
     /**
@@ -316,36 +326,36 @@ class SprigVariable
     }
 
     /**
-     * Returns the value for the out-of-band swap from a rendered template if it exists, otherwise a rendered string
+     * Returns the value for the out-of-band swap from a rendered template if it exists, otherwise a rendered string.
      */
-    private function getOobSwapValue(string $template, array $variables = []): ?string
+    private function getOobSwapValue(string $selector, string $template, array $variables = []): ?string
     {
         if (Craft::$app->getView()->resolveTemplate($template) === false) {
             return Craft::$app->getView()->renderString($template, $variables);
         }
 
-        if (in_array($template, $this->getOobSwapTemplates())) {
+        if (in_array($selector, $this->getOobSwapSources())) {
             return null;
         }
 
-        $this->oobSwapTemplates[] = $template;
+        $this->oobSwapSources[] = $selector;
 
         return Craft::$app->getView()->renderTemplate($template, $variables);
     }
 
     /**
-     * Returns the templates that initiated out-of-band swaps in the current request, including the original component template.
+     * Returns the components that initiated out-of-band swaps in the current request, including the original component.
      */
-    private function getOobSwapTemplates(): array
+    private function getOobSwapSources(): array
     {
-        if ($this->oobSwapTemplates === null) {
-            $this->oobSwapTemplates = [];
-            $template = Sprig::$core->requests->getValidatedParam('sprig:template');
-            if ($template) {
-                $this->oobSwapTemplates[] = $template;
+        if ($this->oobSwapSources === null) {
+            $this->oobSwapSources = [];
+            $id = Sprig::$core->requests->getValidatedParam('sprig:id');
+            if ($id) {
+                $this->oobSwapSources[] = '#' . $id;
             }
         }
 
-        return $this->oobSwapTemplates;
+        return $this->oobSwapSources;
     }
 }
