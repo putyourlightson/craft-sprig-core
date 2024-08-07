@@ -1,5 +1,16 @@
 # Release Notes for Sprig Core
 
+## 2.10.0 - 2024-08-08
+
+### Added
+
+- Added the component configurations to a `Sprig` variable in the browser console when `devMode` is enabled.
+- Added the `sprig.registerJs(js)` function.
+
+### Changed
+
+- The `sprig.triggerRefresh(selector, variables)` function now prevents cyclical requests.
+
 ## 2.9.1 - 2024-08-06
 
 ### Changed

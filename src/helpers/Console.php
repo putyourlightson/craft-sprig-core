@@ -17,18 +17,21 @@ use putyourlightson\sprig\models\ConfigModel;
  */
 class Console
 {
-    private static bool $initialized = false;
+    /**
+     * Whether the Sprig object has been initialised.
+     */
+    private static bool $initialised = false;
 
     /**
      * Initialises the Sprig object in the console.
      */
     public static function init(): void
     {
-        if (self::$initialized || Component::getIsRequest()) {
+        if (self::$initialised || Component::getIsRequest()) {
             return;
         }
 
-        self::$initialized = true;
+        self::$initialised = true;
 
         Component::registerJs('Sprig = {components: []}');
     }
