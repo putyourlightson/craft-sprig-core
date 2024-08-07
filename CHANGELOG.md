@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 3.3.0 - Unreleased
+## 3.3.0 - 2024-08-08
 
 ### Added
 

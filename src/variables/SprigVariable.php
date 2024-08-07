@@ -312,7 +312,7 @@ class SprigVariable
     }
 
     /**
-     * Returns the value for the out-of-band swap from a rendered template if it exists, otherwise a rendered string
+     * Returns the value for the out-of-band swap from a rendered template if it exists, otherwise a rendered string.
      */
     private function getOobSwapValue(string $selector, string $template, array $variables = []): ?string
     {
