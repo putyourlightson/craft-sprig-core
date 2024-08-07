@@ -17,7 +17,6 @@ use craft\helpers\UrlHelper;
 use craft\web\View;
 use putyourlightson\sprig\assets\HtmxAssetBundle;
 use putyourlightson\sprig\base\Component;
-use putyourlightson\sprig\components\RefreshOnLoad;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
 use putyourlightson\sprig\helpers\Html;
@@ -207,6 +206,10 @@ class ComponentsService extends BaseComponent
         $config = new ConfigModel();
         $config->siteId = Craft::$app->getSites()->getCurrentSite()->id;
 
+        // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
+        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
+        $config->id = $id;
+
         $mergedVariables = array_merge(
             $variables,
             Sprig::$core->requests->getVariables()
@@ -238,7 +241,7 @@ class ComponentsService extends BaseComponent
 
             // Unset the component type, so that nested components will work.
             // https://github.com/putyourlightson/craft-sprig/issues/243
-            $config->component = '';
+            $config->component = null;
 
             $renderedContent = Craft::$app->getView()->renderTemplate($value, $mergedVariables);
         }
@@ -246,6 +249,8 @@ class ComponentsService extends BaseComponent
         $content = $this->parse($renderedContent);
         $this->validateVariables($variables);
         $config->variables = $variables;
+
+        Component::consoleLog($config->getAttributes());
 
         // Add token to values if this is a preview request.
         // https://github.com/putyourlightson/craft-sprig/issues/162
@@ -259,9 +264,6 @@ class ComponentsService extends BaseComponent
                 $values[$tokenParam] = $token;
             }
         }
-
-        // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
-        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
 
         $values = array_merge(
             ['sprig:config' => $config->getHashed()],

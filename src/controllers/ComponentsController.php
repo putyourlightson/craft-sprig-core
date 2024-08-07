@@ -69,6 +69,8 @@ class ComponentsController extends Controller
             $content = Craft::$app->getView()->renderTemplate($config->template, $variables);
         }
 
+        Component::consoleLog($config->getAttributes());
+
         // Remove flashes after rendering, so they don’t appear on subsequent requests.
         Craft::$app->getSession()->removeAllFlashes();
 

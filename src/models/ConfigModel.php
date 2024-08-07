@@ -16,11 +16,13 @@ use craft\helpers\Json;
  */
 class ConfigModel extends Model
 {
+    public ?string $id = null;
     public ?int $siteId = null;
     public ?string $component = null;
     public ?string $template = null;
-    public ?string $action = null;
     public array $variables = [];
+    public ?string $action = null;
+    public array $triggerRefreshSources = [];
 
     /**
      * Returns a hashed, JSON-encoded array of non-empty config attributes.

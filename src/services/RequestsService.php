@@ -70,6 +70,11 @@ class RequestsService extends Component
             $config->action = Craft::$app->getSecurity()->validateData($actionParam);
         }
 
+        $triggerRefreshSourcesParam = Craft::$app->getRequest()->getParam('sprig:triggerRefreshSources');
+        if ($triggerRefreshSourcesParam) {
+            $config->triggerRefreshSources = Json::decode(Craft::$app->getSecurity()->validateData($triggerRefreshSourcesParam));
+        }
+
         return $config;
     }
 

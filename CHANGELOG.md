@@ -1,5 +1,17 @@
 # Release Notes for Sprig Core
 
+## 3.3.0 - Unreleased
+
+### Added
+
+- Added the logging of component configurations to the browser console when `devMode` is enabled.
+- Added the `sprig.registerJs(js)` function.
+- Added the `sprig.consoleLog(value)` function.
+
+### Changed
+
+- The `sprig.triggerRefresh(selector, variables)` function now prevents cyclical requests.
+
 ## 3.2.1 - 2024-08-06
 
 ### Changed
