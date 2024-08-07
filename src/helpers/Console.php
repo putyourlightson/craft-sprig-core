@@ -8,7 +8,6 @@ namespace putyourlightson\sprig\helpers;
 use Craft;
 use craft\helpers\Json;
 use putyourlightson\sprig\base\Component;
-use putyourlightson\sprig\models\ConfigModel;
 
 /**
  * Manages the Sprig object in the console.
