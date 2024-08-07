@@ -56,16 +56,6 @@ class ComponentsController extends Controller
             Sprig::$core->requests->getVariables()
         );
 
-        $config = [
-            'id' => Sprig::$core->requests->getValidatedParam('sprig:id'),
-            'siteId' => $siteId,
-            'component' => null,
-            'template' => null,
-            'variables' => $variables,
-            'action' => $action,
-            'triggerRefreshSources' => Sprig::$core->requests->getValidatedParam('sprig:triggerRefreshSources') ?? [],
-        ];
-
         $content = '';
 
         if ($component) {
@@ -77,7 +67,6 @@ class ComponentsController extends Controller
                 }
 
                 $content = $componentObject->render();
-                $config['component'] = $component;
             }
         } else {
             if ($action) {
@@ -87,10 +76,17 @@ class ComponentsController extends Controller
 
             $template = Sprig::$core->requests->getRequiredValidatedParam('sprig:template');
             $content = Craft::$app->getView()->renderTemplate($template, $variables);
-            $config['template'] = $template;
         }
 
-        Console::addComponent($config);
+        Console::addComponent([
+            'id' => Sprig::$core->requests->getValidatedParam('sprig:id'),
+            'siteId' => $siteId,
+            'component' => $component,
+            'template' => $template ?? null,
+            'variables' => $variables,
+            'action' => $action,
+            'triggerRefreshSources' => Sprig::$core->requests->getValidatedParam('sprig:triggerRefreshSources') ?? [],
+        ]);
 
         // Append queued HTML to the content.
         $content .= Craft::$app->getView()->getBodyHtml();
