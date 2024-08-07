@@ -304,16 +304,6 @@ class SprigVariable
     }
 
     /**
-     * Logs a value to the console.
-     *
-     * @since 2.10.0
-     */
-    public static function consoleLog(mixed $value, bool $devModeOnly = true): void
-    {
-        Component::consoleLog($value, $devModeOnly);
-    }
-
-    /**
      * Returns a new component.
      */
     public function getComponent(string $value, array $variables = [], array $attributes = []): Markup

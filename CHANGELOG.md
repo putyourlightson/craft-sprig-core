@@ -4,9 +4,8 @@
 
 ### Added
 
-- Added the logging of component configurations to the browser console when `devMode` is enabled.
+- Added the component configurations to a `Sprig` variable in the browser console when `devMode` is enabled.
 - Added the `sprig.registerJs(js)` function.
-- Added the `sprig.consoleLog(value)` function.
 
 ### Changed
 

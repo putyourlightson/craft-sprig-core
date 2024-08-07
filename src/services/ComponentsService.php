@@ -19,6 +19,7 @@ use putyourlightson\sprig\assets\HtmxAssetBundle;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\events\ComponentEvent;
+use putyourlightson\sprig\helpers\Console;
 use putyourlightson\sprig\helpers\Html;
 use putyourlightson\sprig\models\ConfigModel;
 use putyourlightson\sprig\plugin\components\SprigPlayground;
@@ -250,7 +251,7 @@ class ComponentsService extends BaseComponent
         $this->validateVariables($variables);
         $config->variables = $variables;
 
-        Component::consoleLog($config->getAttributes());
+        Console::addComponent($config);
 
         // Add token to values if this is a preview request.
         // https://github.com/putyourlightson/craft-sprig/issues/162

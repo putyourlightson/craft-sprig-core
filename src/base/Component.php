@@ -248,18 +248,4 @@ abstract class Component extends BaseComponent implements ComponentInterface
         $html = Html::tag('div', $content, ['s-swap-oob' => 'beforeend:body']);
         Craft::$app->getView()->registerHtml($html);
     }
-
-    /**
-     * Logs a value to the console.
-     *
-     * @since 2.10.0
-     */
-    public static function consoleLog(mixed $value, bool $devModeOnly = true): void
-    {
-        if ($devModeOnly && Craft::$app->getConfig()->getGeneral()->devMode === false) {
-            return;
-        }
-
-        self::registerJs('console.log(' . Json::encode($value) . ')');
-    }
 }

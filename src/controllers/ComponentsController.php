@@ -13,6 +13,7 @@ use craft\helpers\ArrayHelper;
 use craft\web\Controller;
 use craft\web\UrlManager;
 use putyourlightson\sprig\base\Component;
+use putyourlightson\sprig\helpers\Console;
 use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\web\ForbiddenHttpException;
@@ -69,7 +70,7 @@ class ComponentsController extends Controller
             $content = Craft::$app->getView()->renderTemplate($config->template, $variables);
         }
 
-        Component::consoleLog($config->getAttributes());
+        Console::addComponent($config);
 
         // Remove flashes after rendering, so they don’t appear on subsequent requests.
         Craft::$app->getSession()->removeAllFlashes();
