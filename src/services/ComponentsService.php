@@ -426,12 +426,10 @@ class ComponentsService extends BaseComponent
      */
     private function parseSprigAttribute(array &$attributes): void
     {
-        $verb = 'get';
         $params = [];
+        $method = strtolower($this->getSprigAttributeValue($attributes, 'method', 'get'));
 
-        $method = $this->getSprigAttributeValue($attributes, 'method');
-        if (strtolower($method) == 'post') {
-            $verb = 'post';
+        if ($method === 'post') {
             $this->mergeJsonAttributes($attributes, 'headers', [
                 Request::CSRF_HEADER => Craft::$app->getRequest()->getCsrfToken(),
             ]);
@@ -444,7 +442,7 @@ class ComponentsService extends BaseComponent
             ]);
         }
 
-        $attributes[self::HTMX_PREFIX . $verb] = $this->getSprigActionUrl($params);
+        $attributes[self::HTMX_PREFIX . $method] = $this->getSprigActionUrl($params);
     }
 
     /**
@@ -566,7 +564,7 @@ class ComponentsService extends BaseComponent
     /**
      * Returns a Sprig attribute value if it exists.
      */
-    private function getSprigAttributeValue(array $attributes, string $name): string
+    private function getSprigAttributeValue(array $attributes, string $name, string $default = ''): string
     {
         foreach (self::SPRIG_PREFIXES as $prefix) {
             if (!empty($attributes[$prefix . $name])) {
@@ -578,7 +576,7 @@ class ComponentsService extends BaseComponent
             }
         }
 
-        return '';
+        return $default;
     }
 
     /**
