@@ -429,7 +429,7 @@ class ComponentsService extends BaseComponent
         $params = [];
         $method = strtolower($this->getSprigAttributeValue($attributes, 'method', 'get'));
 
-        if ($method === 'post') {
+        if ($method !== 'get') {
             $this->mergeJsonAttributes($attributes, 'headers', [
                 Request::CSRF_HEADER => Craft::$app->getRequest()->getCsrfToken(),
             ]);
