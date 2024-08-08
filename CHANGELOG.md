@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.10.1 - 2024-08-08
+
+### Fixed
+
+- Fixed CSRF tokens not being sent with requests using a method other than `GET`.
+
 ## 2.10.0 - 2024-08-08
 
 ### Added
