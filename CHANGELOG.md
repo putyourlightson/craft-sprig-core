@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 3.3.2 - 2024-08-12
+
+### Fixed
+
+- Fixed a bug in which asset bundles were being registered and rendered in control panel Sprig requests ([#383](https://github.com/putyourlightson/craft-sprig/issues/383)).
+
 ## 3.3.1 - 2024-08-08
 
 ### Fixed

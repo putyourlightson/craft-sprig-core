@@ -294,7 +294,7 @@ class SprigVariable
     }
 
     /**
-     * Registers JavaScript code to be executed. This method takes care of registering the code depending on whether it is part of an include or a request.
+     * Registers JavaScript code to be executed. This method takes care of registering the code in the appropriate way depending on whether it is part of an include or a request.
      *
      * @since 2.10.0
      */
