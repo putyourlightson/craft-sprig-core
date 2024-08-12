@@ -88,7 +88,9 @@ class ComponentsController extends Controller
             'triggerRefreshSources' => Sprig::$core->requests->getValidatedParam('sprig:triggerRefreshSources') ?? [],
         ]);
 
-        // Append queued HTML to the content.
+        // Append queued HTML to the content, disregarding any asset bundles.
+        // https://github.com/putyourlightson/craft-sprig/issues/383
+        Craft::$app->getView()->assetBundles = [];
         $content .= Craft::$app->getView()->getBodyHtml();
 
         $response = Craft::$app->getResponse();
