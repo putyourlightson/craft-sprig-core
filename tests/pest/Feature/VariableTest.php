@@ -56,39 +56,49 @@ describe('Sprig request', function() {
     test('Swap OOB', function() {
         getVariable()->swapOob('#test1', '_component');
 
-        expect(Craft::$app->getView()->getBodyHtml())
-            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'innerHTML:#test1']));
+        expect(Sprig::$core->requests->getRegisteredHtml())
+            ->toContain(Html::beginTag('div', [
+                ComponentsService::HTMX_PREFIX . 'swap-oob' => 'innerHTML:#test1',
+            ]));
     });
 
     test('Swap OOB with variables', function() {
         getVariable()->swapOob('#test1', '_component', ['number' => 12345]);
 
-        expect(Craft::$app->getView()->getBodyHtml())
-            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'innerHTML:#test1']))
+        expect(Sprig::$core->requests->getRegisteredHtml())
+            ->toContain(Html::beginTag('div', [
+                ComponentsService::HTMX_PREFIX . 'swap-oob' => 'innerHTML:#test1',
+            ]))
             ->toContain(12345);
     });
 
     test('Swap OOB with string', function() {
         getVariable()->swapOob('#test1', '{{ name }}', ['name' => 'xyz']);
 
-        expect(Craft::$app->getView()->getBodyHtml())
-            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'innerHTML:#test1']))
+        expect(Sprig::$core->requests->getRegisteredHtml())
+            ->toContain(Html::beginTag('div', [
+                ComponentsService::HTMX_PREFIX . 'swap-oob' => 'innerHTML:#test1',
+            ]))
             ->toContain('xyz');
     });
 
     test('Trigger refresh', function() {
         getVariable()->triggerRefresh('#test1');
 
-        expect(Craft::$app->getView()->getBodyHtml())
-            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'beforeend:#test1']))
+        expect(Sprig::$core->requests->getRegisteredHtml())
+            ->toContain(Html::beginTag('div', [
+                ComponentsService::HTMX_PREFIX . 'swap-oob' => 'beforeend:#test1',
+            ]))
             ->toContain('htmx.trigger(\'#test1\', \'refresh\')');
     });
 
     test('Trigger refresh with variables', function() {
         getVariable()->triggerRefresh('#test2', ['a' => 'b']);
 
-        expect(Craft::$app->getView()->getBodyHtml())
-            ->toContain(Html::beginTag('div', ['s-swap-oob' => 'beforeend:#test2']))
+        expect(Sprig::$core->requests->getRegisteredHtml())
+            ->toContain(Html::beginTag('div', [
+                ComponentsService::HTMX_PREFIX . 'swap-oob' => 'beforeend:#test2',
+            ]))
             ->toContain(Html::hiddenInput('a', 'b'))
             ->toContain('htmx.trigger(\'#test2\', \'refresh\')');
     });
@@ -104,9 +114,7 @@ describe('Sprig include', function() {
         $selector = '.' . ComponentsService::SPRIG_CSS_CLASS;
         getVariable()->triggerRefreshOnLoad();
 
-        $html = Craft::$app->getView()->getBodyHtml();
-
-        expect($html)
+        expect(Craft::$app->getView()->getBodyHtml())
             ->toContain("htmx.findAll('$selector'))");
     });
 
@@ -114,9 +122,7 @@ describe('Sprig include', function() {
         $selector = '#test';
         getVariable()->triggerRefreshOnLoad($selector);
 
-        $html = Craft::$app->getView()->getBodyHtml();
-
-        expect($html)
+        expect(Craft::$app->getView()->getBodyHtml())
             ->toContain("htmx.findAll('$selector'))");
     });
 });

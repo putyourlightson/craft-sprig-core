@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 3.3.3 - 2024-08-19
+
+### Changed
+
+- Components no longer render markup added via `{% html %}`, `{% css %}` and `{% js %}` tags during Sprig requests.
+
 ## 3.3.2 - 2024-08-12
 
 ### Fixed
@@ -28,7 +34,7 @@
 
 ### Changed
 
-- The `sprig.swapOob()` function now accepts a string in addition to a template to be rendered, in the second argument.
+- The `sprig.swapOob()` function now accepts a string, in addition to a template to be rendered, in the second argument.
 
 ## 3.2.0 - 2024-08-01
 
