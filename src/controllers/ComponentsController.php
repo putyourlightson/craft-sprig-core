@@ -71,11 +71,10 @@ class ComponentsController extends Controller
         }
 
         Console::addComponent($config);
+        $content .= Sprig::$core->requests->getRegisteredHtml();
 
         // Remove flashes after rendering, so they don’t appear on subsequent requests.
         Craft::$app->getSession()->removeAllFlashes();
-
-        $content .= Sprig::$core->requests->getRegisteredHtml();
 
         $response = Craft::$app->getResponse();
         $response->statusCode = 200;
