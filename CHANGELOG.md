@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.11.1 - 2024-08-20
+
+### Fixed
+
+- Fixed a bug that was breaking the `Sprig` variable in the browser console with `devMode` enabled.
+
 ## 2.11.0 - 2024-08-20
 
 ### Changed
