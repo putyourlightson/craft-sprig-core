@@ -5,6 +5,7 @@
 ### Changed
 
 - Components no longer render markup added via `{% html %}`, `{% css %}` and `{% js %}` tags during Sprig requests.
+- The `sprig.registerJs(js)` function now executes the registered JavaScript after htmx settles.
 
 ## 3.3.2 - 2024-08-12
 

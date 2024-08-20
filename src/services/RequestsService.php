@@ -131,9 +131,15 @@ class RequestsService extends Component
 
         // Append registered JS to the `beforeend:body` HTML block.
         if (!empty($this->js)) {
-            $content = Html::script(implode('', $this->js));
+            // Execute the JS after htmx settles, at most once.
+            $js = implode(PHP_EOL, $this->js);
+            $content = <<<JS
+                document.addEventListener('htmx:afterSettle', function() {
+                    $js
+                }, { once: true });
+            JS;
             $this->html['beforeend:body'] = $this->html['beforeend:body'] ?? [];
-            $this->html['beforeend:body'][] = $content;
+            $this->html['beforeend:body'][] = Html::script($content);
         }
 
         foreach ($this->html as $swapSelector => $blocks) {
