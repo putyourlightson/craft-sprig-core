@@ -248,9 +248,7 @@ class SprigVariable
             return;
         }
 
-        $html = Html::tag('div', $value, ['s-swap-oob' => 'innerHTML:' . $selector]);
-
-        Craft::$app->getView()->registerHtml($html);
+        Sprig::$core->requests->registerHtml($value, 'innerHTML:' . $selector);
     }
 
     /**
@@ -277,10 +275,9 @@ class SprigVariable
             $values[] = Html::hiddenInput($name, $value);
         }
 
-        $html = Html::tag('div', implode('', $values), ['s-swap-oob' => 'beforeend:' . $selector]);
-        Craft::$app->getView()->registerHtml($html);
-
-        Component::registerJs('htmx.trigger(\'' . $selector . '\', \'refresh\')');
+        $html = implode('', $values);
+        Sprig::$core->requests->registerHtml($html, 'beforeend:' . $selector);
+        Sprig::$core->requests->registerJs('htmx.trigger(\'' . $selector . '\', \'refresh\')');
     }
 
     /**
@@ -304,7 +301,7 @@ class SprigVariable
             });
         JS;
 
-        Component::registerJs($js);
+        Sprig::$core->requests->registerJs($js);
     }
 
     /**
@@ -314,7 +311,7 @@ class SprigVariable
      */
     public function registerJs(string $js): void
     {
-        Component::registerJs($js);
+        Sprig::$core->requests->registerJs($js);
     }
 
     /**

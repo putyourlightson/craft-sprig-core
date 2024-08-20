@@ -7,10 +7,8 @@ namespace putyourlightson\sprig\base;
 
 use Craft;
 use craft\base\Component as BaseComponent;
-use craft\helpers\Html;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
-use craft\web\View;
 
 abstract class Component extends BaseComponent implements ComponentInterface
 {
@@ -229,23 +227,5 @@ abstract class Component extends BaseComponent implements ComponentInterface
         if ($header) {
             Craft::$app->getResponse()->getHeaders()->set($header, $events);
         }
-    }
-
-    /**
-     * Registers JavaScript code to be executed. This method takes care of registering the code depending on whether it is part of an include or a request.
-     *
-     * @since 2.10.0
-     */
-    public static function registerJs(string $js): void
-    {
-        if (self::getIsInclude()) {
-            Craft::$app->getView()->registerJs($js, View::POS_END);
-
-            return;
-        }
-
-        $content = Html::script($js);
-        $html = Html::tag('div', $content, ['s-swap-oob' => 'beforeend:body']);
-        Craft::$app->getView()->registerHtml($html);
     }
 }
