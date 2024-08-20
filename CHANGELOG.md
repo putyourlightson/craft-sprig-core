@@ -1,11 +1,11 @@
 # Release Notes for Sprig Core
 
-## 3.3.3 - 2024-08-19
+## 3.4.0 - 2024-08-20
 
 ### Changed
 
+- The `sprig.registerJs(js)` function now executes the registered JavaScript after htmx settles, and is now the recommended way of outputting JavaScript in Sprig components.
 - Components no longer render markup added via `{% html %}`, `{% css %}` and `{% js %}` tags during Sprig requests.
-- The `sprig.registerJs(js)` function now executes the registered JavaScript after htmx settles.
 
 ## 3.3.2 - 2024-08-12
 

@@ -7,8 +7,12 @@ namespace putyourlightson\sprig\base;
 
 use Craft;
 use craft\base\Component as BaseComponent;
+use craft\helpers\Html;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
+use craft\web\View;
+use putyourlightson\sprig\services\ComponentsService;
+use putyourlightson\sprig\Sprig;
 
 abstract class Component extends BaseComponent implements ComponentInterface
 {
@@ -50,7 +54,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function getIsInclude(): bool
     {
-        return !self::getIsRequest();
+        return !static::getIsRequest();
     }
 
     /**
@@ -187,6 +191,22 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Registers JavaScript code to be output. This method takes care of registering the code in the appropriate way depending on whether it is part of an include or a request.
+     *
+     * @since 2.11.0
+     */
+    public static function registerJs(string $js): void
+    {
+        if (static::getIsInclude()) {
+            Craft::$app->getView()->registerJs($js, View::POS_END);
+
+            return;
+        }
+
+        Sprig::$core->requests->registerJs($js);
+    }
+
+    /**
      * Specifies how the response will be swapped.
      * https://htmx.org/reference#response_headers
      */
@@ -202,6 +222,26 @@ abstract class Component extends BaseComponent implements ComponentInterface
     public static function retarget(string $target): void
     {
         Craft::$app->getResponse()->getHeaders()->set('HX-Retarget', $target);
+    }
+
+    /**
+     * Swaps a template out-of-band. Cyclical requests are mitigated by prevented the swapping of unique components multiple times in the current request, including the initiating component.
+     * https://htmx.org/attributes/hx-swap-oob/
+     *
+     * @since 2.9.0
+     */
+    public static function swapOob(string $selector, string $template, array $variables = []): void
+    {
+        if (static::getIsInclude()) {
+            return;
+        }
+
+        $value = Sprig::$core->requests->getOobSwapValue($selector, $template, $variables);
+        if ($value === null) {
+            return;
+        }
+
+        Sprig::$core->requests->registerHtml($value, 'innerHTML:' . $selector);
     }
 
     /**
@@ -227,5 +267,57 @@ abstract class Component extends BaseComponent implements ComponentInterface
         if ($header) {
             Craft::$app->getResponse()->getHeaders()->set($header, $events);
         }
+    }
+
+    /**
+     * Triggers a refresh event on the provided selector. If variables are provided then they are appended to the component as hidden input fields. Cyclical requests are mitigated by prevented the triggering of unique components multiple times, including the initiating component.
+     *
+     * @since 2.9.0
+     */
+    public static function triggerRefresh(string $selector, array $variables = []): void
+    {
+        if (static::getIsInclude()) {
+            return;
+        }
+
+        $config = Sprig::$core->requests->getValidatedConfig();
+        if (in_array($selector, $config->triggerRefreshSources)) {
+            return;
+        }
+
+        $config->triggerRefreshSources[] = '#' . $config->id;
+        $variables['sprig:triggerRefreshSources'] = Craft::$app->getSecurity()->hashData(Json::encode($config->triggerRefreshSources));
+
+        foreach ($variables as $name => $value) {
+            $values[] = Html::hiddenInput($name, $value);
+        }
+
+        $html = implode('', $values);
+        Sprig::$core->requests->registerHtml($html, 'beforeend:' . $selector);
+        Sprig::$core->requests->registerJs('htmx.trigger(\'' . $selector . '\', \'refresh\')');
+    }
+
+    /**
+     * Triggers a refresh event on all components on load.
+     * https://github.com/putyourlightson/craft-sprig/issues/279
+     *
+     * @since 2.3.0
+     */
+    public static function triggerRefreshOnLoad(string $selector = ''): void
+    {
+        if (static::getIsRequest()) {
+            return;
+        }
+
+        $selector = $selector ?: '.' . ComponentsService::SPRIG_CSS_CLASS;
+        $js = <<<JS
+            fetch('/actions/users/session-info', {headers: {'Accept': 'application/json'}}).then(() => {
+                for (const component of htmx.findAll('$selector')) {
+                    htmx.trigger(component, 'refresh');
+                }
+            });
+        JS;
+
+        Craft::$app->getView()->registerJs($js);
     }
 }

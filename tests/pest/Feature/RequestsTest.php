@@ -87,6 +87,22 @@ test('Get cache duration provided a negative value', function() {
         ->toBe(0);
 });
 
+test('Get registered HTML', function() {
+    Sprig::$core->requests->registerHtml('xyz', 'swap:selector');
+
+    expect(Sprig::$core->requests->getRegisteredHtml())
+        ->toContain('swap-oob="swap:selector"')
+        ->toContain('xyz');
+});
+
+test('Get registered HTML includes registered JS', function() {
+    Sprig::$core->requests->registerJs('xyz');
+
+    expect(Sprig::$core->requests->getRegisteredHtml())
+        ->toContain('swap-oob="beforeend:body"')
+        ->toContain('xyz');
+});
+
 test('Validate data', function() {
     $data = Craft::$app->getSecurity()->hashData('xyz') . 'abc';
 
