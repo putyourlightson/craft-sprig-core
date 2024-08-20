@@ -12,7 +12,6 @@ use putyourlightson\sprig\variables\SprigVariable;
 beforeEach(function() {
     Sprig::bootstrap();
     Craft::$app->getResponse()->getHeaders()->removeAll();
-    Craft::$app->getView()->clear();
     Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
@@ -48,7 +47,7 @@ describe('Sprig request', function() {
     beforeEach(function() {
         Craft::$app->getRequest()->setQueryParams(['sprig:template' => Craft::$app->getSecurity()->hashData('test')]);
         Craft::$app->getRequest()->getHeaders()->set('HX-Request', true);
-        Craft::$app->getView()->clear();
+        Sprig::$core->requests->resetOobSwapSources();
     });
 
     test('Swap OOB', function() {

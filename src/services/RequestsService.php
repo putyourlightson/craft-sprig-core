@@ -10,8 +10,7 @@ use craft\base\Component;
 use craft\helpers\Html;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
-use craft\web\View;
-use putyourlightson\sprig\base\Component as BaseComponent;
+use putyourlightson\sprig\Sprig;
 use yii\web\BadRequestHttpException;
 
 /**
@@ -43,6 +42,13 @@ class RequestsService extends Component
      * @var string[]
      */
     private array $js = [];
+
+    /**
+     * The components that initiated out-of-band swaps in the current request.
+     *
+     * @var string[]|null
+     */
+    private ?array $oobSwapSources = null;
 
     /**
      * Returns allowed request variables.
@@ -153,7 +159,7 @@ class RequestsService extends Component
             // Execute the JS after htmx settles, at most once.
             $js = implode(PHP_EOL, $this->js);
             $content = <<<JS
-                document.addEventListener('htmx:afterSettle', function() {
+                document.body.addEventListener('htmx:afterSettle', function() {
                     $js
                 }, { once: true });
             JS;
@@ -175,38 +181,52 @@ class RequestsService extends Component
     }
 
     /**
-     * Registers HTML code to be output. This method takes care of registering the code depending on whether it is part of an include or a request.
+     * Registers HTML code to be output.
      *
      * @since 2.11.0
      */
     public function registerHtml(string $html, string $swapSelector): void
     {
-        if (BaseComponent::getIsInclude()) {
-            Craft::$app->getView()->registerHtml($html);
-
-            return;
-        }
-
         $this->html[$swapSelector][] = $html;
     }
 
     /**
-     * Registers JavaScript code to be output. This method takes care of registering the code depending on whether it is part of an include or a request.
+     * Registers JavaScript code to be output.
      *
      * @since 2.11.0
      */
     public function registerJs(string $js): void
     {
-        if (BaseComponent::getIsInclude()) {
-            Craft::$app->getView()->registerJs($js, View::POS_END);
-
-            return;
-        }
-
         // Trim any whitespace and ensure it ends with a semicolon.
         $js = StringHelper::ensureRight(trim($js, " \t\n\r\0\x0B"), ';');
 
         $this->js[] = $js;
+    }
+
+    /**
+     * Returns the value for the out-of-band swap from a rendered template if it exists, otherwise a rendered string.
+     */
+    public function getOobSwapValue(string $selector, string $template, array $variables = []): ?string
+    {
+        if (Craft::$app->getView()->resolveTemplate($template) === false) {
+            return Craft::$app->getView()->renderString($template, $variables);
+        }
+
+        if (in_array($selector, $this->getOobSwapSources())) {
+            return null;
+        }
+
+        $this->oobSwapSources[] = $selector;
+
+        return Craft::$app->getView()->renderTemplate($template, $variables);
+    }
+
+    /**
+     * Resets the components that initiated out-of-band swaps in the current request.
+     */
+    public function resetOobSwapSources(): void
+    {
+        $this->oobSwapSources = [];
     }
 
     /**
@@ -239,5 +259,21 @@ class RequestsService extends Component
         }
 
         return true;
+    }
+
+    /**
+     * Returns the components that initiated out-of-band swaps in the current request, including the original component.
+     */
+    private function getOobSwapSources(): array
+    {
+        if ($this->oobSwapSources === null) {
+            $this->oobSwapSources = [];
+            $id = Sprig::$core->requests->getValidatedParam('sprig:id');
+            if ($id) {
+                $this->oobSwapSources[] = '#' . $id;
+            }
+        }
+
+        return $this->oobSwapSources;
     }
 }
