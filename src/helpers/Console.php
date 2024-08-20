@@ -9,7 +9,6 @@ use Craft;
 use craft\helpers\Json;
 use putyourlightson\sprig\base\Component;
 use putyourlightson\sprig\models\ConfigModel;
-use putyourlightson\sprig\Sprig;
 
 /**
  * Manages the Sprig object in the console.
@@ -34,7 +33,7 @@ class Console
 
         self::$initialised = true;
 
-        Sprig::$core->requests->registerJs('Sprig = {components: []}');
+        Component::registerJs('Sprig = {components: []}');
     }
 
     /**
@@ -50,6 +49,6 @@ class Console
 
         $value = Json::encode($config->getAttributes());
 
-        Sprig::$core->requests->registerJs('Sprig.components.push(' . $value . ')');
+        Component::registerJs('Sprig.components.push(' . $value . ')');
     }
 }
