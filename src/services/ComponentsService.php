@@ -212,10 +212,6 @@ class ComponentsService extends BaseComponent
             $attributes = ['id' => $attributes];
         }
 
-        // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
-        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
-        $config->id = $id;
-
         $mergedVariables = array_merge(
             $variables,
             Sprig::$core->requests->getVariables()
@@ -232,6 +228,10 @@ class ComponentsService extends BaseComponent
         $value = $event->value;
         $mergedVariables = $event->variables;
         $attributes = $event->attributes;
+
+        // Fall back to a random ID that does not start with a digit (to avoid a JS error)
+        $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
+        $config->id = $id;
 
         $componentObject = $this->createObject($value, $mergedVariables);
 
