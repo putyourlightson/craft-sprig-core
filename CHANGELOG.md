@@ -2,6 +2,10 @@
 
 ## 2.12.0 - Unreleased
 
+### Added
+
+- Added the ability to assign an ID to a component by passing a string as the third argument to the `sprig()` function.
+
 ### Deprecated
 
 - Deprecated `sprig.getIsBoosted`, `sprig.getIsError`, `sprig.getIsHistoryRestoreRequest`, `sprig.getIsInclude`, `sprig.getIsRequest`, `sprig.getIsSuccess`. Use `sprig.isBoosted`, `sprig.isError`, `sprig.isHistoryRestoreRequest`, `sprig.isInclude`, `sprig.isRequest`, `sprig.isSuccess` instead.

@@ -206,7 +206,7 @@ class ComponentsService extends BaseComponent
     /**
      * Creates a new component.
      */
-    public function create(string $value, array $variables = [], array $attributes = []): Markup
+    public function create(string $value, array $variables = [], array|string $attributes = []): Markup
     {
         $this->componentName = $value;
         $values = [];
@@ -218,6 +218,11 @@ class ComponentsService extends BaseComponent
             $variables,
             Sprig::$core->requests->getVariables()
         );
+
+        // Allow an ID to be passed in as a string
+        if (is_string($attributes)) {
+            $attributes = ['id' => $attributes];
+        }
 
         $event = new ComponentEvent([
             'value' => $value,
