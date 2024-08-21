@@ -8,6 +8,7 @@ namespace putyourlightson\sprig\variables;
 use craft\db\Paginator;
 use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
+use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use yii\db\Query;
 use yii\web\AssetBundle;
@@ -15,41 +16,19 @@ use yii\web\AssetBundle;
 class SprigVariable
 {
     /**
-     * Returns whether this is a Sprig request.
+     * Returns the htmx version number.
+     *
+     * @since 2.6.0
      */
-    public function getIsRequest(): bool
+    public function getHtmxVersion(): string
     {
-        return Component::getIsRequest();
-    }
-
-    /**
-     * Returns whether this is a Sprig include.
-     */
-    public function getIsInclude(): bool
-    {
-        return Component::getIsInclude();
-    }
-
-    /**
-     * Returns whether this is a success request.
-     */
-    public function getIsSuccess(): bool
-    {
-        return Component::getIsSuccess();
-    }
-
-    /**
-     * Returns whether this is an error request.
-     */
-    public function getIsError(): bool
-    {
-        return Component::getIsError();
+        return ComponentsService::HTMX_VERSION;
     }
 
     /**
      * Returns the message resulting from a request.
      */
-    public static function getMessage(): string
+    public function getMessage(): string
     {
         return Component::getMessage();
     }
@@ -57,17 +36,9 @@ class SprigVariable
     /**
      * Returns the model ID resulting from a request.
      */
-    public static function getModelId(): ?int
+    public function getModelId(): ?int
     {
         return Component::getModelId();
-    }
-
-    /**
-     * Returns whether this is a boosted request.
-     */
-    public static function getIsBoosted(): bool
-    {
-        return Component::getIsBoosted();
     }
 
     /**
@@ -111,33 +82,56 @@ class SprigVariable
     }
 
     /**
-     * Registers the script and returns the asset bundle.
-     *
-     * @since 2.6.3
+     * Returns whether this is a boosted request.
      */
-    public function registerScript(array $attributes = []): AssetBundle
+    public function isBoosted(): bool
     {
-        return Sprig::$core->components->registerScript($attributes);
+        return Component::isBoosted();
     }
 
     /**
-     * Sets whether the script should automatically be registered.
-     *
-     * @since 2.6.3
+     * Returns whether this is an error request.
      */
-    public function setRegisterScript(bool|array $value = true): void
+    public function isError(): bool
     {
-        Sprig::$core->components->setRegisterScript($value);
+        return Component::isError();
     }
 
     /**
-     * Sets config options and registers them as a meta tag.
-     *
-     * @since 2.5.0
+     * Returns whether this is a history restore request.
      */
-    public function setConfig(array $options = []): void
+    public function isHistoryRestoreRequest(): bool
     {
-        Sprig::$core->components->setConfig($options);
+        return Component::isHistoryRestoreRequest();
+    }
+
+    /**
+     * Returns whether this is a Sprig include.
+     */
+    public function isInclude(): bool
+    {
+        return Component::isInclude();
+    }
+
+    /**
+     * Returns whether this is a Sprig request.
+     */
+    public function isRequest(): bool
+    {
+        return Component::isRequest();
+    }
+
+    /**
+     * Returns whether this is a success request.
+     */
+    public function isSuccess(): bool
+    {
+        return Component::isSuccess();
+    }
+
+    public function location(string $url): void
+    {
+        Component::location($url);
     }
 
     /**
@@ -156,11 +150,6 @@ class SprigVariable
         $paginator = new Paginator($paginatorQuery, $config);
 
         return PaginateVariable::create($paginator);
-    }
-
-    public function location(string $url): void
-    {
-        Component::location($url);
     }
 
     public function pushUrl(string $url): void
@@ -183,6 +172,16 @@ class SprigVariable
         Component::registerJs($js);
     }
 
+    /**
+     * Registers the script and returns the asset bundle.
+     *
+     * @since 2.6.3
+     */
+    public function registerScript(array $attributes = []): AssetBundle
+    {
+        return Sprig::$core->components->registerScript($attributes);
+    }
+
     public function replaceUrl(string $url): void
     {
         Component::replaceUrl($url);
@@ -196,6 +195,26 @@ class SprigVariable
     public function retarget(string $target): void
     {
         Component::retarget($target);
+    }
+
+    /**
+     * Sets config options and registers them as a meta tag.
+     *
+     * @since 2.5.0
+     */
+    public function setConfig(array $options = []): void
+    {
+        Sprig::$core->components->setConfig($options);
+    }
+
+    /**
+     * Sets whether the script should automatically be registered, and optionally how.
+     *
+     * @since 2.6.3
+     */
+    public function setRegisterScript(bool|array $value = true): void
+    {
+        Sprig::$core->components->setRegisterScript($value);
     }
 
     public function swapOob(string $selector, string $template, array $variables = []): void
@@ -216,5 +235,53 @@ class SprigVariable
     public function triggerRefreshOnLoad(string $selector = ''): void
     {
         Component::triggerRefreshOnLoad($selector);
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isBoosted()` instead.
+     */
+    public function getIsBoosted(): bool
+    {
+        return Component::getIsBoosted();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isError()` instead.
+     */
+    public function getIsError(): bool
+    {
+        return Component::getIsError();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isHistoryRestoreRequest()` instead.
+     */
+    public function getIsHistoryRestoreRequest(): bool
+    {
+        return Component::getIsHistoryRestoreRequest();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isInclude()` instead.
+     */
+    public function getIsInclude(): bool
+    {
+        return Component::getIsInclude();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isRequest()` instead.
+     */
+    public function getIsRequest(): bool
+    {
+        return Component::getIsRequest();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isSuccess()` instead.
+     */
+    public function getIsSuccess(): bool
+    {
+        return Component::getIsSuccess();
     }
 }

@@ -42,38 +42,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
-     * Returns whether this is a Sprig request.
-     */
-    public static function getIsRequest(): bool
-    {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false) == 'true';
-    }
-
-    /**
-     * Returns whether this is a Sprig include.
-     */
-    public static function getIsInclude(): bool
-    {
-        return !static::getIsRequest();
-    }
-
-    /**
-     * Returns whether this is a success request.
-     */
-    public static function getIsSuccess(): bool
-    {
-        return Craft::$app->getSession()->getFlash('sprig:isSuccess', false);
-    }
-
-    /**
-     * Returns whether this is an error request.
-     */
-    public static function getIsError(): bool
-    {
-        return Craft::$app->getSession()->getFlash('sprig:isError', false);
-    }
-
-    /**
      * Returns the message resulting from a request.
      */
     public static function getMessage(): string
@@ -87,22 +55,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     public static function getModelId(): ?int
     {
         return Craft::$app->getSession()->getFlash('sprig:modelId');
-    }
-
-    /**
-     * Returns whether this is a boosted request.
-     */
-    public static function getIsBoosted(): bool
-    {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted', false) == 'true';
-    }
-
-    /**
-     * Returns whether this is a history restore request.
-     */
-    public static function getIsHistoryRestoreRequest(): bool
-    {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-History-Restore-Request', false) == 'true';
     }
 
     /**
@@ -146,6 +98,54 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
+     * Returns whether this is a boosted request.
+     */
+    public static function isBoosted(): bool
+    {
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted', false) == 'true';
+    }
+
+    /**
+     * Returns whether this is an error request.
+     */
+    public static function isError(): bool
+    {
+        return Craft::$app->getSession()->getFlash('sprig:isError', false);
+    }
+
+    /**
+     * Returns whether this is a history restore request.
+     */
+    public static function isHistoryRestoreRequest(): bool
+    {
+        return Craft::$app->getRequest()->getHeaders()->get('HX-History-Restore-Request', false) == 'true';
+    }
+
+    /**
+     * Returns whether this is a Sprig include.
+     */
+    public static function isInclude(): bool
+    {
+        return !static::isRequest();
+    }
+
+    /**
+     * Returns whether this is a Sprig request.
+     */
+    public static function isRequest(): bool
+    {
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false) == 'true';
+    }
+
+    /**
+     * Returns whether this is a success request.
+     */
+    public static function isSuccess(): bool
+    {
+        return Craft::$app->getSession()->getFlash('sprig:isSuccess', false);
+    }
+
+    /**
      * Triggers a client-side redirect without reloading the page.
      * https://htmx.org/headers/hx-location/
      */
@@ -173,15 +173,6 @@ abstract class Component extends BaseComponent implements ComponentInterface
     }
 
     /**
-     * Replaces the current URL in the location bar.
-     * https://htmx.org/headers/hx-replace-url/
-     */
-    public static function replaceUrl(string $url): void
-    {
-        Craft::$app->getResponse()->getHeaders()->set('HX-Replace-Url', $url);
-    }
-
-    /**
      * Refreshes the browser.
      * https://htmx.org/reference#response_headers
      */
@@ -197,13 +188,22 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function registerJs(string $js): void
     {
-        if (static::getIsInclude()) {
+        if (static::isInclude()) {
             Craft::$app->getView()->registerJs($js, View::POS_END);
 
             return;
         }
 
         Sprig::$core->requests->registerJs($js);
+    }
+
+    /**
+     * Replaces the current URL in the location bar.
+     * https://htmx.org/headers/hx-replace-url/
+     */
+    public static function replaceUrl(string $url): void
+    {
+        Craft::$app->getResponse()->getHeaders()->set('HX-Replace-Url', $url);
     }
 
     /**
@@ -232,7 +232,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function swapOob(string $selector, string $template, array $variables = []): void
     {
-        if (static::getIsInclude()) {
+        if (static::isInclude()) {
             return;
         }
 
@@ -276,7 +276,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function triggerRefresh(string $selector, array $variables = []): void
     {
-        if (static::getIsInclude()) {
+        if (static::isInclude()) {
             return;
         }
 
@@ -306,7 +306,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function triggerRefreshOnLoad(string $selector = ''): void
     {
-        if (static::getIsRequest()) {
+        if (static::isRequest()) {
             return;
         }
 
@@ -320,5 +320,65 @@ abstract class Component extends BaseComponent implements ComponentInterface
         JS;
 
         Craft::$app->getView()->registerJs($js);
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isBoosted()` instead.
+     */
+    public static function getIsBoosted(): bool
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.getIsBoosted` has been deprecated. Use `sprig.isBoosted` instead.');
+
+        return static::isBoosted();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isError()` instead.
+     */
+    public static function getIsError(): bool
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.getIsError` has been deprecated. Use `sprig.isError` instead.');
+
+        return static::isError();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isHistoryRestoreRequest()` instead.
+     */
+    public static function getIsHistoryRestoreRequest(): bool
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.getIsHistoryRestoreRequest` has been deprecated. Use `sprig.isHistoryRestoreRequest` instead.');
+
+        return static::isHistoryRestoreRequest();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isInclude()` instead.
+     */
+    public static function getIsInclude(): bool
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.getIsInclude` has been deprecated. Use `sprig.isInclude` instead.');
+
+        return static::isInclude();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isRequest()` instead.
+     */
+    public static function getIsRequest(): bool
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.getIsRequest` has been deprecated. Use `sprig.isRequest` instead.');
+
+        return static::isRequest();
+    }
+
+    /**
+     * @deprecated since 2.12.0. Use `isSuccess()` instead.
+     */
+    public static function getIsSuccess(): bool
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.getIsSuccess` has been deprecated. Use `sprig.isSuccess` instead.');
+
+        return static::isSuccess();
     }
 }

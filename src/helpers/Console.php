@@ -26,7 +26,7 @@ class Console
      */
     public static function init(): void
     {
-        if (self::$initialised || Component::getIsRequest()) {
+        if (self::$initialised || Component::isRequest()) {
             return;
         }
 

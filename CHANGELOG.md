@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.12.0 - Unreleased
+
+### Deprecated
+
+- Deprecated `sprig.getIsBoosted`, `sprig.getIsError`, `sprig.getIsHistoryRestoreRequest`, `sprig.getIsInclude`, `sprig.getIsRequest`, `sprig.getIsSuccess`. Use `sprig.isBoosted`, `sprig.isError`, `sprig.isHistoryRestoreRequest`, `sprig.isInclude`, `sprig.isRequest`, `sprig.isSuccess` instead.
+
 ## 2.11.1 - 2024-08-20
 
 ### Fixed
