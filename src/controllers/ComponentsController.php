@@ -195,10 +195,10 @@ class ComponentsController extends Controller
     /**
      * Sets values for the current session, so we can retrieve them in the same request.
      *
-     * @used-by Component::getIsSuccess()
-     * @used-by Component::getIsError()
      * @used-by Component::getMessage()
      * @used-by Component::getModelId()
+     * @used-by Component::isError()
+     * @used-by Component::isSuccess()
      */
     private function setSessionValues(bool $success, string $message, ?int $modelId = null): void
     {
