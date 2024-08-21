@@ -200,12 +200,17 @@ class ComponentsService extends BaseComponent
     /**
      * Creates a new component.
      */
-    public function create(string $value, array $variables = [], array $attributes = []): Markup
+    public function create(string $value, array $variables = [], array|string $attributes = []): Markup
     {
         $this->componentName = $value;
         $values = [];
         $config = new ConfigModel();
         $config->siteId = Craft::$app->getSites()->getCurrentSite()->id;
+
+        // Allow an ID to be passed in as a string
+        if (is_string($attributes)) {
+            $attributes = ['id' => $attributes];
+        }
 
         // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
         $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
