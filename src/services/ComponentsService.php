@@ -236,7 +236,7 @@ class ComponentsService extends BaseComponent
         $mergedVariables = $event->variables;
         $attributes = $event->attributes;
 
-        // Allow ID to be overridden, otherwise ensure random ID does not start with a digit (to avoid a JS error)
+        // Fall back to a random ID that does not start with a digit (to avoid a JS error)
         $id = $attributes['id'] ?? ('component-' . StringHelper::randomString(6));
         $values['sprig:id'] = Craft::$app->getSecurity()->hashData($id);
 
