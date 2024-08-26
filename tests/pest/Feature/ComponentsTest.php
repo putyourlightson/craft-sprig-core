@@ -7,7 +7,6 @@
 use craft\elements\Entry;
 use putyourlightson\sprig\errors\FriendlyInvalidVariableException;
 use putyourlightson\sprig\Sprig;
-use putyourlightson\sprig\test\components\TestComponent;
 use Twig\Markup;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -40,6 +39,19 @@ test('Creating a component with variables and options', function() {
             'data-hx-push-url="new-url"',
             'data-hx-headers="{&quot;S-Cache&quot;:&quot;10&quot;}"',
             'xyz 15',
+        );
+});
+
+test('Creating a component with an ID passed in as a string', function() {
+    $markup = Sprig::$core->components->create(
+        '_component',
+        [],
+        'abc'
+    );
+
+    expect((string)$markup)
+        ->toContain(
+            'id="abc"',
         );
 });
 
