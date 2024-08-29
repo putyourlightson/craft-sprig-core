@@ -1,6 +1,6 @@
 # Release Notes for Sprig Core
 
-## 2.12.0 - Unreleased
+## 2.12.0 - 2024-08-29
 
 ### Added
 
@@ -9,6 +9,10 @@
 ### Changed
 
 - Updated htmx to version 2.0.2 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#202---2024-08-12)).
+
+### Fixed
+
+- Fixed the positioning of the JavaScript output by the `sprig.triggerRefreshOnLoad` function.
 
 ### Deprecated
 

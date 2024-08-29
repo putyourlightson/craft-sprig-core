@@ -319,7 +319,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
             });
         JS;
 
-        Craft::$app->getView()->registerJs($js);
+        Craft::$app->getView()->registerJs($js, View::POS_END);
     }
 
     /**

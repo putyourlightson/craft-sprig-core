@@ -393,7 +393,7 @@ class ComponentsService extends BaseComponent
             Craft::error('Backtrack limit was exhausted!', __METHOD__);
         }
 
-        return $matches[0] ?? [];
+        return [];
     }
 
     /**
