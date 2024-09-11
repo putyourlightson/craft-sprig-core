@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.12.1 - 2024-09-11
+
+### Fixed
+
+- Fixed the ability to pass a JSON encoded string into the `sprig.triggerEvents()` function ([#15](https://github.com/putyourlightson/craft-sprig-core/issues/15).
+
 ## 2.12.0 - 2024-08-29
 
 ### Added

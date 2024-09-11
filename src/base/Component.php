@@ -247,14 +247,18 @@ abstract class Component extends BaseComponent implements ComponentInterface
     /**
      * Triggers client-side events.
      * https://htmx.org/headers/hx-trigger/
+     *
+     * @param array|string $events An array of events, a string of comma-separated events, or a JSON encoded string (that is passed along as-is).
      */
     public static function triggerEvents(array|string $events, string $on = 'load'): void
     {
-        if (is_string($events)) {
-            $events = StringHelper::split($events);
+        $decoded = Json::decodeIfJson($events);
+        if ($events === $decoded) {
+            if (is_string($events)) {
+                $events = StringHelper::split($events);
+            }
+            $events = Json::encode(array_combine($events, $events));
         }
-
-        $events = Json::encode(array_combine($events, $events));
 
         $headerMap = [
             'load' => 'HX-Trigger',
