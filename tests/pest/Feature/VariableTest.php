@@ -15,11 +15,11 @@ beforeEach(function() {
     Craft::$app->getView()->setTemplatesPath(Craft::getAlias('@putyourlightson/sprig/test/templates'));
 });
 
-test('Trigger events as strings', function() {
+test('Trigger events as string', function() {
     getVariable()->triggerEvents('a,b,c');
 
     expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger'))
-        ->toEqual('{"a":"a","b":"b","c":"c"}');
+        ->toEqual('a,b,c');
 });
 
 test('Trigger events as JSON string', function() {
@@ -47,7 +47,7 @@ test('Trigger events after swap', function() {
     getVariable()->triggerEvents('a,b,c', 'swap');
 
     expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger-After-Swap'))
-        ->toEqual('{"a":"a","b":"b","c":"c"}');
+        ->toEqual('a,b,c');
 });
 
 describe('Sprig request', function() {

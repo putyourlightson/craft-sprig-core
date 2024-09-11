@@ -9,7 +9,6 @@ use Craft;
 use craft\base\Component as BaseComponent;
 use craft\helpers\Html;
 use craft\helpers\Json;
-use craft\helpers\StringHelper;
 use craft\web\View;
 use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
@@ -248,15 +247,11 @@ abstract class Component extends BaseComponent implements ComponentInterface
      * Triggers client-side events.
      * https://htmx.org/headers/hx-trigger/
      *
-     * @param array|string $events An array of events, a string of comma-separated events, or a JSON encoded string (that is passed along as-is).
+     * @param array|string $events An array of events, one or more comma-separated events as a string, or a JSON encoded string (that is passed along as-is).
      */
     public static function triggerEvents(array|string $events, string $on = 'load'): void
     {
-        $decoded = Json::decodeIfJson($events);
-        if ($events === $decoded) {
-            if (is_string($events)) {
-                $events = StringHelper::split($events);
-            }
+        if (is_array($events)) {
             $events = Json::encode(array_combine($events, $events));
         }
 
