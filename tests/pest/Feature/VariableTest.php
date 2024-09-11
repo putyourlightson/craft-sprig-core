@@ -22,6 +22,13 @@ test('Trigger events as strings', function() {
         ->toEqual('{"a":"a","b":"b","c":"c"}');
 });
 
+test('Trigger events as JSON string', function() {
+    getVariable()->triggerEvents('{"a":{"b":"c"}}');
+
+    expect(Craft::$app->getResponse()->getHeaders()->get('HX-Trigger'))
+        ->toEqual('{"a":{"b":"c"}}');
+});
+
 test('Trigger events as arrays', function() {
     getVariable()->triggerEvents(['a', 'b', 'c']);
 
