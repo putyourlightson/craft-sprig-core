@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.12.2 - 2024-09-17
+
+### Changed
+
+- Reverted the removal of the `sprig.script` function ([#391](https://github.com/putyourlightson/craft-sprig/issues/391).
+
 ## 2.12.1 - 2024-09-11
 
 ### Fixed

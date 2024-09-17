@@ -16,6 +16,18 @@ use yii\web\AssetBundle;
 class SprigVariable
 {
     /**
+     * Returns the script tag with the given attributes.
+     *
+     * @deprecated in 2.6.0
+     */
+    public function getScript(array $attributes = []): string
+    {
+        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.script` has been deprecated. It is no longer required and can be safely removed.');
+
+        return '';
+    }
+
+    /**
      * Returns the htmx version number.
      *
      * @since 2.6.0
