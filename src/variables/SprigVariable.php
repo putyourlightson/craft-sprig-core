@@ -12,6 +12,7 @@ use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use yii\db\Query;
 use yii\web\AssetBundle;
+use Craft;
 
 class SprigVariable
 {
