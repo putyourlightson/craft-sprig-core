@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 2.12.3 - 2024-09-19
+
+### Fixed
+
+- Fixed a missing import ([#16](https://github.com/putyourlightson/craft-sprig-core/pull/16).
+
 ## 2.12.2 - 2024-09-17
 
 ### Changed
