@@ -5,6 +5,7 @@
 
 namespace putyourlightson\sprig\variables;
 
+use Craft;
 use craft\db\Paginator;
 use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
@@ -12,7 +13,6 @@ use putyourlightson\sprig\services\ComponentsService;
 use putyourlightson\sprig\Sprig;
 use yii\db\Query;
 use yii\web\AssetBundle;
-use Craft;
 
 class SprigVariable
 {
