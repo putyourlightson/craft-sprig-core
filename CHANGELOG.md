@@ -1,5 +1,11 @@
 # Release Notes for Sprig Core
 
+## 3.5.2 - Unreleased
+
+### Changed
+
+- The fetch function is now called inside an event listener when calling `sprig.triggerRefreshOnLoad()`, making it more robust.
+
 ## 3.5.1 - 2024-09-11
 
 ### Fixed
