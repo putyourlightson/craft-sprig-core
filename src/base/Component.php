@@ -310,10 +310,16 @@ abstract class Component extends BaseComponent implements ComponentInterface
 
         $selector = $selector ?: '.' . ComponentsService::SPRIG_CSS_CLASS;
         $js = <<<JS
-            fetch('/actions/users/session-info', {headers: {'Accept': 'application/json'}}).then(() => {
-                for (const component of htmx.findAll('$selector')) {
-                    htmx.trigger(component, 'refresh');
-                }
+            window.addEventListener('DOMContentLoaded', function() {
+                fetch('/actions/users/session-info', {
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                }).then(function() {
+                    for (const component of htmx.findAll('$selector')) {
+                        htmx.trigger(component, 'refresh');
+                    }
+                });
             });
         JS;
 
