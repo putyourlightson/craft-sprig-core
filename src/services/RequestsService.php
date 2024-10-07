@@ -159,7 +159,7 @@ class RequestsService extends Component
             // Execute the JS after htmx settles, at most once.
             $js = implode(PHP_EOL, $this->js);
             $content = <<<JS
-                document.body.addEventListener('htmx:afterSettle', function() {
+                htmx.on('htmx:afterSettle', function() {
                     $js
                 }, { once: true });
             JS;
