@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Updated htmx to version 2.0.3 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#203---2024-10-03)).
 - The fetch function is now called inside an event listener when calling `sprig.triggerRefreshOnLoad()`, making it more robust.
 
 ## 2.12.3 - 2024-09-19
