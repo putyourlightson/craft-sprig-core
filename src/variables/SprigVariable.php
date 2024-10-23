@@ -5,7 +5,6 @@
 
 namespace putyourlightson\sprig\variables;
 
-use Craft;
 use craft\db\Paginator;
 use craft\web\twig\variables\Paginate;
 use putyourlightson\sprig\base\Component;
@@ -16,18 +15,6 @@ use yii\web\AssetBundle;
 
 class SprigVariable
 {
-    /**
-     * Returns the script tag with the given attributes.
-     *
-     * @deprecated in 2.6.0
-     */
-    public function getScript(array $attributes = []): string
-    {
-        Craft::$app->getDeprecator()->log(__METHOD__, '`sprig.script` has been deprecated. It is no longer required and can be safely removed.');
-
-        return '';
-    }
-
     /**
      * Returns the htmx version number.
      *
@@ -97,7 +84,7 @@ class SprigVariable
     /**
      * Returns whether this is a boosted request.
      */
-    public function isBoosted(): bool
+    public function getIsBoosted(): bool
     {
         return Component::isBoosted();
     }
@@ -105,7 +92,7 @@ class SprigVariable
     /**
      * Returns whether this is an error request.
      */
-    public function isError(): bool
+    public function getIsError(): bool
     {
         return Component::isError();
     }
@@ -113,7 +100,7 @@ class SprigVariable
     /**
      * Returns whether this is a history restore request.
      */
-    public function isHistoryRestoreRequest(): bool
+    public function getIsHistoryRestoreRequest(): bool
     {
         return Component::isHistoryRestoreRequest();
     }
@@ -121,7 +108,7 @@ class SprigVariable
     /**
      * Returns whether this is a Sprig include.
      */
-    public function isInclude(): bool
+    public function getIsInclude(): bool
     {
         return Component::isInclude();
     }
@@ -129,7 +116,7 @@ class SprigVariable
     /**
      * Returns whether this is a Sprig request.
      */
-    public function isRequest(): bool
+    public function getIsRequest(): bool
     {
         return Component::isRequest();
     }
@@ -137,7 +124,7 @@ class SprigVariable
     /**
      * Returns whether this is a success request.
      */
-    public function isSuccess(): bool
+    public function getIsSuccess(): bool
     {
         return Component::isSuccess();
     }
@@ -248,53 +235,5 @@ class SprigVariable
     public function triggerRefreshOnLoad(string $selector = ''): void
     {
         Component::triggerRefreshOnLoad($selector);
-    }
-
-    /**
-     * @deprecated since 2.12.0. Use `isBoosted()` instead.
-     */
-    public function getIsBoosted(): bool
-    {
-        return Component::getIsBoosted();
-    }
-
-    /**
-     * @deprecated since 2.12.0. Use `isError()` instead.
-     */
-    public function getIsError(): bool
-    {
-        return Component::getIsError();
-    }
-
-    /**
-     * @deprecated since 2.12.0. Use `isHistoryRestoreRequest()` instead.
-     */
-    public function getIsHistoryRestoreRequest(): bool
-    {
-        return Component::getIsHistoryRestoreRequest();
-    }
-
-    /**
-     * @deprecated since 2.12.0. Use `isInclude()` instead.
-     */
-    public function getIsInclude(): bool
-    {
-        return Component::getIsInclude();
-    }
-
-    /**
-     * @deprecated since 2.12.0. Use `isRequest()` instead.
-     */
-    public function getIsRequest(): bool
-    {
-        return Component::getIsRequest();
-    }
-
-    /**
-     * @deprecated since 2.12.0. Use `isSuccess()` instead.
-     */
-    public function getIsSuccess(): bool
-    {
-        return Component::getIsSuccess();
     }
 }

@@ -1,17 +1,18 @@
 # Release Notes for Sprig Core
 
-## 2.12.4 - Unreleased
+## 2.12.4 - 2024-10-23
 
 ### Changed
 
 - Updated htmx to version 2.0.3 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#203---2024-10-03)).
 - The fetch function is now called inside an event listener when calling `sprig.triggerRefreshOnLoad()`, making it more robust.
+- Reverted some variable method name changes to improve autocompletion in PhpStorm.
 
 ## 2.12.3 - 2024-09-19
 
 ### Fixed
 
-- Fixed a missing import ([#16](https://github.com/putyourlightson/craft-sprig-core/pull/16).
+- Fixed a missing import ([#16](https://github.com/putyourlightson/craft-sprig-core/pull/16)).
 
 ## 2.12.2 - 2024-09-17
 
@@ -39,11 +40,15 @@
 
 - Fixed the positioning of the JavaScript output by the `sprig.triggerRefreshOnLoad` function.
 
+<<<<<<< HEAD
 ### Deprecated
 
 - Deprecated `sprig.getIsBoosted`, `sprig.getIsError`, `sprig.getIsHistoryRestoreRequest`, `sprig.getIsInclude`, `sprig.getIsRequest`, `sprig.getIsSuccess`. Use `sprig.isBoosted`, `sprig.isError`, `sprig.isHistoryRestoreRequest`, `sprig.isInclude`, `sprig.isRequest`, `sprig.isSuccess` instead.
 
 ## 2.11.1 - 2024-08-20
+=======
+## 3.4.1 - 2024-08-20
+>>>>>>> 0d34434 (Revert variable method name changes)
 
 ### Fixed
 
