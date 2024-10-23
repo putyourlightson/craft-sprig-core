@@ -18,13 +18,13 @@
 
 ### Changed
 
-- Reverted the removal of the `sprig.script` function ([#391](https://github.com/putyourlightson/craft-sprig/issues/391).
+- Reverted the removal of the `sprig.script` function ([#391](https://github.com/putyourlightson/craft-sprig/issues/391)).
 
 ## 2.12.1 - 2024-09-11
 
 ### Fixed
 
-- Fixed the ability to pass a JSON encoded string into the `sprig.triggerEvents()` function ([#15](https://github.com/putyourlightson/craft-sprig-core/issues/15).
+- Fixed the ability to pass a JSON encoded string into the `sprig.triggerEvents()` function ([#15](https://github.com/putyourlightson/craft-sprig-core/issues/15)).
 
 ## 2.12.0 - 2024-08-29
 
@@ -40,15 +40,11 @@
 
 - Fixed the positioning of the JavaScript output by the `sprig.triggerRefreshOnLoad` function.
 
-<<<<<<< HEAD
 ### Deprecated
 
 - Deprecated `sprig.getIsBoosted`, `sprig.getIsError`, `sprig.getIsHistoryRestoreRequest`, `sprig.getIsInclude`, `sprig.getIsRequest`, `sprig.getIsSuccess`. Use `sprig.isBoosted`, `sprig.isError`, `sprig.isHistoryRestoreRequest`, `sprig.isInclude`, `sprig.isRequest`, `sprig.isSuccess` instead.
 
 ## 2.11.1 - 2024-08-20
-=======
-## 3.4.1 - 2024-08-20
->>>>>>> 0d34434 (Revert variable method name changes)
 
 ### Fixed
 
