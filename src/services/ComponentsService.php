@@ -442,9 +442,7 @@ class ComponentsService extends BaseComponent
 
         $action = $this->getSprigAttributeValue($attributes, 'action');
         if ($action) {
-            $this->mergeJsonAttributes($attributes, 'vals', [
-                'sprig:action' => Craft::$app->getSecurity()->hashData($action),
-            ]);
+            $params['sprig:action'] = Craft::$app->getSecurity()->hashData($action);
         }
 
         $attributes[self::HTMX_PREFIX . $method] = $this->getSprigActionUrl($params);

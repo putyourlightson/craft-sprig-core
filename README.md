@@ -7,7 +7,7 @@
 
 This module provides the core functionality for the [Sprig plugin](https://github.com/putyourlightson/craft-sprig), a reactive Twig component framework for [Craft CMS](https://craftcms.com/). If you are developing a Craft plugin/module and would like to use Sprig in the control panel, then you can require this package to give you its functionality, without requiring that the site has the Sprig plugin installed.
 
-First require the package in your plugin/module's `composer.json` file.
+First require the package in your plugin/module’s `composer.json` file.
 
 ```json
 {
@@ -17,7 +17,7 @@ First require the package in your plugin/module's `composer.json` file.
 }
 ```
 
-Then bootstrap the module from within your plugin/module's `init` method.
+Then bootstrap the module from within your plugin/module’s `init` method.
 
 ```php
 use craft\base\Plugin;
@@ -56,7 +56,7 @@ class MyAssetBundle extends AssetBundle
 
 Sprig plugin issues should be reported to https://github.com/putyourlightson/craft-sprig/issues
 
-Sprig plugin changes are documented in https://github.com/putyourlightson/craft-sprig/blob/develop/CHANGELOG.md
+The Sprig plugin changelog is at https://github.com/putyourlightson/craft-sprig/blob/develop/CHANGELOG.md
 
 ## Documentation
 

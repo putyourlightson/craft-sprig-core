@@ -17,7 +17,7 @@ test('Parsing tag attributes', function() {
     expect(Sprig::$core->components->parse($html))
         ->toContain(
             'data-hx-post=',
-            '&quot;sprig:action&quot;:',
+            'sprig:action=',
             'data-hx-headers="{&quot;' . Request::CSRF_HEADER . '&quot;',
             '&quot;limit&quot;:1',
             'data-sprig-parsed',
