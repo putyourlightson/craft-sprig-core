@@ -1,5 +1,9 @@
 # Release Notes for Sprig Core
 
+## 2.13.0 - 2025-04-09
+
+- Updated htmx to version 2.0.4 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#204---2024-12-13)).
+
 ## 2.12.4 - 2024-10-23
 
 ### Changed
