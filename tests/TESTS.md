@@ -6,7 +6,7 @@ This document outlines the test specification for the Sprig Core module.
 
 ## Architecture Tests
 
-### [Architecture](pest/Architecture/ArchitectureTest.php)
+### [Architecture](Architecture/ArchitectureTest.php)
 
 _Tests the architecture of the plugin._
 
@@ -15,7 +15,7 @@ _Tests the architecture of the plugin._
 
 ## Feature Tests
 
-### [Components](pest/Feature/ComponentsTest.php)
+### [Components](Feature/ComponentsTest.php)
 
 _Tests the creation of components._
 
@@ -32,7 +32,7 @@ _Tests the creation of components._
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Creating a component with an array variable containing a model throws an exception.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Creating a component with a nested array variable is allowed.  
 
-### [Controller](pest/Feature/ControllerTest.php)
+### [Controller](Feature/ControllerTest.php)
 
 _Tests the component controller._
 
@@ -44,7 +44,7 @@ _Tests the component controller._
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Running a save action that results in a success.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Running a save action that results in an error.  
 
-### [Parsing](pest/Feature/ParsingTest.php)
+### [Parsing](Feature/ParsingTest.php)
 
 _Tests the parsing of HTML in components._
 
@@ -67,7 +67,7 @@ _Tests the parsing of HTML in components._
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing HTML with a script tag.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Parsing HTML with UTF encoded characters.  
 
-### [Requests](pest/Feature/RequestsTest.php)
+### [Requests](Feature/RequestsTest.php)
 
 _Tests the handling of component requests._
 
@@ -83,7 +83,7 @@ _Tests the handling of component requests._
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Get registered HTML includes registered JS.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Validate data.  
 
-### [Script](pest/Feature/ScriptTest.php)
+### [Script](Feature/ScriptTest.php)
 
 _Tests the existence and inclusion of the htmx script._
 
@@ -92,7 +92,7 @@ _Tests the existence and inclusion of the htmx script._
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Script is not added when set to `false`.  
 ![Pass](https://raw.githubusercontent.com/putyourlightson/craft-generate-test-spec/main/icons/pass.svg) Script is added with attributes.  
 
-### [Variable](pest/Feature/VariableTest.php)
+### [Variable](Feature/VariableTest.php)
 
 _Tests the Sprig variable methods._
 
