@@ -228,7 +228,12 @@ class RequestsService extends Component
      */
     private function getIsVariableAllowed(string $name): bool
     {
-        if ($name == Craft::$app->getConfig()->getGeneral()->getPageTrigger()) {
+        if ($name === Craft::$app->getConfig()->getGeneral()->getPageTrigger()) {
+            return false;
+        }
+
+        $globals = Craft::$app->getView()->getTwig()->getGlobals();
+        if (isset($globals[$name])) {
             return false;
         }
 
