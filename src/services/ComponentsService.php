@@ -129,11 +129,11 @@ class ComponentsService extends BaseComponent
 
     /**
      * @const string The htmx version to load (must exist in `resources/lib/htmx/`).
-     * Downloaded from https://unpkg.com/htmx.org
+     * Downloaded from https://cdn.jsdelivr.net/npm/htmx.org
      *
      * @since 2.6.0
      */
-    public const HTMX_VERSION = '2.0.4';
+    public const HTMX_VERSION = '2.0.6';
 
     /**
      * @var string|null
