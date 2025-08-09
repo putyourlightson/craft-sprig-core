@@ -1,5 +1,10 @@
 # Release Notes for Sprig Core
 
+## 2.14.0 - 2025-08-09
+
+- Updated htmx to version 2.0.6 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#206---2025-06-27)).
+- Variables named the same as Twig globals are now disallowed ([#422](https://github.com/putyourlightson/craft-sprig/issues/422)).
+
 ## 2.13.0 - 2025-04-09
 
 - Updated htmx to version 2.0.4 ([changelog](https://github.com/bigskysoftware/htmx/blob/master/CHANGELOG.md#204---2024-12-13)).

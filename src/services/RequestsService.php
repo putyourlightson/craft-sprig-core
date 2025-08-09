@@ -252,6 +252,11 @@ class RequestsService extends Component
             return false;
         }
 
+        $globals = Craft::$app->getView()->getTwig()->getGlobals();
+        if (isset($globals[$name])) {
+            return false;
+        }
+
         foreach (self::DISALLOWED_PREFIXES as $prefix) {
             if (str_starts_with($name, $prefix)) {
                 return false;
