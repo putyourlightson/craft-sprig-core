@@ -233,7 +233,7 @@ class RequestsService extends Component
         }
 
         $globals = Craft::$app->getView()->getTwig()->getGlobals();
-        if (isset($globals[$name])) {
+        if (array_key_exists($name, $globals)) {
             return false;
         }
 
