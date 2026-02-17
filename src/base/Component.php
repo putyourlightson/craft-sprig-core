@@ -101,7 +101,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function isBoosted(): bool
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted', false) == 'true';
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Boosted') == 'true';
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function isHistoryRestoreRequest(): bool
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-History-Restore-Request', false) == 'true';
+        return Craft::$app->getRequest()->getHeaders()->get('HX-History-Restore-Request') == 'true';
     }
 
     /**
@@ -133,7 +133,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
      */
     public static function isRequest(): bool
     {
-        return Craft::$app->getRequest()->getHeaders()->get('HX-Request', false) == 'true';
+        return Craft::$app->getRequest()->getHeaders()->get('HX-Request') == 'true';
     }
 
     /**

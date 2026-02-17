@@ -106,7 +106,7 @@ class RequestsService extends Component
      */
     public function getCacheDuration(): int
     {
-        $duration = Craft::$app->getRequest()->getHeaders()->get('S-Cache', 0);
+        $duration = Craft::$app->getRequest()->getHeaders()->get('S-Cache', '0');
 
         if ($duration === 'true') {
             return self::DEFAULT_CACHE_DURATION;
