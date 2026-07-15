@@ -320,7 +320,7 @@ abstract class Component extends BaseComponent implements ComponentInterface
                         htmx.trigger(component, 'refresh');
                     }
                 });
-            });
+            }, { once: true });
         JS;
 
         Craft::$app->getView()->registerJs($js, View::POS_END);
